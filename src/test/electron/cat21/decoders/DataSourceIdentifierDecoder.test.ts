@@ -1,9 +1,9 @@
 import {expect, test} from '@jest/globals';
 import { FileManager } from "../../../../electron/utils/FileManager";
 import { MessageClassifier } from "../../../../electron/data/MessageClassifier";
-import { DataSourceIdentifierDecoder } from "../../../../electron/cat10/decoders/DataSourceIdentifierDecoder";
-import { DataSourceIdentifier } from "../../../../electron/cat10/valueObjects/DataSourceIdentifier";
-import { Cat10Adapter } from "../../../../electron/data/adapters/Cat10Adapter";
+import { DataSourceIdentifierDecoder } from "../../../../electron/cat21/decoders/DataSourceIdentifierDecoder";
+import { DataSourceIdentifier } from "../../../../electron/cat21/valueObjects/DataSourceIdentifier";
+import { Cat21Adapter } from "../../../../electron/data/adapters/Cat21Adapter";
 
 
 test('givenValidBinaryData_WhenDecodeDataSourceIdentifier_thenCorrectValues', async () => {
@@ -11,13 +11,13 @@ test('givenValidBinaryData_WhenDecodeDataSourceIdentifier_thenCorrectValues', as
     var fileManager : FileManager = new FileManager();
     var messageClassifier : MessageClassifier = new MessageClassifier();
     var dataSourceIdentifierDecoder : DataSourceIdentifierDecoder = new DataSourceIdentifierDecoder();
-    var cat10Adapter : Cat10Adapter = new Cat10Adapter();
-    var expectedSac : string = "0";
-    var expectedSic : string = "7";
+    var cat10Adapter : Cat21Adapter = new Cat21Adapter();
+    var expectedSac : string = "20";
+    var expectedSic : string = "-37";
 
     // When
     //var data : Buffer = await fileManager.readFile('/Users/arnaumirhurtado/Documents/GitHub/asterix-analyzer/SAMPLE_FILES/201002-lebl-080001_smr.ast');
-    var data : Buffer = await fileManager.readFile('/Users/marca/Documents/5B/Projectes en Gestió del Trànsit Aeri/FitxersProva/201002-lebl-080001_smr.ast');
+    var data : Buffer = await fileManager.readFile('/Users/marca/Documents/5B/Projectes en Gestió del Trànsit Aeri/FitxersProva/201002-lebl-080001_adsb.ast');
 
     var slicedData : Buffer[] = await messageClassifier.sliceMessageBuffer(data);
     var messageCategoriesList : Buffer[] = await messageClassifier.classifyMessage(slicedData, slicedData.length);
