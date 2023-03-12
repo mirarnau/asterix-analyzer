@@ -1,10 +1,11 @@
-import fs from "fs/promises";
-import { join } from "path";
+import {readFile} from 'fs/promises';
 
 export class FileManager {
+    
+    constructor (){}
 
-    public async readFile(file : string) : Promise<Buffer>{
-        const buffer = await fs.readFile(join(__dirname.replace("build", "src/electron"), file));
+    public async readFile(path : string) : Promise<Buffer>{
+        const buffer = await readFile(path);
         return buffer;
     }
 
