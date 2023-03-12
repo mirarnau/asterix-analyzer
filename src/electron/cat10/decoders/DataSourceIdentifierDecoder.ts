@@ -2,7 +2,7 @@ import { DataSourceIdentifier } from "../valueObjects/DataSourceIdentifier";
 
 export class DataSourceIdentifierDecoder {
 
-    public async decode(item : Buffer) : Promise<Object>{
+    public async decode(item : Buffer) : Promise<DataSourceIdentifier>{
         const sacOctet = item.subarray(0, 1);
         const sac = sacOctet.readInt8().toString();
 

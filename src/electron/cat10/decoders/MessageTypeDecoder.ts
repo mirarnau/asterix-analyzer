@@ -1,17 +1,19 @@
+import { MessageType } from "../valueObjects/MessageType";
+
 export class MessageTypeDecoder {
 
-    public async decode(item: Buffer) : Promise <string>{ 
+    public async decode(item: Buffer) : Promise <MessageType>{ 
         switch (item[0]) {
             case 0x01:
-              return "Target Report";
+              return new MessageType("Target Report");
             case 0x02:
-                return "Start of Update Cycle";
+                return new MessageType("Start of Update Cycle");
             case 0x03:
-                return "Periodic Status Message";
+                return new MessageType("Periodic Status Message");
             case 0x04:
-                return "Event-triggered Status Message";
+                return new MessageType("Event-triggered Status Message");
           }
-          return "Unknown";
+          return new MessageType("Unknown");
     }
 
 }
