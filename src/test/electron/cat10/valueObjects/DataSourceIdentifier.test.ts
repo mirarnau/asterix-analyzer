@@ -4,8 +4,6 @@ import { DataSourceIdentifierMockGenerator } from "../../mocks/DataSourceIdentif
 
 test('givenValidValues_WhenCreateDataSourceIdentifier_thenNotNull', () => {
     // Given
-    const sac = 0;
-    const sic = 7;
 
     // When
     const dataSouceIdentifier : DataSourceIdentifier = new DataSourceIdentifierMockGenerator().validDataSourceIdentifier();

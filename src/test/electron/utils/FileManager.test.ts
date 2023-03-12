@@ -1,7 +1,7 @@
 import {expect, test} from '@jest/globals';
-import { FileManager } from "../../../../electron/utils/FileManager";
+import { FileManager } from "../../../electron/utils/FileManager";
 
-test('givenValidBinaryData_WhenDecodeDataSourceIdentifier_thenCorrectValues', async () => {
+test('givenValidBinaryData_WhenFileReaderReadFile_thenCorrectReading', async () => {
     // Given
     var fileManager : FileManager = new FileManager();
 
@@ -10,6 +10,5 @@ test('givenValidBinaryData_WhenDecodeDataSourceIdentifier_thenCorrectValues', as
 
     //Then
     expect(data).not.toBe(null);
-    //TODO first we need the file message classifier
 
 })
