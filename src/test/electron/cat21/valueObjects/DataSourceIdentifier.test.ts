@@ -1,5 +1,5 @@
 import {expect, test} from '@jest/globals';
-import { DataSourceIdentifier } from '../../../../electron/cat10/valueObjects/DataSourceIdentifier';
+import { DataSourceIdentifier } from '../../../../electron/cat21/valueObjects/DataSourceIdentifier';
 import { DataSourceIdentifierMockGenerator } from "../../mocks_cat10/DataSourceIdentifierMockGenerator";
 
 test('givenValidValues_WhenCreateDataSourceIdentifier_thenNotNull', () => {

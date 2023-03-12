@@ -1,6 +1,6 @@
 import {expect, test} from '@jest/globals';
 import { TargetReportDescriptor } from '../../../../electron/cat10/valueObjects/TargetReportDescriptor';
-import { TargetReportDescriptorMockGenerator } from "../../mocks/TargetReportDescriptorMockGenerator";
+import { TargetReportDescriptorMockGenerator } from "../../mocks_cat10/TargetReportDescriptorMockGenerator";
 
 test('givenValidValues_WhenCreateDataSourceIdentifier_thenNotNull', () => {
     // Given
