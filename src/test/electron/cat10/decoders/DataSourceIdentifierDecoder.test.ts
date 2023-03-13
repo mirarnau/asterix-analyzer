@@ -28,6 +28,7 @@ test('givenValidBinaryData_WhenDecodeDataSourceIdentifier_thenCorrectValues', as
     expect(dataSourceIdentifier).not.toBe(null);
     expect(dataSourceIdentifier.sac).toBe(expectedSac);
     expect(dataSourceIdentifier.sic).toBe(expectedSic);
+    console.log(listItems);
     console.log("SAC: " + dataSourceIdentifier.sac);
     console.log("SIC: " + dataSourceIdentifier.sic);
 

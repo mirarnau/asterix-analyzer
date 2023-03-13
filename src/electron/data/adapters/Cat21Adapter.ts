@@ -26,8 +26,14 @@ export class Cat21Adapter {
 
         let len = this.variableItemOffset(message.subarray(offset, offset + 3), 3);
 
-        items.push(message.subarray(offset, offset + await len)); //MessageType
+        items.push(message.subarray(offset, offset + await len)); //Target Report Descriptor
         offset += await len;
+        
+        // Aircraft Operational Status
+        if (fspec[40] === "1") {
+          items.push(message.subarray(offset, offset + 1));
+          offset += 1; //length =1
+        }
         return items;
     }
 

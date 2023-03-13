@@ -7,8 +7,8 @@ export class DataSourceIdentifierDecoder {
         const sac = sacOctet.readInt8().toString();
 
         const sicOctet = item.subarray(1, 2);
-        const sic = sicOctet.readInt8().toString();
-
+        let sic = sicOctet.readUInt8().toString();
+    
         return new DataSourceIdentifier(sac, sic);
     }
 

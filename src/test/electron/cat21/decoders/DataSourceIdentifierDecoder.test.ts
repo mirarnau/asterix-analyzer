@@ -11,9 +11,9 @@ test('givenValidBinaryData_WhenDecodeDataSourceIdentifier_thenCorrectValues', as
     var fileManager : FileManager = new FileManager();
     var messageClassifier : MessageClassifier = new MessageClassifier();
     var dataSourceIdentifierDecoder : DataSourceIdentifierDecoder = new DataSourceIdentifierDecoder();
-    var cat10Adapter : Cat21Adapter = new Cat21Adapter();
+    var cat21Adapter : Cat21Adapter = new Cat21Adapter();
     var expectedSac : string = "20";
-    var expectedSic : string = "-37";
+    var expectedSic : string = "219";
 
     // When
     //var data : Buffer = await fileManager.readFile('/Users/arnaumirhurtado/Documents/GitHub/asterix-analyzer/SAMPLE_FILES/201002-lebl-080001_smr.ast');
@@ -21,14 +21,15 @@ test('givenValidBinaryData_WhenDecodeDataSourceIdentifier_thenCorrectValues', as
 
     var slicedData : Buffer[] = await messageClassifier.sliceMessageBuffer(data);
     var messageCategoriesList : Buffer[] = await messageClassifier.classifyMessage(slicedData, slicedData.length);
-    var listItems = await cat10Adapter.adapt(messageCategoriesList[0]);
+    var listItems = await cat21Adapter.adapt(messageCategoriesList[0]);
     var dataSourceIdentifier : DataSourceIdentifier = await dataSourceIdentifierDecoder.decode(listItems[0]);
    
-    //Then
+    //Then    
+    console.log("SAC: " + dataSourceIdentifier.sac);
+    console.log("SIC: " + dataSourceIdentifier.sic);
+    console.log(listItems);
     expect(dataSourceIdentifier).not.toBe(null);
     expect(dataSourceIdentifier.sac).toBe(expectedSac);
     expect(dataSourceIdentifier.sic).toBe(expectedSic);
-    console.log("SAC: " + dataSourceIdentifier.sac);
-    console.log("SIC: " + dataSourceIdentifier.sic);
 
 })
