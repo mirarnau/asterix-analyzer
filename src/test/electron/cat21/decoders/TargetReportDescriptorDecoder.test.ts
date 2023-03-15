@@ -42,20 +42,34 @@ test('givenValidBinaryData_WhenDecodeTargetReportDescriptor_thenCorrectValues', 
     console.log(listItems);
     expect(targetReportDescriptor).not.toBe(null);
     expect(targetReportDescriptor.atp).toBe(expectedAtp);
+    //console.log(targetReportDescriptor.atp);
     expect(targetReportDescriptor.arc).toBe(expectedArc);
+    //console.log(targetReportDescriptor.arc);
     expect(targetReportDescriptor.rc).toBe(expectedRc);
+    //console.log(targetReportDescriptor.rc);
     expect(targetReportDescriptor.rab).toBe(expectedRab);
+    //console.log(targetReportDescriptor.rab);
     expect(targetReportDescriptor.dcr).toBe(expectedDcr);
-    console.log(targetReportDescriptor.dcr);
+    //console.log(targetReportDescriptor.dcr);
     expect(targetReportDescriptor.gbs).toBe(expectedGbs);
+    //console.log(targetReportDescriptor.gbs);
     expect(targetReportDescriptor.sim).toBe(expectedSim);
+    //console.log(targetReportDescriptor.sim);
     expect(targetReportDescriptor.tst).toBe(expectedTst);
+    //console.log(targetReportDescriptor.tst);
     expect(targetReportDescriptor.saa).toBe(expectedSaa);
+    //console.log(targetReportDescriptor.saa);
     expect(targetReportDescriptor.cl).toBe(expectedCl);
+    //console.log(targetReportDescriptor.cl);
     expect(targetReportDescriptor.ipc).toBe(expectedIpc);
+    //console.log(targetReportDescriptor.ipc);
     expect(targetReportDescriptor.nogo).toBe(expectedNogo);
+    //console.log(targetReportDescriptor.nogo);
     expect(targetReportDescriptor.cpr).toBe(expectedCpr);
+    //console.log(targetReportDescriptor.cpr);
     expect(targetReportDescriptor.ldpj).toBe(expectedLdpj);
-    expect(targetReportDescriptor.rcf).toBe(expectedRcf);            
+    //console.log(targetReportDescriptor.ldpj);
+    expect(targetReportDescriptor.rcf).toBe(expectedRcf);
+    //console.log(targetReportDescriptor.rcf);            
 
 })

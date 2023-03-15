@@ -7,7 +7,6 @@ export class Cat21Adapter {
         .split("");
 
 
-        console.log("fspec: " + fspec);
     
         let count = 7;
         let found = false;
