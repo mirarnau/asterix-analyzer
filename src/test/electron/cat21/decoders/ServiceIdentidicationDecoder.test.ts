@@ -13,8 +13,7 @@ test('givenValidBinaryData_WhenDecodeServiceIdentification_thenCorrectValues', a
     var expectedServiceIdentification : string = "1";
 
     // When
-    //var data : Buffer = await fileManager.readFile('/Users/arnaumirhurtado/Documents/GitHub/asterix-analyzer/SAMPLE_FILES/201002-lebl-080001_smr.ast');
-    var data : Buffer = await fileManager.readFile('/Users/marca/Documents/5B/Projectes en Gestió del Trànsit Aeri/FitxersProva/201002-lebl-080001_adsb.ast');
+    var data : Buffer = await fileManager.readFile('FILES/201002-lebl-080001_adsb.ast');
 
     var slicedData : Buffer[] = await messageClassifier.sliceMessageBuffer(data);
     var messageCategoriesList : Buffer[] = await messageClassifier.classifyMessage(slicedData, slicedData.length);
