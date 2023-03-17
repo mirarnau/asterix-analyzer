@@ -84,7 +84,7 @@ app.on("web-contents-created", (e, contents) => {
   contents.on("will-navigate", (event, navigationUrl) => {
     const parsedURL = parse(navigationUrl);
     // In dev mode allow Hot Module Replacement
-    if (parsedURL.host !== "localhost:5000" && !isProd) {
+    if (parsedURL.host !== "localhost:3000" && !isProd) {
       logger.warn("Stopped attempt to open: " + navigationUrl);
       event.preventDefault();
     } else if (isProd) {
