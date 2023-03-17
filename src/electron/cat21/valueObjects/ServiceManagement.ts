@@ -1,9 +1,9 @@
 import { strict as assert } from 'node:assert';
 
 export class ServiceManagement {
-    rp : number;
+    rp : string;
 
-    constructor(rp : number){
+    constructor(rp : string){
         this.rp = rp;
         this.validate();
     }

@@ -1,48 +1,71 @@
+import { EmitterCategory } from "../valueObjects/EmitterCategory";
+
 export class EmitterCategoryDecoder {
 
-    public async decode(item: Buffer) : Promise <string>{
+    public async decode(item: Buffer) : Promise <EmitterCategory>{
+        var res = "";
         switch (item.subarray(0, 1).toString("hex")) {
             case "00":
-                return "No ADS-B Emitter Category Information";
+                res = "No ADS-B Emitter Category Information";
+                break;
             case "01":
-                return "Light aircraft <= 15500 lbs";
+                res = "Light aircraft <= 15500 lbs";
+                break;
             case "02":
-                return "5500 lbs < small aircraft <75000 lbs";
+                res = "5500 lbs < small aircraft <75000 lbs";
+                break;
             case "03":
-                return "75000 lbs < medium a/c < 300000 lbs";
+                res = "75000 lbs < medium a/c < 300000 lbs";
+                break;
             case "04":
-                return "High Vortex Large";
+                res = "High Vortex Large";
+                break;
             case "05":
-                return "300000 lbs <= heavy aircraft";
+                res = "300000 lbs <= heavy aircraft";
+                break;
             case "06":
-                return "Highly manoeuvrable (5g acceleration capability) and high speed (>400 knots cruise)";
+                res = "Highly manoeuvrable (5g acceleration capability) and high speed (>400 knots cruise)";
+                break;
             case "0A":
-                return "Rotocraft";
+                res = "Rotocraft";
+                break;
             case "0B":
-                return "Glider / sailplane";
+                res = "Glider / sailplane";
+                break;
             case "0C":
-                return "Lighter-than-air";
+                res = "Lighter-than-air";
+                break;
             case "0D":
-                return "Unmanned aerial vehicle";
+                res = "Unmanned aerial vehicle";
+                break;
             case "0E":
-                return "Space / transatmospheric vehicle";
+                res = "Space / transatmospheric vehicle";
+                break;
             case "0F":
-                return "Ultralight / handglider / paraglider";
+                res = "Ultralight / handglider / paraglider";
+                break;
             case "10":
-                return "Parachutist / skydiver";
+                res = "Parachutist / skydiver";
+                break;
             case "14":
-                return "Surface emergency vehicle";
+                res = "Surface emergency vehicle";
+                break;
             case "15":
-                return "Surface service vehicle";
+                res = "Surface service vehicle";
+                break;
             case "16":
-                return "Fixed ground or tethered obstruction";
+                res = "Fixed ground or tethered obstruction";
+                break;
             case "17":
-                return "Cluster obstacle";
+                res = "Cluster obstacle";
+                break;
             case "18":
-                return "Line obstacle";
+                res = "Line obstacle";
+                break;
             default:
-                return "Reserved";
+                res = "Reserved";
         }
+        return new EmitterCategory(res);
     }
 
 }

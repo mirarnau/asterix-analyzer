@@ -1,6 +1,6 @@
 import { strict as assert } from 'node:assert';
 
-export class TimeofApplicabilityforvelocity {
+export class TimeofApplicabilityforVelocity {
     time : number;
 
     constructor(time : number){

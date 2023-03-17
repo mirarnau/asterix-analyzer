@@ -1,6 +1,6 @@
 import { strict as assert } from 'node:assert';
 
-export class TimeofMessageReceptionforVelocity_HighPrecission {
+export class TimeofMessageReceptionforVelocity_HighPrecision {
     time : number;
 
     constructor(time : number){
