@@ -1,9 +1,9 @@
 import { strict as assert } from 'node:assert';
 
 export class MeasuredHeight {
-    height : string;
+    height : number;
 
-    constructor(height : string){
+    constructor(height : number){
         this.height = height;
         this.validate();
     }

@@ -64,7 +64,7 @@ export class TargetReportDescriptorDecoder {
                 return "Loop start";
             case "10":
                 return "Loop finish";
-            }
+        }
         return "Unknown"
     }
 
@@ -78,7 +78,7 @@ export class TargetReportDescriptorDecoder {
                 return"Ground vehicle";
             case "11":
                 return "Helicopter";
-            }
+        }
         return "Unknown"
     }
     

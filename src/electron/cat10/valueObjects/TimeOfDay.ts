@@ -1,15 +1,15 @@
 import { strict as assert } from 'node:assert';
 
 export class TimeOfDay {
-    time : number;
+    timestamp : number;
 
     constructor(time : number){
-        this.time = time;
+        this.timestamp = time;
         this.validate();
     }
 
     validate(){
-        assert(this.time != null);
+        assert(this.timestamp != null);
     }
 
 }
