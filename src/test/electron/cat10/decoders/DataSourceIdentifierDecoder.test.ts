@@ -1,7 +1,6 @@
 import {expect, test} from '@jest/globals';
 import { FileManager } from "../../../../electron/utils/FileManager";
 import { MessageClassifier } from "../../../../electron/data/MessageClassifier";
-import { DataSourceIdentifierDecoder } from "../../../../electron/cat10/decoders/DataSourceIdentifierDecoder";
 import { DataSourceIdentifier } from "../../../../electron/cat10/valueObjects/DataSourceIdentifier";
 import { Cat10Adapter } from "../../../../electron/data/adapters/Cat10Adapter";
 
@@ -10,7 +9,6 @@ test('givenValidBinaryData_WhenDecodeDataSourceIdentifier_thenCorrectValues', as
     // Given
     var fileManager : FileManager = new FileManager();
     var messageClassifier : MessageClassifier = new MessageClassifier();
-    var dataSourceIdentifierDecoder : DataSourceIdentifierDecoder = new DataSourceIdentifierDecoder();
     var cat10Adapter : Cat10Adapter = new Cat10Adapter();
     var expectedSac : string = "0";
     var expectedSic : string = "7";

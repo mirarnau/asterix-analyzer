@@ -4,13 +4,13 @@ export class Mode3ACodeOctalRepresentation {
     v : string;
     g : string;
     l : string;
-    reply : string;
+    mode : string;
 
     constructor(v : string, g : string, l: string, reply : string){
         this.v = v;
         this.g = g;
         this.l = l;
-        this.reply = reply;
+        this.mode = reply;
         this.validate();
     }
 
@@ -18,7 +18,7 @@ export class Mode3ACodeOctalRepresentation {
         assert(this.v != null);
         assert(this.g != null);
         assert(this.l != null);
-        assert(this.reply != null);
+        assert(this.mode != null);
     }
 
 }
