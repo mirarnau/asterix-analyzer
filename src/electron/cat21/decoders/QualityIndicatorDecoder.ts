@@ -8,8 +8,8 @@ export class QualityIndicatorsDecoder {
             .padStart(item.length * 8, "0")
             .split("");
 
-        var nucr_or_nacv = this.decodeNucr_or_nacv(bits);
-        var nucp_or_nic = this.decodeNucp_or_nic(bits);
+        const nucr_or_nacv = this.decodeNucr_or_nacv(bits);
+        const nucp_or_nic = this.decodeNucp_or_nic(bits);
 
         if (bits[7] == "0") {
             return new QualityIndicators(nucr_or_nacv, nucp_or_nic);

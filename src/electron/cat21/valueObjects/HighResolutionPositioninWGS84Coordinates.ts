@@ -1,6 +1,6 @@
 import { strict as assert } from 'node:assert';
 
-export class PositioninWGS84Coordinates {
+export class HighResolutionPositioninWGS84Coordinates {
     latitude : number;
     longitude : number;
 

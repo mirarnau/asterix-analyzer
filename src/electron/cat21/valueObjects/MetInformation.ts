@@ -8,7 +8,7 @@ export class MetInformation {
     wind_speed? : string;
     wind_direction? : string;
     temperature? : string;
-    turbulence? : number;
+    turbulence? : string;
 
     constructor(ws : string,
                 wd : string,
@@ -17,7 +17,7 @@ export class MetInformation {
                 wind_speed? : string,
                 wind_direction? : string,
                 temperature? : string,
-                turbulence? : number){
+                turbulence? : string){
         this.ws = ws;
         this.wd = wd;
         this.tmp = tmp;

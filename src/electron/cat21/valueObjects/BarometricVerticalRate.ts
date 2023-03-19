@@ -1,6 +1,6 @@
 import { strict as assert } from 'node:assert';
 
-export class GeometricVerticalRate {
+export class BarometricVerticalRate {
     re : string;
     value : string;
 
