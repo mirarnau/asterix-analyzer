@@ -1,53 +1,53 @@
 import { strict as assert } from 'node:assert';
 
 export class DataAges {
-    aos : string;
-    trd : string;
-    m3a : string;
-    qi : string;
-    tri : string;
-    mam : string;
-    gh : string;
-    fl? : string;
-    isa? : string;
-    fsa? : string;
-    as? : string;
-    tas? : string;
-    mh? : string;
-    bvr? : string;
-    gvr? : string;
-    gv? : string;
-    tar? : string;
-    ti? : string;
-    ts? : string;
-    met? : string;
-    roa? : string;
-    ara? : string;
-    scc? : string;
+    aos : string | number;
+    trd : string | number;
+    m3a : string | number;
+    qi : string | number;
+    tri : string | number;
+    mam : string | number;
+    gh : string | number;
+    fl : string | number;
+    isa : string | number;
+    fsa : string | number;
+    as : string | number;
+    tas : string | number;
+    mh : string | number;
+    bvr : string | number;
+    gvr : string | number;
+    gv : string | number;
+    tar : string | number;
+    ti : string | number;
+    ts : string | number;
+    met : string | number;
+    roa : string | number;
+    ara : string | number;
+    scc : string | number;
 
-    constructor(aos : string,
-                trd : string,
-                m3a : string,
-                qi : string,
-                tri : string,
-                mam : string,
-                gh : string,
-                fl? : string,
-                isa? : string,
-                fsa? : string,
-                as? : string,
-                tas? : string,
-                mh? : string,
-                bvr? : string,
-                gvr? : string,
-                gv? : string,
-                tar? : string,
-                ti? : string,
-                ts? : string,
-                met? : string,
-                roa? : string,
-                ara? : string,
-                scc? : string){
+    constructor(aos : string | number,
+                trd : string | number,
+                m3a : string | number,
+                qi : string | number,
+                tri : string | number,
+                mam : string | number,
+                gh : string | number,
+                fl : string | number,
+                isa : string | number,
+                fsa : string | number,
+                as : string | number,
+                tas : string | number,
+                mh : string | number,
+                bvr : string | number,
+                gvr : string | number,
+                gv : string | number,
+                tar : string | number,
+                ti : string | number,
+                ts : string | number,
+                met : string | number,
+                roa : string | number,
+                ara : string | number,
+                scc : string | number){
 
         this.aos = aos;
         this.trd = trd;
