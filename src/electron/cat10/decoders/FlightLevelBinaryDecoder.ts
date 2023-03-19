@@ -14,7 +14,7 @@ export class FlightLevelBinaryDecoder {
         var v = bits[0] === "0" ? "Code validated" : "Code not validated";
         var g = bits[1] === "0" ? "Default" : "Garbled code";
         //@ts-ignore
-        var flightLevel = this.converter.fromTwosComplement(buffer.join("")) / 4 + "FL";
+        var flightLevel = this.converter.fromTwosComplement(item.join("")) / 4 + "FL";
 
         return new FlightLevelBinary(v, g, flightLevel);
     }
