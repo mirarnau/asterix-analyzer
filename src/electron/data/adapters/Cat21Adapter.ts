@@ -105,29 +105,33 @@ export class Cat21Adapter {
           this.schduler.addOperation(this.cat21.setTimeofMessageReceptionofPosition(timeofMessageReceptionofPosition));
           offset += 3;
         }
-        /*
         // Time of Message Reception of Position-High
         if (fspec[13] === "1") {
-          items.push(message.subarray(offset, offset + 4));
+          var timeofMessageReceptionofPosition_highPres = message.subarray(offset, offset + 4);
+          this.schduler.addOperation(this.cat21.setTimeofMessageReceptionofPositionHighPres(timeofMessageReceptionofPosition_highPres));
           offset += 4;
         }
         // Time of Message Reception of Velocity
         if (fspec[14] === "1") {
-          items.push(message.subarray(offset, offset + 3));
+          var timeofMessageReceptionofVelocity = message.subarray(offset, offset + 3);
+          this.schduler.addOperation(this.cat21.setTimeofMessageReceptionofVelocity(timeofMessageReceptionofVelocity));
           offset += 3;
         }
         // FX
         if (fspec[15] === "1") {
           // Time of Message Reception of Velocity-High Precision
           if (fspec[16] === "1") {
-            items.push(message.subarray(offset, offset + 4));
+            var timeofMessageReceptionofVelocity_highPres = message.subarray(offset, offset + 4);
+            this.schduler.addOperation(this.cat21.setTimeofMessageReceptionofVelocity_HighPres(timeofMessageReceptionofVelocity_highPres));
             offset += 4;
           }
           // Geometric Height
           if (fspec[17] === "1") {
-            items.push(message.subarray(offset, offset + 2));
+            var geometricHeight = message.subarray(offset, offset + 2);
+            this.schduler.addOperation(this.cat21.setGeometricHeight(geometricHeight));
             offset += 2;
           }
+          /*
           // Quality Indicators
           let len = await this.variableItemOffset(message.subarray(offset, offset + 4), 4);
           items.push(message.subarray(offset, offset + len));
@@ -320,8 +324,9 @@ export class Cat21Adapter {
         }
               */
       }
-    await this.schduler.execute();
-    return this.cat21;
+      }
+      await this.schduler.execute();
+      return this.cat21;
   }
     
 private async variableItemOffset(buffer: Buffer, max_len: number) {

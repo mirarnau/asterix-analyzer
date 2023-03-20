@@ -97,6 +97,8 @@ export class Cat21 {
     timeofMessageReceptionofPosition : TimeofMessageReceptionofPosition;
     timeofMessageReceptionofPosition_highPres : TimeofMessageReceptionofPosition_HighPrecision;
     timeofMessageReceptionofVelocity : TimeofMessageReceptionofVelocity;
+    timeofMessageReceptionofVelocity_highPres : TimeofMessageReceptionofVelocity_HighPrecision;
+    geometricHeight : GeometricHeight;
 
 
     public async setDataSourceIdentifier(item : Buffer) : Promise<void> {
@@ -171,6 +173,29 @@ export class Cat21 {
         this.timeofApplicabilityforPosition = timeofMessageReceptionofPosition;
     }
 
+    public async setTimeofMessageReceptionofPositionHighPres(item : Buffer) : Promise<void> {
+        var timeofMessageReceptionofPosition_HighPrecisionDecoder : TimeofMessageReceptionofPosition_HighPrecisionDecoder = new TimeofMessageReceptionofPosition_HighPrecisionDecoder();
+        var timeofMessageReceptionofPosition_highPres : TimeofMessageReceptionofPosition_HighPrecision = await timeofMessageReceptionofPosition_HighPrecisionDecoder.decode(item);
+        this.timeofMessageReceptionofPosition_highPres = timeofMessageReceptionofPosition_highPres;
+    }
+
+    public async setTimeofMessageReceptionofVelocity(item : Buffer) : Promise<void> {
+        var timeofMessageReceptionofVelocityDecoder : TimeofMessageReceptionofVelocityDecoder = new TimeofMessageReceptionofVelocityDecoder();
+        var timeofMessageReceptionofVelocity : TimeofMessageReceptionofVelocity = await timeofMessageReceptionofVelocityDecoder.decode(item);
+        this.timeofMessageReceptionofVelocity = timeofMessageReceptionofVelocity;
+    }
+
+    public async setTimeofMessageReceptionofVelocity_HighPres(item : Buffer) : Promise<void> {
+        var timeofMessageReceptionofVelocity_HighPrecisionDecoder : TimeofMessageReceptionofVelocity_HighPrecisionDecoder = new TimeofMessageReceptionofVelocity_HighPrecisionDecoder();
+        var timeofMessageReceptionofVelocity_highPres : TimeofMessageReceptionofVelocity_HighPrecision = await timeofMessageReceptionofVelocity_HighPrecisionDecoder.decode(item);
+        this.timeofMessageReceptionofVelocity_highPres = timeofMessageReceptionofVelocity_highPres;
+    }
+
+    public async setGeometricHeight(item : Buffer) : Promise<void>{
+        var geometricHeightDecoder : GeometricHeihgtDecoder = new GeometricHeihgtDecoder();
+        var geometricHeight : GeometricHeight = await geometricHeightDecoder.decode(item);
+        this.geometricHeight = geometricHeight;
+    }
     
 
 
