@@ -20,7 +20,7 @@ test('givenValidBinaryData_WhenDecodeTimeofApplicabilityforPosition_thenCorrectV
 
     var slicedData : Buffer[] = await messageClassifier.sliceMessageBuffer(data);
     var messageCategoriesList : Buffer[] = await messageClassifier.classifyMessage(slicedData, slicedData.length);
-    var timeofApplicabilityforPosition : TimeofApplicabilityforPosition = (await (cat21Adapter.adapt(messageCategoriesList[1]))).timeofApplicabilityforPosition;
+    var timeofApplicabilityforPosition : TimeofApplicabilityforPosition = (await (cat21Adapter.adapt(messageCategoriesList[0]))).timeofApplicabilityforPosition;
    
     //Then    
     

@@ -9,7 +9,6 @@ test('givenValidBinaryData_WhenDecodeWGS84_thenCorrectValues', async () => {
     // Given
     var fileManager : FileManager = new FileManager();
     var messageClassifier : MessageClassifier = new MessageClassifier();
-    var positioninWGS84CoordinatesDecoder : PositioninWGS84CoordinatesDecoder = new PositioninWGS84CoordinatesDecoder();
     var cat21Adapter : Cat21Adapter = new Cat21Adapter();
     var expectedLatitude : number = 39.58571434020996;
     var expectedLongitude : number = 1.844930648803711;
