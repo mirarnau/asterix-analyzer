@@ -9,7 +9,6 @@ test('givenValidBinaryData_WhenDecodeTargetReportDescriptor_thenCorrectValues', 
     // Given
     var fileManager : FileManager = new FileManager();
     var messageClassifier : MessageClassifier = new MessageClassifier();
-    var targetReportDescriptorDecoder : TargetReportDescriptorDecoder = new TargetReportDescriptorDecoder();
     var cat21Adapter : Cat21Adapter = new Cat21Adapter();
     var expectedAtp : string = "24-Bit ICAO address";
     var expectedArc : string = "25 ft";
@@ -32,13 +31,9 @@ test('givenValidBinaryData_WhenDecodeTargetReportDescriptor_thenCorrectValues', 
 
     var slicedData : Buffer[] = await messageClassifier.sliceMessageBuffer(data);
     var messageCategoriesList : Buffer[] = await messageClassifier.classifyMessage(slicedData, slicedData.length);
-    var listItems = await cat21Adapter.adapt(messageCategoriesList[0]);
-    var targetReportDescriptor : TargetReportDescriptor = await targetReportDescriptorDecoder.decode(listItems[1]);
+    var targetReportDescriptor : TargetReportDescriptor = (await (cat21Adapter.adapt(messageCategoriesList[0]))).targetReportDescriptor;
    
     //Then    
-    //console.log("SAC: " + dataSourceIdentifier.sac);
-    //console.log("SIC: " + dataSourceIdentifier.sic);
-    console.log(listItems);
     expect(targetReportDescriptor).not.toBe(null);
     expect(targetReportDescriptor.atp).toBe(expectedAtp);
     //console.log(targetReportDescriptor.atp);

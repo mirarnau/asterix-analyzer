@@ -61,7 +61,7 @@ import { TargetStatusDecoder } from "./decoders/TargetStatusDecoder";
 import { TimeofApplicabilityforPosition } from "./valueObjects/TimeofApplicabilityforPosition";
 import { TimeofApplicabilityforPositionDecoder } from "./decoders/TimeofApplicabilityforPositionDecoder";
 import { TimeofApplicabilityforVelocity } from "./valueObjects/TimeofApplicabilityforVelocity";
-import { TimeofApplicabilityforVelocityDecoder } from "./decoders/TimeofApplicabilityforVelocitiDecoder";
+import { TimeofApplicabilityforVelocityDecoder} from "./decoders/TimeofApplicabilityforVelocitiDecoder";
 import { TimeofASTERIXReportTransmission } from "./valueObjects/TimeofASTERIXReportTransmission";
 import { TimeofASTERIXReportTransmissionDecoder } from "./decoders/TimeofASTERIXReportTransmissionDecoder";
 import { TimeofMessageReceptionofPosition } from "./valueObjects/TimeofMessageReceptionofPosition";
@@ -99,7 +99,7 @@ export class Cat21 {
     timeofMessageReceptionofVelocity : TimeofMessageReceptionofVelocity;
 
 
-    public async setDataSourceIDentifier(item : Buffer) : Promise<void> {
+    public async setDataSourceIdentifier(item : Buffer) : Promise<void> {
         var dataSourceIdentifierDecoder : DataSourceIdentifierDecoder = new DataSourceIdentifierDecoder();
         var dataSourceIdentifier : DataSourceIdentifier = await dataSourceIdentifierDecoder.decode(item);
         this.dataSourceIdentifier = dataSourceIdentifier;
@@ -123,6 +123,53 @@ export class Cat21 {
         this.serviceIdentification = serviceIdentification;
     }
 
+    public async setTimeofApplicabilityforPosition(item : Buffer) : Promise<void> {
+        var timeofApplicabilityforPositionDecoder : TimeofApplicabilityforPositionDecoder = new TimeofApplicabilityforPositionDecoder();
+        var timeofApplicabilityforPosition : TimeofApplicabilityforPosition = await timeofApplicabilityforPositionDecoder.decode(item);
+        this.timeofApplicabilityforPosition = timeofApplicabilityforPosition;
+    } 
+
+    public async setPositioninWGS84Coordinates(item : Buffer) : Promise<void> {
+        var positioninWGS84CoordinatesDecoder : PositioninWGS84CoordinatesDecoder = new PositioninWGS84CoordinatesDecoder();
+        var positioninWGS84Coordinates : PositioninWGS84Coordinates = await positioninWGS84CoordinatesDecoder.decode(item);
+        this.positioninWGS84Coordinates = positioninWGS84Coordinates;
+    }
+
+    public async setHighResPositionPositioninWGS84Coordinates(item : Buffer) : Promise<void> {
+        var highResolutionPositioninWGS84CoordinatesDecoder : HighResolutionPositioninWGS84CoordinatesDecoder = new HighResolutionPositioninWGS84CoordinatesDecoder();
+        var highResolutionPositioninWGS84Coordinates : HighResolutionPositioninWGS84Coordinates = await highResolutionPositioninWGS84CoordinatesDecoder.decode(item);
+        this.highResPositioninWGS84Coordinates = highResolutionPositioninWGS84Coordinates;
+    }
+
+    public async setTimeofApplicabilityforVelocity(item : Buffer) : Promise<void> {
+        var timeofApplicabilityforVelocityDecoder : TimeofApplicabilityforVelocityDecoder = new TimeofApplicabilityforVelocityDecoder();
+        var timeofApplicabilityforVelocity : TimeofApplicabilityforVelocity = await timeofApplicabilityforVelocityDecoder.decode(item);
+        this.timeofApplicabilityforVelocity = timeofApplicabilityforVelocity;
+    }
+
+    public async setAirSpeed(item : Buffer) : Promise<void> {
+        var airSpeedDecoder : AirSpeedDecoder = new AirSpeedDecoder();
+        var airSpeed : AirSpeed = await airSpeedDecoder.decode(item);
+        this.airSpeed = airSpeed;
+    }
+
+    public async setTrueAirSpeed(item : Buffer) : Promise<void> {
+        var trueAirSpeedDecoder : TrueAirSpeedDecoder = new TrueAirSpeedDecoder();
+        var trueAirSpeed : TrueAirSpeed = await trueAirSpeedDecoder.decode(item);
+        this.trueAirSpeed = trueAirSpeed;
+    }
+
+    public async setTargetAddress(item : Buffer) : Promise<void> {
+        var targetAddressDecoder : TargetAddressDecoder = new TargetAddressDecoder();
+        var targetAddress : TargetAddress = await targetAddressDecoder.decode(item);
+        this.targetAddress = targetAddress;
+    }
+    
+    public async setTimeofMessageReceptionofPosition(item : Buffer) : Promise<void> {
+        var timeofMessageReceptionofPositionDecoder : TimeofMessageReceptionofPositionDecoder = new TimeofMessageReceptionofPositionDecoder();
+        var timeofMessageReceptionofPosition : TimeofMessageReceptionofPosition = await timeofMessageReceptionofPositionDecoder.decode(item);
+        this.timeofApplicabilityforPosition = timeofMessageReceptionofPosition;
+    }
 
     
 

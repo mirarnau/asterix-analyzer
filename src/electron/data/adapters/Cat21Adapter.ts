@@ -1,6 +1,14 @@
+import { Cat21 } from "../../cat21/Cat21";
+import { AsyncScheduler } from "../../utils/AsyncScheduler";
+import { Operator } from "../../utils/Operator";
+
 export class Cat21Adapter {
 
-  public async adapt(message : Buffer) : Promise<Buffer[]> {
+  operator : Operator = new Operator();
+  schduler : AsyncScheduler = new AsyncScheduler();
+  cat21 : Cat21 = new Cat21();
+
+  public async adapt(message : Buffer) : Promise<Cat21> {
       const fspec = BigInt("0x" + message.subarray(3, 10).toString("hex"))
       .toString(2)
       .padStart(7 * 8, "0")
@@ -20,34 +28,39 @@ export class Cat21Adapter {
           return;
           }).length + 3;
       
-      var items : any[] = [];
       //DataSourceIdentifier
-      items.push(message.subarray(offset, offset + 2));
+      var dataSourceIdentifier = message.subarray(offset, offset + 2);
+      this.schduler.addOperation(this.cat21.setDataSourceIdentifier(dataSourceIdentifier));
       offset += 2;
 
       //Target Report Descriptor
       let len = await this.variableItemOffset(message.subarray(offset, offset + 3), 3);
-      items.push(message.subarray(offset, offset + len));
+      var targetReportDescriptor = message.subarray(offset, offset + len);
+      this.schduler.addOperation(this.cat21.setTargetReporDesriptor(targetReportDescriptor))
       offset += len;
 
       // Track Number
       if (fspec[2] === "1") {
-        items.push(message.subarray(offset, offset + 2));
+        var trackNumber = message.subarray(offset, offset + 2);
+        this.schduler.addOperation(this.cat21.setTrackNumber(trackNumber));
         offset += 2;
       }
       // Service Identification
       if (fspec[3] === "1") {
-        items.push(message.subarray(offset, offset + 1));
+        var serviceIdentification = message.subarray(offset, offset + 1);
+        this.schduler.addOperation(this.cat21.setServiceIdentification(serviceIdentification));
         offset += 1;
       }
       // Time of Applicability for Position
       if (fspec[4] === "1") {
-        items.push(message.subarray(offset, offset + 3));
+        var timeofApplicabilityforPosition = message.subarray(offset, offset + 3);
+        this.schduler.addOperation(this.cat21.setTimeofApplicabilityforPosition(timeofApplicabilityforPosition));
         offset += 3;
       }
       // Position in WGS-84 coordinates
       if (fspec[5] === "1") {
-        items.push(message.subarray(offset, offset + 6));
+        var positioninWGS84Coordinates = message.subarray(offset, offset + 6);
+        this.schduler.addOperation(this.cat21.setPositioninWGS84Coordinates(positioninWGS84Coordinates));
         offset += 6;
       }
       // Position in WGS-84 coordinates High Resolution
@@ -57,34 +70,42 @@ export class Cat21Adapter {
           console.log(fspec);
           console.log(message);
         }
-        items.push(message.subarray(offset, offset + 8));
+        var highResolutionPositioninWGS84Coordinates = message.subarray(offset, offset + 8);
+        this.schduler.addOperation(this.cat21.setHighResPositionPositioninWGS84Coordinates(highResolutionPositioninWGS84Coordinates));
         offset += 8;
       }
       // FX
       if (fspec[7] === "1") {      
         // Time of Applicability for Velocity
         if (fspec[8] === "1") {
-          items.push(message.subarray(offset, offset + 3));
+          var timeofApplicabilityforVelocity = message.subarray(offset, offset + 3);
+          this.schduler.addOperation(this.cat21.setTimeofApplicabilityforVelocity(timeofApplicabilityforVelocity));
           offset += 3;
         }
         // Air Speed
         if (fspec[9] === "1") {
-          items.push(message.subarray(offset, offset + 2));
+          var airSpeed = message.subarray(offset, offset + 2);
+          this.schduler.addOperation(this.cat21.setAirSpeed(airSpeed));
           offset += 2;
         }
         // True Air Speed
         if (fspec[10] === "1") {
-          items.push(message.subarray(offset, offset + 2));
+          var trueAirSpeed = message.subarray(offset, offset + 2);
+          this.schduler.addOperation(this.cat21.setTrueAirSpeed(trueAirSpeed));
           offset += 2;
         }
         /// Target Address
-        items.push(message.subarray(offset, offset + 3));
+        var targetAddress = message.subarray(offset, offset + 3);
+        this.schduler.addOperation(this.cat21.setTargetAddress(targetAddress));
         offset += 3;
+        
         // Time of Message Reception of Position
         if (fspec[12] === "1") {
-          items.push(message.subarray(offset, offset + 3));
+          var timeofMessageReceptionofPosition = message.subarray(offset, offset + 3);
+          this.schduler.addOperation(this.cat21.setTimeofMessageReceptionofPosition(timeofMessageReceptionofPosition));
           offset += 3;
         }
+        /*
         // Time of Message Reception of Position-High
         if (fspec[13] === "1") {
           items.push(message.subarray(offset, offset + 4));
@@ -297,8 +318,10 @@ export class Cat21Adapter {
             }
           }
         }
+              */
       }
-    return items;
+    await this.schduler.execute();
+    return this.cat21;
   }
     
 private async variableItemOffset(buffer: Buffer, max_len: number) {

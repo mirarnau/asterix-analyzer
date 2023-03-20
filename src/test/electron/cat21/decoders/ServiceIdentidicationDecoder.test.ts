@@ -3,6 +3,7 @@ import { FileManager } from "../../../../electron/utils/FileManager";
 import { MessageClassifier } from "../../../../electron/data/MessageClassifier";
 import { ServiceIdentificationDecoder } from "../../../../electron/cat21/decoders/ServiceIdentificationDecoder";
 import { Cat21Adapter } from "../../../../electron/data/adapters/Cat21Adapter";
+import { ServiceIdentification } from '../../../../electron/cat21/valueObjects/ServiceIdentification';
 
 test('givenValidBinaryData_WhenDecodeServiceIdentification_thenCorrectValues', async () => {
     // Given
@@ -17,14 +18,12 @@ test('givenValidBinaryData_WhenDecodeServiceIdentification_thenCorrectValues', a
 
     var slicedData : Buffer[] = await messageClassifier.sliceMessageBuffer(data);
     var messageCategoriesList : Buffer[] = await messageClassifier.classifyMessage(slicedData, slicedData.length);
-    var listItems = await cat21Adapter.adapt(messageCategoriesList[0]);
-    var serviceIdentification = await serviceIdentificationDecoder.decode(listItems[3]);
+    var serviceIdentification : ServiceIdentification = (await (cat21Adapter.adapt(messageCategoriesList[0]))).serviceIdentification;
    
     //Then        
-    console.log(listItems);
     console.log(serviceIdentification);
-    expect(serviceIdentification).not.toBe(null);
-    expect(serviceIdentification).toBe(expectedServiceIdentification);
+    expect(serviceIdentification.serviceIdentification).not.toBe(null);
+    expect(serviceIdentification.serviceIdentification).toBe(expectedServiceIdentification);
 
 })
 
