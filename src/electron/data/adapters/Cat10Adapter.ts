@@ -42,7 +42,7 @@ export class Cat10Adapter {
             this.schduler.addOperation(this.cat10.setTimeOfDay(timeOfDay));
             if (offset === 9) {
                 var systemStatus = message.subarray(offset + 3, offset + 4);
-                // NO DECODER YET
+                this.schduler.addOperation(this.cat10.setsystemStatus(systemStatus));
             }
         }
         else{
@@ -73,12 +73,12 @@ export class Cat10Adapter {
             if (fspec[7] === "1") {
                 if (fspec[8] === "1") {
                     var calculatedTrackVelocityPolarCoordinates = message.subarray(offset, offset + 4);
-                    // NO DECODER YET
+                    this.schduler.addOperation(this.cat10.setCalculatedTrackVelocityPolarCoordinates(calculatedTrackVelocityPolarCoordinates));
                     offset += 4;
                 }
                 if (fspec[9] === "1") {
                     var calculatedTrackVelocityCartesianCoordinates = message.subarray(offset, offset + 4);
-                    // NO DECODER YET
+                    this.schduler.addOperation(this.cat10.setCalculatedTrackVelocityCartesianCoordinates(calculatedTrackVelocityCartesianCoordinates));
                     offset += 4;
                 }
                 if (fspec[10] === "1") {
@@ -99,23 +99,25 @@ export class Cat10Adapter {
                 }
                 if (fspec[13] === "1") {
                     var targetAddress = message.subarray(offset, offset + 3);
-                    // NO DECODER YET
+                    this.schduler.addOperation(this.cat10.setTargetAddress(targetAddress));
                     offset += 3; 
                 }
                 if (fspec[14] === "1") {
                     var targetIdentification = message.subarray(offset, offset + 7);
-                    // NO DECODER YET
+                    this.schduler.addOperation(this.cat10.setTargetIdentification(targetIdentification));
                     offset += 7;
                 }
                 if (fspec[15] === "1") {
                     if (fspec[16] === "1") {
                         const length = parseInt("0x" + message.subarray(offset, offset + 1).toString("hex"));
-                        // NO DECODER YET
+                        var modeSMBDData = message.subarray(offset, offset + 1 + 8 * length)
+                        this.schduler.addOperation(this.cat10.setModeSMBData(modeSMBDData, length));
                         offset += 1 + 8 * length;
                       }
                     if (fspec[17] === "1") {
                         var vehicleFleetIdentification = message.subarray(offset, offset + 1);
-                        // NO DECODER YET
+                        this.schduler.addOperation(this.cat10.setVehicleFleetIdentification(vehicleFleetIdentification));
+
                         offset += 1;
                     }
                     if (fspec[18] === "1") {
@@ -131,8 +133,35 @@ export class Cat10Adapter {
                     if (fspec[20] === "1") {
                         let variableOffset = this.operator.getVariableItemOffset(message.subarray(offset, offset + 3), 3);
                         var targetSizeAndOrientation = message.subarray(offset, offset + variableOffset);
-                        // NO DECODER YET
+                        this.schduler.addOperation(this.cat10.setTargetSizeAndOrientation(targetSizeAndOrientation));
                         offset += variableOffset; 
+                    }
+                    if (fspec[22] === "1") {
+                        var preProgrammedMessage = message.subarray(offset, offset + 1)
+                        this.schduler.addOperation(this.cat10.setPreProgrammedMessage(preProgrammedMessage));
+                        offset += 1;
+                    }
+                    if (fspec[23] === "1") {
+                        if (fspec[24] === "1") {
+                            var standardDeviationOfPosition = message.subarray(offset, offset + 4);
+                            this.schduler.addOperation(this.cat10.setStandardDeviationOfPosition(standardDeviationOfPosition));
+                            offset += 4;
+                        }
+                        if (fspec[25] === "1") {
+                            const len = parseInt("0x" + message.subarray(offset, offset + 1).toString("hex"));
+                            var presence = message.subarray(offset + 1, offset + 1 + 2 * len);
+                            this.schduler.addOperation(this.cat10.setPresence(presence, len));
+                            offset += 1 + 2 * len;
+                        }
+                        if (fspec[26] === "1") {
+                            var amplitudeOfPrimaryPlot = message.subarray(offset, offset + 1);
+                            this.schduler.addOperation(this.cat10.setAmplitudeOfPrimaryPlot(amplitudeOfPrimaryPlot));
+                            offset += 1;
+                        }
+                        if (fspec[27] === "1") {
+                            var calculatedAcceleration = message.subarray(offset, offset + 2);
+                            this.schduler.addOperation(this.cat10.setCalculatedAcceleration(calculatedAcceleration));
+                        }
                     }
                 }
 

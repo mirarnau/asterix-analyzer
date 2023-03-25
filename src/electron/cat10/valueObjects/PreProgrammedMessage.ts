@@ -2,16 +2,16 @@ import { strict as assert } from 'node:assert';
 
 export class PreProgrammedMessage {
     trb : string;
-    data : string;
+    message : string;
 
-    constructor(trb : string, data : string){
+    constructor(trb : string, message : string){
     this.trb = trb;
-    this.data = data;
+    this.message = message;
     }
 
     validate(){
         assert(this.trb != null);
-        assert(this.data != null);
+        assert(this.message != null);
     }
     
 }
