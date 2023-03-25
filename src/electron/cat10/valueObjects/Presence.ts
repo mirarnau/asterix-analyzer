@@ -1,18 +1,16 @@
+import { PresenceObject } from "./PresenceObject";
 import { strict as assert } from 'node:assert';
 
 export class Presence {
-    dRho : string;
-    dTheta : string;
+    list : PresenceObject[];
 
-    constructor(dRho : string, dTheta : string){
-        this.dRho = dRho;
-        this.dTheta = dTheta;
+    constructor(list : PresenceObject[]){
+        this.list = list;
         this.validate();
     }
 
     validate(){
-        assert(this.dRho != null);
-        assert(this.dRho != null);
+        assert(this.list != null);
     }
 
 }

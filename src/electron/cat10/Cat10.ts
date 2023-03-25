@@ -1,16 +1,28 @@
 import { AmplitudeOfPrimaryPlotDecoder } from "./decoders/AmplitudeOfPrimaryPlotDecoder";
+import { CalculatedAccelerationDecoder } from "./decoders/CalculatedAccelerationDecoder";
+import { CalculatedTrackVelocityCartesianCoordinatesDecoder } from "./decoders/CalculatedTrackVelocityCartesianCoordinatesDecoder";
+import { CalculatedTrackVelocityPolarCoordinatesDecoder } from "./decoders/CalculatedTrackVelocityPolarCoordinatesDecoder";
 import { DataSourceIdentifierDecoder } from "./decoders/DataSourceIdentifierDecoder";
 import { FlightLevelBinaryDecoder } from "./decoders/FlightLevelBinaryDecoder";
 import { MeasuredHeightDecoder } from "./decoders/MeasuredHeightDecoder";
 import { MeasuredPositionPolarCoordinatesDecoder } from "./decoders/MeasuredPositionPolarCoordinatesDecoder";
 import { MessageTypeDecoder } from "./decoders/MessageTypeDecoder";
 import { Mode3ACodeOctalRepresentationDecoder } from "./decoders/Mode3ACodeOctalRepresentationDecoder";
+import { ModeSMBDataDecoder } from "./decoders/ModeSMBDataDecoder";
 import { PositionCartesianCoordinatesDecoder } from "./decoders/PositionCartesianCoordinatesDecoder";
 import { PositionWG84CoordinatesDecoder } from "./decoders/PositionWGS84CoordinatesDecoder";
+import { PreProgrammedMessageDecoder } from "./decoders/PreProgrammedMessageDecoder";
+import { PresenceDecoder } from "./decoders/PresenceDecoder";
+import { StandardDeviationOfPositionDecoder } from "./decoders/StandardDeviationOfPositionDecoder";
+import { SystemStatusDecoder } from "./decoders/SystemStatusDecoder";
+import { TargetAddressDecoder } from "./decoders/TargetAddressDecoder";
+import { TargetIdentificationDecoder } from "./decoders/TargetIdentificationDecoder";
 import { TargetReportDescriptorDecoder } from "./decoders/TargetReportDescriptorDecoder";
+import { TargetSizeAndOrientationDecoder } from "./decoders/TargetSizeAndOrientationDecoder";
 import { TimeOfDayDecoder } from "./decoders/TimeOfDayDecoder";
 import { TrackNumberDecoder } from "./decoders/TrackNumberDecoder";
 import { TrackStatusDecoder } from "./decoders/TrackStatusDecoder";
+import { VehicleFleetIdentificationDecoder } from "./decoders/VehicleFleetIdentificationDecoder";
 import { AmplitudeOfPrimaryPlot } from "./valueObjects/AmplitudeOfPrimaryPlot";
 import { CalculatedAcceleration } from "./valueObjects/CalculatedAcceleration";
 import { CalculatedTrackVelocityCartesianCoordinates } from "./valueObjects/CalculatedTrackVelocityCartesianCoordinates";
@@ -53,7 +65,7 @@ export class Cat10 {
     trackStatus : TrackStatus;
     calculatedTrackVelocityPolarCoordinates : CalculatedTrackVelocityPolarCoordinates;
     calculatedTrackVelocityCartesianCoordinates : CalculatedTrackVelocityCartesianCoordinates;
-    calculatedacceleration : CalculatedAcceleration;
+    calculatedAcceleration : CalculatedAcceleration;
     targetAddress : TargetAddress;
     targetIdentification : TargetIdentification;
     modeSMBData : ModeSMBData;
@@ -141,5 +153,78 @@ export class Cat10 {
         var trackStatus : TrackStatus = await trackStatusDecoder.decode(item);
         this.trackStatus = trackStatus;
     }
+      
+
+    public async setCalculatedTrackVelocityPolarCoordinates(item : Buffer) : Promise<void> {
+        var calculatedTrackVelocityPolarCoordinatesDecoder : CalculatedTrackVelocityPolarCoordinatesDecoder = new CalculatedTrackVelocityPolarCoordinatesDecoder();
+        var calculatedTrackVelocityPolarCoordinates : CalculatedTrackVelocityPolarCoordinates  = await calculatedTrackVelocityPolarCoordinatesDecoder.decode(item);
+        this.calculatedTrackVelocityPolarCoordinates = calculatedTrackVelocityPolarCoordinates;
+    }
+
+    public async setCalculatedTrackVelocityCartesianCoordinates(item : Buffer) : Promise<void> {
+        var calculatedTrackVelocityCartesianCoordinatesDecoder : CalculatedTrackVelocityCartesianCoordinatesDecoder = new CalculatedTrackVelocityCartesianCoordinatesDecoder();
+        var calculatedTrackVelocityCartesianCoordinates : CalculatedTrackVelocityCartesianCoordinates  = await calculatedTrackVelocityCartesianCoordinatesDecoder.decode(item);
+        this.calculatedTrackVelocityCartesianCoordinates = calculatedTrackVelocityCartesianCoordinates;
+    }
+
+    public async setCalculatedAcceleration(item : Buffer) : Promise<void> {
+        var calculatedAccelerationDecoder : CalculatedAccelerationDecoder = new CalculatedAccelerationDecoder();
+        var calculatedAcceleration : CalculatedAcceleration  = await calculatedAccelerationDecoder.decode(item);
+        this.calculatedAcceleration = calculatedAcceleration;
+    }
+
+    public async setTargetAddress(item : Buffer) : Promise<void> {
+        var targetAddressDecoder : TargetAddressDecoder = new TargetAddressDecoder();
+        var targetAddress : TargetAddress  = await targetAddressDecoder.decode(item);
+        this.targetAddress = targetAddress;
+    }
+
+    public async setTargetIdentification(item : Buffer) : Promise<void> {
+        var targetIdentificationDecoder : TargetIdentificationDecoder = new TargetIdentificationDecoder();
+        var targetIdentification : TargetIdentification  = await targetIdentificationDecoder.decode(item);
+        this.targetIdentification = targetIdentification;
+    }
+
+    public async setModeSMBData(item : Buffer, length : number) : Promise<void> {
+        var modeSMBDataDecoder : ModeSMBDataDecoder = new ModeSMBDataDecoder();
+        var modeSMBData : ModeSMBData  = await modeSMBDataDecoder.decode(item, length);
+        this.modeSMBData = modeSMBData;
+    }
     
+    public async setTargetSizeAndOrientation(item : Buffer) : Promise<void> {
+        var targetSizeAndOrientationDecoder : TargetSizeAndOrientationDecoder = new TargetSizeAndOrientationDecoder();
+        var targetSizeAndOrientation : TargetSizeAndOrientation  = await targetSizeAndOrientationDecoder.decode(item);
+        this.targetSizeAndOrientation = targetSizeAndOrientation;
+    }
+
+    public async setPresence(item : Buffer, length : number) : Promise<void> {
+        var presenceDecoder : PresenceDecoder = new PresenceDecoder();
+        var presence : Presence  = await presenceDecoder.decode(item, length);
+        this.presence = presence;
+    }
+
+    public async setVehicleFleetIdentification(item : Buffer) : Promise<void> {
+        var vehicleFleetIdentificationDecoder : VehicleFleetIdentificationDecoder = new VehicleFleetIdentificationDecoder();
+        var vehicleFleetIdentification : VehicleFleetIdentification  = await vehicleFleetIdentificationDecoder.decode(item);
+        this.vehicleFleetIdentification = vehicleFleetIdentification;
+    }
+
+    public async setPreProgrammedMessage(item : Buffer) : Promise<void> {
+        var preProgrammedMessageDecoder : PreProgrammedMessageDecoder = new PreProgrammedMessageDecoder();
+        var preProgrammedMessage : PreProgrammedMessage  = await preProgrammedMessageDecoder.decode(item);
+        this.preProgrammedMessage = preProgrammedMessage;
+    }
+
+    public async setStandardDeviationOfPosition(item : Buffer) : Promise<void> {
+        var standardDeviationOfPositionDecoder : StandardDeviationOfPositionDecoder = new StandardDeviationOfPositionDecoder();
+        var standardDeviationOfPosition : StandardDeviationOfPosition  = await standardDeviationOfPositionDecoder.decode(item);
+        this.standardDeviationOfPosition = standardDeviationOfPosition;
+    }
+
+    public async setsystemStatus(item : Buffer) : Promise<void> {
+        var systemStatusDecoder : SystemStatusDecoder = new SystemStatusDecoder();
+        var systemStatus : SystemStatus  = await systemStatusDecoder.decode(item);
+        this.systemStatus = systemStatus;
+    }
+
 }
