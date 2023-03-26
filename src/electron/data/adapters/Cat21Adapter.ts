@@ -131,78 +131,91 @@ export class Cat21Adapter {
             this.schduler.addOperation(this.cat21.setGeometricHeight(geometricHeight));
             offset += 2;
           }
-          /*
           // Quality Indicators
           let len = await this.variableItemOffset(message.subarray(offset, offset + 4), 4);
-          items.push(message.subarray(offset, offset + len));
+          var qualityIndicator = message.subarray(offset, offset + len);
+          this.schduler.addOperation(this.cat21.setQualityIndicators(qualityIndicator));
           offset += len;
           // MOPS Version
           if (fspec[19] === "1") {
-            items.push(message.subarray(offset, offset + 1));
+            var mopsVersion = message.subarray(offset, offset + 1);
+            this.schduler.addOperation(this.cat21.setMOPSVersion(mopsVersion));
             offset += 1;
           }
           // Mode 3/A Code
           if (fspec[20] === "1") {
-            items.push(message.subarray(offset, offset + 2));
+            var mode3A = message.subarray(offset, offset + 2);
+            this.schduler.addOperation(this.cat21.setMode3A(mode3A));
             offset += 2;
           }
           // Roll Angle
           if (fspec[21] === "1") {
-            items.push(message.subarray(offset, offset + 2));
+            var rollAngle = message.subarray(offset, offset + 2);
+            this.schduler.addOperation(this.cat21.setRollAngle(rollAngle));
             offset += 2;
           }
           // Flight Level
           if (fspec[22] === "1") {
-            items.push(message.subarray(offset, offset + 2));
+            var flightLevel = message.subarray(offset, offset + 2);
+            this.schduler.addOperation(this.cat21.setFlightLevel(flightLevel));
             offset += 2;
           }
           // FX
           if (fspec[23] === "1") {
             // Magnetic Heading     
             if (fspec[24] === "1") {
-              items.push(message.subarray(offset, offset + 2));
+              var magneticHeading = message.subarray(offset, offset + 2);
+              this.schduler.addOperation(this.cat21.setMagneticHeading(magneticHeading));
               offset += 2;
             }
             // Target Status
             if (fspec[25] === "1") {
-              items.push(message.subarray(offset, offset + 1));
+              var targetStatus = message.subarray(offset, offset + 1);
+              this.schduler.addOperation(this.cat21.setTargetStatus(targetStatus));
               offset += 1;
             }
             // Barometric Vertical Rate
             if (fspec[26] === "1") {
-              items.push(message.subarray(offset, offset + 2));
+              var barometricVerticalRate = message.subarray(offset, offset + 2);
+              this.schduler.addOperation(this.cat21.setBarometricVerticalRate(barometricVerticalRate));
               offset += 2;
             }
             // Geometric Vertical Rate
             if (fspec[27] === "1") {
-              items.push(message.subarray(offset, offset + 2));
+              var geometricVerticalRate = message.subarray(offset, offset + 2);
+              this.schduler.addOperation(this.cat21.setGeometricVerticalRate(geometricVerticalRate));
               offset += 2;
             }
             // Airborne Ground Vector
             if (fspec[28] === "1") {
-              items.push(message.subarray(offset, offset + 4));
+              var airborneGroundVector = message.subarray(offset, offset + 4);
+              this.schduler.addOperation(this.cat21.setAirborneGroundVector(airborneGroundVector));
               offset += 4;
             }
             // Track Angle Rate
             if (fspec[29] === "1") {
-              items.push(message.subarray(offset, offset + 2));
+              var trackAngleRate = message.subarray(offset, offset + 2);
+              this.schduler.addOperation(this.cat21.setTrackAngleRate(trackAngleRate));
               offset += 2; 
             }
             // Time of Report Transmission
             if (fspec[30] === "1") {
-              items.push(message.subarray(offset, offset + 3));
+              var timeofReportTransmission = message.subarray(offset, offset + 3);
+              this.schduler.addOperation(this.cat21.setTimeofReportTransmission(timeofReportTransmission));
               offset += 3;
             }
             // FX
             if (fspec[31] === "1") {
               // Target Identification
               if (fspec[32] === "1") {
-                items.push(message.subarray(offset, offset + 6));
+                var targetIdentification = message.subarray(offset, offset + 6);
+                this.schduler.addOperation(this.cat21.setTargetIdentification(targetIdentification));
                 offset += 6;
               }
               // Emitter Category
               if (fspec[33] === "1") {
-                items.push(message.subarray(offset, offset + 1));
+                var emitterCategory = message.subarray(offset, offset + 1);
+                this.schduler.addOperation(this.cat21.setEmitterCategory(emitterCategory));
                 offset += 1;
               }
               // Met Information
@@ -238,18 +251,22 @@ export class Cat21Adapter {
                         break;
                     }
                   });
-                items.push(
-                  message.subarray(offset + 1, offset + selection.length * 2 + len), selection);
+                //items.push(
+                  //message.subarray(offset + 1, offset + selection.length * 2 + len), selection);
+                var metInformation = message.subarray(offset + 1, offset + selection.length * 2 + len);
+                this.schduler.addOperation(this.cat21.setMetInformation(metInformation, selection));
                 offset += selection.length * 2 + len;
               }
               // Selected Altitude
               if (fspec[35] === "1") {
-                items.push(message.subarray(offset, offset + 2));
+                var selectedAltitude = message.subarray(offset, offset + 2);
+                this.schduler.addOperation(this.cat21.setSelectedAltutude(selectedAltitude));
                 offset += 2;
               }
               // Final State Selected Altitude
               if (fspec[36] === "1") {
-                items.push(message.subarray(offset, offset + 2));
+                var finalStateSelectedAltitude = message.subarray(offset, offset + 2);
+                this.schduler.addOperation(this.cat21.setFinalStateSelectedAltitude(finalStateSelectedAltitude));
                 offset += 2;
               }
               // Trajectory Intent
@@ -271,59 +288,67 @@ export class Cat21Adapter {
                   len += 15 * rep;
                   tid = true;
                 }
-                items.push(message.subarray(offset + 1, offset + len + 1), tis, tid, rep);
+                var trajectoryIntent = message.subarray(offset + 1, offset + len + 1);
+                //items.push(message.subarray(offset + 1, offset + len + 1), tis, tid, rep);
+                this.schduler.addOperation(this.cat21.setTrajectoryIntent(trajectoryIntent, tis, tid, rep));
                 offset += len + 1;
               }
               // Service Management
               if (fspec[38] === "1") {
-                items.push(message.subarray(offset, offset + 1));
+                var serviceManagement = message.subarray(offset, offset + 1);
+                this.schduler.addOperation(this.cat21.setServiceManagement(serviceManagement));
                 offset += 1;
               }
               // FX
               if (fspec[39] === "1") {
                 // Aircraft Operational Status
                 if (fspec[40] === "1") {
-                  items.push(message.subarray(offset, offset + 1));
+                  var aircraftOperationalStatus = message.subarray(offset, offset + 1);
+                  this.schduler.addOperation(this.cat21.setAircraftOperationalStatus(aircraftOperationalStatus));
                   offset += 1;
                 }
                 // Surface Capabilities and Characteristics
                 if (fspec[41] === "1") {
                   let len = await this.variableItemOffset(message.subarray(offset, offset + 2), 2);
-                  items.push(message.subarray(offset, offset + len));
+                  var surfaCapabilitiesandCharacteristics = message.subarray(offset, offset + len);
+                  this.schduler.addOperation(this.cat21.setSurfaceCapabilitiesandCharacteristics(surfaCapabilitiesandCharacteristics));
                   offset += len;
                 }
                 // Message Amplitude
                 if (fspec[42] === "1") {
-                  items.push(message.subarray(offset, offset + 1));
+                  var messageAmplitude = message.subarray(offset, offset + 1);
+                  this.schduler.addOperation(this.cat21.setMessageAmplitude(messageAmplitude));
                   offset += 1;
                 }
                 // Mode S MB Data
                 if (fspec[43] === "1") {
-                  const len = parseInt("0x" + message.subarray(offset, offset + 1).toString("hex"));
-                  items.push(message.subarray(offset + 1, offset + 1 + 8 * len), len);
-                  offset += 1 + 8 * len;
+                  const rep = parseInt("0x" + message.subarray(offset, offset + 1).toString("hex"));
+                  var modeSMBData = message.subarray(offset + 1, offset + 1 + 8 * rep);
+                  this.schduler.addOperation(this.cat21.setModeSMBData(modeSMBData, rep));
+                  offset += 1 + 8 * rep;
                 }
                 // ACAS Resolution Advisory Report
                 if (fspec[44] === "1") {
-                  items.push(message.subarray(offset, offset + 7));
+                  var acasResolutionAdvisoryReport = message.subarray(offset, offset + 7);
+                  this.schduler.addOperation(this.cat21.setACASResolutionAdvisoryReport(acasResolutionAdvisoryReport));
                   offset += 7;
                 }
                 // Receiver ID
                 if (fspec[45] === "1") {
-                  items.push(message.subarray(offset, offset + 1));
+                  var receiverID = message.subarray(offset, offset + 1);
+                  this.schduler.addOperation(this.cat21.setReceiverID(receiverID));
                   offset += 1;
                 }
                 // Data Ages
                 if (fspec[46] === "1") {
-                  items.push(message.subarray(offset, message.length));
+                  var dataAges = message.subarray(offset, message.length);
+                  this.schduler.addOperation(this.cat21.setDataAges(dataAges));
                   offset += len;
                 }
               }
             }
           }
         }
-              */
-      }
       }
       await this.schduler.execute();
       return this.cat21;

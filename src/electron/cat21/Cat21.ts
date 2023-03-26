@@ -80,6 +80,8 @@ import { TrajectoryIntent } from "./valueObjects/TrajcetoryIntent";
 import { TrajectoryIntentDecoder } from "./decoders/TrajectoryIntentDecoder";
 import { TrueAirSpeed } from "./valueObjects/TrueAirSpeed";
 import { TrueAirSpeedDecoder } from "./decoders/TrueAirSpeedDecoder";
+import { GeometricVerticalRate } from "./valueObjects/GeometricVerticalRate";
+import { GeometricVerticalRateDecoder } from "./decoders/GeometricVerticalRateDecoder";
 
 export class Cat21 {
 
@@ -99,7 +101,32 @@ export class Cat21 {
     timeofMessageReceptionofVelocity : TimeofMessageReceptionofVelocity;
     timeofMessageReceptionofVelocity_highPres : TimeofMessageReceptionofVelocity_HighPrecision;
     geometricHeight : GeometricHeight;
-
+    qualityIndicators : QualityIndicators;
+    mopsVersion : MOPSVersion;
+    mode3A : Mode3ACodeOctalRepresentation;
+    rollAngle : RollAngle;
+    flightLevel : FlightLevel;
+    magneticHeading : MagneticHeading;
+    targetStatus : TargetStatus;
+    barometricVerticalRate : BarometricVerticalRate;
+    geometricVerticalRate : GeometricVerticalRate;
+    ariborneGroundVector : AirborneGroundVector;
+    trackAngleRate : TrackAngleRate;
+    timeofReportTransmission : TimeofASTERIXReportTransmission;
+    targetIdentification : TargetIdentification;
+    emitterCategory : EmitterCategory;
+    metInformation : MetInformation;
+    selectedAltitude : SelectedAltitude;
+    finalStateSelectedAltitude : FinalStateSelectedAltitude;
+    trajectoryIntent : TrajectoryIntent;
+    serviceManagement : ServiceManagement;
+    aircraftOperationalStatus : AircraftOperationalStatus;
+    surfaCapabilitiesandCharacteristics: SurfaceCapabilitiesandCharacteristics;
+    messageAmplitude : MessageAmplitude;
+    modeSMBData : ModeSMBData;
+    acasResolutionAdvisoryReport : ACASResolutionAdvisoryReport;
+    receiverID : ReceiverID;
+    dataAges : DataAges;
 
     public async setDataSourceIdentifier(item : Buffer) : Promise<void> {
         var dataSourceIdentifierDecoder : DataSourceIdentifierDecoder = new DataSourceIdentifierDecoder();
@@ -196,9 +223,162 @@ export class Cat21 {
         var geometricHeight : GeometricHeight = await geometricHeightDecoder.decode(item);
         this.geometricHeight = geometricHeight;
     }
+
+    public async setQualityIndicators(item : Buffer) : Promise<void> {
+        var qualityIndicatorsDecoder : QualityIndicatorsDecoder = new QualityIndicatorsDecoder();
+        var qualityIndicators : QualityIndicators = await qualityIndicatorsDecoder.decode(item);
+        this.qualityIndicators = qualityIndicators;
+    }
+
+    public async setMOPSVersion(item : Buffer) : Promise<void> {
+        var mopsVersionDecoder : MOPSVersionDecoder = new MOPSVersionDecoder();
+        var mopsVersion : MOPSVersion = await mopsVersionDecoder.decode(item);
+        this.mopsVersion = mopsVersion;
+    }
+
+    public async setMode3A(item : Buffer) : Promise<void> {
+        var mode3ACodeOcalRepresentationDecoder : Mode3ACodeOctalRepresentationDecoder = new Mode3ACodeOctalRepresentationDecoder();
+        var mode3A : Mode3ACodeOctalRepresentation = await mode3ACodeOcalRepresentationDecoder.decode(item);
+        this.mode3A = mode3A;
+    }
+
+    public async setRollAngle(item : Buffer) : Promise<void> {
+        var rollAngleDecoder : RollAngleDecoder = new RollAngleDecoder();
+        var rollAngle : RollAngle = await rollAngleDecoder.decode(item);
+        this.rollAngle = rollAngle;
+    }
+
+    public async setFlightLevel(item : Buffer) : Promise<void> {
+        var flightLevelDecoder : FlightLevelDecoder = new FlightLevelDecoder();
+        var flightLevel : FlightLevel = await flightLevelDecoder.decode(item);
+        this.flightLevel = flightLevel;
+    }
+
+    public async setMagneticHeading(item : Buffer) : Promise<void> {
+        var magneticHeadingDecoder : MagneticHeadingDecoder = new MagneticHeadingDecoder();
+        var magneticHeading : MagneticHeading = await magneticHeadingDecoder.decode(item);
+        this.magneticHeading = magneticHeading;
+    }
+
+    public async setTargetStatus(item : Buffer) : Promise<void> {
+        var targetStatusDecoder : TargetStatusDecoder = new TargetStatusDecoder();
+        var targetStatus : TargetStatus = await targetStatusDecoder.decode(item);
+        this.targetStatus = targetStatus;
+    }
+
+    public async setBarometricVerticalRate(item : Buffer) : Promise<void> {
+        var barometricVerticalRateDecoder : BarometricVerticalRateDecoder = new BarometricVerticalRateDecoder();
+        var barometricVerticalRate : BarometricVerticalRate = await barometricVerticalRateDecoder.decode(item);
+        this.barometricVerticalRate = barometricVerticalRate;
+    }
+
+    public async setGeometricVerticalRate(item : Buffer) : Promise<void> {
+        var geometricVerticalRateDecoder : GeometricVerticalRateDecoder = new GeometricVerticalRateDecoder();
+        var geometricVerticalRate : GeometricVerticalRate = await geometricVerticalRateDecoder.decode(item);
+        this.geometricVerticalRate = geometricVerticalRate;
+    }
+
+    public async setAirborneGroundVector(item : Buffer) : Promise<void> {
+        var airborneGroundVectorDecoder : AirborneGroundVectorDecoder = new AirborneGroundVectorDecoder();
+        var airborneGroundVector : AirborneGroundVector = await airborneGroundVectorDecoder.decode(item);
+        this.ariborneGroundVector = airborneGroundVector;
+    }
+
+    public async setTrackAngleRate(item : Buffer) : Promise<void> {
+        var trackAngleRateDecoder : TrackAngleRateDecoder = new TrackAngleRateDecoder();
+        var trackAngleRate : TrackAngleRate = await trackAngleRateDecoder.deocde(item);
+        this.trackAngleRate = trackAngleRate;
+    }
+
+    public async setTimeofReportTransmission(item : Buffer) : Promise<void> {
+        var timeofReportTransmissionDecoder : TimeofASTERIXReportTransmissionDecoder = new TimeofASTERIXReportTransmissionDecoder();
+        var timeofReportTransmission : TimeofASTERIXReportTransmission = await timeofReportTransmissionDecoder.decode(item);
+        this.timeofReportTransmission = timeofReportTransmission;
+    }
     
+    public async setTargetIdentification(item : Buffer) : Promise<void> {
+        var targetIdentificationDecoder : TargetIdentificationDecoder = new TargetIdentificationDecoder();
+        var targetIdentification : TargetIdentification = await targetIdentificationDecoder.decode(item);
+        this.targetIdentification = targetIdentification;
+    }
 
+    public async setEmitterCategory(item : Buffer) : Promise<void> {
+        var emitterCategoryDecoder : EmitterCategoryDecoder = new EmitterCategoryDecoder();
+        var emitterCategory : EmitterCategory = await emitterCategoryDecoder.decode(item);
+        this.emitterCategory = emitterCategory;
+    }
 
+    public async setMetInformation(item : Buffer, selection: string[]) : Promise<void> {
+        var metInformationDecoder : MetInformationDecoder = new MetInformationDecoder();
+        var metInformation : MetInformation = await metInformationDecoder.decode(item, selection);
+        this.metInformation = metInformation;
+    }
+
+    public async setSelectedAltutude(item : Buffer) : Promise<void> {
+        var selectedAltitudeDecoder : SelectedAltitudeDecoder = new SelectedAltitudeDecoder();
+        var selectedAltitude : SelectedAltitude = await selectedAltitudeDecoder.decode(item);
+        this.selectedAltitude = selectedAltitude;
+    }
+
+    public async setFinalStateSelectedAltitude(item : Buffer) : Promise<void> {
+        var finalStateSelectedAltitudeDecoder : FinalStateSelectedAltitudeDecoder = new FinalStateSelectedAltitudeDecoder();
+        var finalStateSelectedAltitude : FinalStateSelectedAltitude = await finalStateSelectedAltitudeDecoder.decode(item);
+        this.finalStateSelectedAltitude = finalStateSelectedAltitude;       
+    }
+
+    public async setTrajectoryIntent(item : Buffer, tis: boolean, tid: boolean, rep: number) : Promise<void> {
+        var trajectoryIntentDeocer : TrajectoryIntentDecoder = new TrajectoryIntentDecoder();
+        var trajectoryIntent : TrajectoryIntent = await trajectoryIntentDeocer.decode(item, tis, tid, rep);
+        this.trajectoryIntent = trajectoryIntent;
+    }
+
+    public async setServiceManagement(item : Buffer) : Promise<void> {
+        var serviceManagementDecoder : ServiceManagementDecoder = new ServiceManagementDecoder();
+        var serviceManagement : ServiceManagement = await serviceManagementDecoder.decode(item);
+        this.serviceManagement = serviceManagement;        
+    }
+
+    public async setAircraftOperationalStatus(item : Buffer) : Promise<void> {
+        var aircraftOperationalStatusDecoder : AircraftOperationalStatusDecoder = new AircraftOperationalStatusDecoder();
+        var aircraftOperationalStatus : AircraftOperationalStatus = await aircraftOperationalStatusDecoder.decode(item);
+        this.aircraftOperationalStatus = aircraftOperationalStatus;
+    }
+
+    public async setSurfaceCapabilitiesandCharacteristics(item : Buffer) : Promise<void> {
+        var surfaceCapabilitiesandCharacteristicsDecoder : SurfaceCapabilitiesandCharacteristicsDecoder = new SurfaceCapabilitiesandCharacteristicsDecoder();
+        var surfaCapabilitiesandCharacteristics : SurfaceCapabilitiesandCharacteristics = await surfaceCapabilitiesandCharacteristicsDecoder.deocde(item);
+        this.surfaCapabilitiesandCharacteristics = surfaCapabilitiesandCharacteristics;
+    }
+    
+    public async setMessageAmplitude(item : Buffer) : Promise<void> {
+        var messageAmplitudeDecoder : MessageAmplitudeDecoder = new MessageAmplitudeDecoder();
+        var messageAmplitude : MessageAmplitude = await messageAmplitudeDecoder.decode(item);
+        this.messageAmplitude = messageAmplitude;
+    }
+
+    public async setModeSMBData(item : Buffer, rep : number) : Promise<void> {
+        var modeSMBDataDecoder : ModeSMBDataDecoder = new ModeSMBDataDecoder();
+        var modeSMBData : ModeSMBData = await modeSMBDataDecoder.decode(item, rep);
+        this.modeSMBData = modeSMBData;
+    }
+
+    public async setACASResolutionAdvisoryReport(item : Buffer) : Promise<void> {
+        var acasResolutionAdvisoryReportDecoder : ACASResolutionAdvisoryReportDecoder = new ACASResolutionAdvisoryReportDecoder();
+        var acasResolutionAdvisoryReport : ACASResolutionAdvisoryReport = await acasResolutionAdvisoryReportDecoder.decode(item);
+        this.acasResolutionAdvisoryReport = acasResolutionAdvisoryReport;
+    }
+
+    public async setReceiverID(item : Buffer) : Promise<void> {
+        var receiverIDDecoder : ReceiverIDDecoder = new ReceiverIDDecoder();
+        var receiverID : ReceiverID = await receiverIDDecoder.decode(item);
+        this.receiverID = receiverID;
+    }
+
+    public async setDataAges(item : Buffer) : Promise<void> {
+        var dataAgesDecoder : DataAgesDecoder = new DataAgesDecoder();
+        var dataAges : DataAges = await dataAgesDecoder.decode(item);
+        this.dataAges = dataAges;
+    }
 
 
 }

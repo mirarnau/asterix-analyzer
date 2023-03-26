@@ -2,7 +2,7 @@ import { TrajectoryIntent } from "../valueObjects/TrajcetoryIntent";
 
 export class TrajectoryIntentDecoder {
 
-    public async decode(item : Buffer, tis: number, tid: number, rep: number) : Promise<TrajectoryIntent> {
+    public async decode(item : Buffer, tis: boolean, tid: boolean, rep: number) : Promise<TrajectoryIntent> {
         var offset = 0;
         let nav;
         let nvb;

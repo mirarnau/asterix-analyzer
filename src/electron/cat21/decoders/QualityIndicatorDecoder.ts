@@ -8,30 +8,37 @@ export class QualityIndicatorsDecoder {
             .padStart(item.length * 8, "0")
             .split("");
 
-        const nucr_or_nacv = this.decodeNucr_or_nacv(bits);
-        const nucp_or_nic = this.decodeNucp_or_nic(bits);
+        const nucr_or_nacv = parseInt(bits.slice(0, 3).join("").toString(), 2).toString(16).padStart(2, "0"); 
+        //const nucr_or_nacv = this.decodeNucr_or_nacv(bits);
+        const nucp_or_nic = parseInt(bits.slice(3, 7).join("").toString(), 2).toString(16).padStart(2, "0");
+        //const nucp_or_nic = this.decodeNucp_or_nic(bits);
 
         if (bits[7] == "0") {
             return new QualityIndicators(nucr_or_nacv, nucp_or_nic);
         }
 
         const nicbaro = "0x" + parseInt(bits.slice(8, 9).join("").toString(), 2).toString(16).padStart(2, "0");
-        const sil = this.decodeSil(bits);
-        const nacp = this.decodeNacp(bits);
+        //const sil = this.decodeSil(bits);
+        const sil = parseInt(bits.slice(9, 11).join("").toString(), 2).toString(16).padStart(2, "0");
+        //const nacp = this.decodeNacp(bits);
+        const nacp = parseInt(bits.slice(11, 15).join("").toString(), 2).toString(16).padStart(2, "0");
 
         if (bits[15] == "0") {
             return new QualityIndicators(nucr_or_nacv, nucp_or_nic, nicbaro, sil, nacp)
         }
 
         const second_sil = bits[18] == "0" ? "measured per flight-hour" : "measured per sample";
-        const sda = this.decodeSda(bits);
-        const gva = this.decodeGva(bits);
+        //const sda = this.decodeSda(bits);
+        const sda = parseInt(bits.slice(19, 21).join("").toString(), 2).toString(16).padStart(2, "0");
+        //const gva = this.decodeGva(bits);
+        const gva = parseInt(bits.slice(21, 23).join("").toString(), 2).toString(16).padStart(2, "0");
 
         if (bits[23] == "0") {
             return new QualityIndicators(nucr_or_nacv, nucp_or_nic, nicbaro, sil, nacp, second_sil, sda, gva);
         }
 
-        const pic = this.decodePic(bits);
+        //const pic = this.decodePic(bits);
+        const pic = parseInt(bits.slice(24, 28).join("").toString(), 2).toString(16).padStart(2, "0");
 
         return new QualityIndicators(nucr_or_nacv, nucp_or_nic, nicbaro, sil, nacp, second_sil, sda, gva, pic);
     }
