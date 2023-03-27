@@ -1,8 +1,8 @@
 import { strict as assert } from 'node:assert';
 
 export class TrajectoryIntent {
-    tis : number;
-    tid : number;
+    tis : boolean;
+    tid : boolean;
     nav? : string;
     nvb? : string;
     vec? : {TCA : string; NC: string; TCPnumber: string; Altitude: string; Latitude: string; Longitud: string; PointType: string; TD: string; TRA: string; TOA: string; TOV: string; TTR: string}[];
@@ -20,8 +20,8 @@ export class TrajectoryIntent {
     tov? : string;
     ttr? : string;
 
-    constructor(tis : number,
-                tid : number,
+    constructor(tis : boolean,
+                tid : boolean,
                 nav? : string,
                 nvb? : string,
                 vec? : {TCA : string; NC: string; TCPnumber: string; Altitude: string; Latitude: string; Longitud: string; PointType: string; TD: string; TRA: string; TOA: string; TOV: string; TTR: string}[],    
