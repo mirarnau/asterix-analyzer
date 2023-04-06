@@ -62,7 +62,9 @@
   "dependencies": {
     "electron-log": "^4.3.5",
     "electron-store": "^8.0.0",
-    "electron-updater": "^5.2.1"
+    "electron-updater": "^5.2.1",
+    "exceljs": "^4.3.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^22.0.2",

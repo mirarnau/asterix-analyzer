@@ -43,6 +43,7 @@ export class QualityIndicatorsDecoder {
         return new QualityIndicators(nucr_or_nacv, nucp_or_nic, nicbaro, sil, nacp, second_sil, sda, gva, pic);
     }
 
+/*
     private decodeNucr_or_nacv(bits : string[]) : string{
         switch (bits.slice(0, 3).join("")) {
             case "000":
@@ -205,6 +206,6 @@ export class QualityIndicatorsDecoder {
                 return "";
         }
     }
-
+*/
 
 }

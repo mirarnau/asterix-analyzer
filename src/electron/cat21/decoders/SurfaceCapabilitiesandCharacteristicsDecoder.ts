@@ -17,11 +17,11 @@ export class SurfaceCapabilitiesandCharacteristicsDecoder {
             return new SurfaceCapabilitiesandCharacteristics(poa, cdtis, b2_low, ras, ident);
         }
 
-        var lw = this.decodeLw(item, bits);
+        var lw = this.decodeLw(item);
         return new SurfaceCapabilitiesandCharacteristics(poa, cdtis, b2_low, ras, ident, lw);        
     }
 
-    private decodeLw(item : Buffer, bits : string[]) : string {
+    private decodeLw(item : Buffer) : string {
         switch (
             BigInt("0x" + item.subarray(1, 2).toString("hex"))
               .toString(2)

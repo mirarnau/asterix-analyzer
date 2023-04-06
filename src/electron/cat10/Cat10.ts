@@ -50,6 +50,8 @@ import { TrackStatus } from "./valueObjects/TrackStatus";
 import { VehicleFleetIdentification } from "./valueObjects/VehicleFleetIdentification";
 
 export class Cat10 {
+    id : number;
+    class : string = "Cat10";
     messageType : MessageType;
     dataSourceIdentifier : DataSourceIdentifier;
     targetReportDescriptor : TargetReportDescriptor;
@@ -75,6 +77,11 @@ export class Cat10 {
     preProgrammedMessage : PreProgrammedMessage;
     standardDeviationOfPosition : StandardDeviationOfPosition;
     systemStatus : SystemStatus;
+
+    constructor(id: number) {
+        this.id = id;
+        this.class = "Cat10";
+    }
 
     public async setMessageType(item : Buffer) : Promise<void> {
         var messageTypeDecoder : MessageTypeDecoder = new MessageTypeDecoder();
