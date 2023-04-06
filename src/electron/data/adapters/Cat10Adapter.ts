@@ -6,9 +6,10 @@ export class Cat10Adapter {
 
     operator : Operator = new Operator();
     schduler : AsyncScheduler = new AsyncScheduler();
-    cat10 : Cat10 = new Cat10();
+    cat10 : Cat10;
 
-    public async adapt(message : Buffer) : Promise<Cat10>{
+    public async adapt(message : Buffer, id : number) : Promise<Cat10>{
+        this.cat10 = new Cat10(id);
         const fspec = BigInt("0x" + message.subarray(3, 7).toString("hex"))
             .toString(2)
             .padStart(4 * 8, "0")

@@ -1,5 +1,4 @@
 import { RollAngle } from "../valueObjects/RollAngle";
-import { TwosComplementToDecimal } from "../../utils/twosComplementToDecimal";
 
 export class RollAngleDecoder {
 
