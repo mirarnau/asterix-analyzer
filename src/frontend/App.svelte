@@ -1,11 +1,13 @@
 <style>
   main {
-    text-align: center;
-    padding: 1em;
-    max-width: 240px;
     margin: 0 auto;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    width: 100%;
+    height: 100%;
   }
-
   h1 {
     color: #ff3e00;
     text-transform: uppercase;
@@ -20,7 +22,13 @@
   }
 </style>
 
-<script lang="ts">
+<script lang="ts" type="module">
+  import type { Cat10 } from "./custom-types/asterix/cat10";
+  import type { Cat21 } from "./custom-types/asterix/cat21";
+  import { initIpcMainBidirectional, ipcMainBidirectional } from "./ipcMain/ipcMainCallers";
+  import { parseIpcMainReceiveMessage } from "./ipcMain/ipcMainReceiveParser";
+
+
   export let name: string;
 </script>
 
