@@ -16,7 +16,8 @@ export async function loadFileIpc() {
     // const endTime = performance.now();
 
     buffer = res;
-    //console.log(buffer);
+
+    console.log("Buffer length: " + buffer.length);
   
     // console.log(`Call to openFilePicker took ${endTime - startTime} milliseconds`);
     messages = [];
@@ -29,6 +30,7 @@ export async function loadFileIpc() {
     }
 
     messages = sliceMessageBuffer(buffer);
+    messages = messages.slice(0, 100);
     let L = messages.length > 5000000 ? 300000 : messages.length;
     return L;
 }
@@ -78,7 +80,7 @@ function runWorker(workerData: any) {
   }
   
   export function getMessagesIpcSlices() {
-    const FRAGMENTS = 10000;
+    const FRAGMENTS = 100;
     const ret = JSON.stringify(decodedMsg.slice(msgDelivered, msgDelivered + FRAGMENTS));
     msgDelivered += FRAGMENTS;
     if (msgDelivered > decodedMsg.length) msgDelivered = 0;

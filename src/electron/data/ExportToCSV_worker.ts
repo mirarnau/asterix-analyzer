@@ -417,7 +417,7 @@ export class ExportToCSV {
 
         let targetIdentification;
         try {
-            targetIdentification = value.targetIdentification.data.join("");
+            targetIdentification = value.targetIdentification.data;
 
         }   catch{targetIdentification = "No data"};
 

@@ -9,7 +9,9 @@ export class Cat21Adapter {
   cat21: Cat21;
 
   public async adapt(message : Buffer, id : number) : Promise<Cat21> {
-    this.cat21 = new Cat21(id);
+    message = Buffer.from(message);
+    this.cat21 = new Cat21();
+    this.cat21.setId(id);
     console.log("ID = " + this.cat21.id);
     const fspec = BigInt("0x" + message.subarray(3, 10).toString("hex"))
     .toString(2)
