@@ -2,6 +2,7 @@ import {
   app,
   BrowserWindow,
   Notification,
+  ipcMain,
   // nativeImage
 } from "electron";
 import { join } from "path";
@@ -10,6 +11,13 @@ import { autoUpdater } from "electron-updater";
 
 import logger from "./utils/logger";
 import settings from "./utils/settings";
+
+import {
+  getMessagesIpc,
+  getMessagesIpcWorker,
+  loadFileIpc,
+  getMessagesIpcSlices,
+} from "./utils/ipcMain";
 
 const isProd = process.env.NODE_ENV === "production" || app.isPackaged;
 
@@ -28,6 +36,7 @@ const createWindow = () => {
     webPreferences: {
       devTools: isProd ? false : true,
       contextIsolation: true,
+      preload: join(__dirname, "/utils/preload.js"),
     },
   });
 
@@ -49,6 +58,11 @@ const createWindow = () => {
   mainWindow.on("closed", () => {
     mainWindow = null;
   });
+
+  ipcMain.handle("file-picker", loadFileIpc);
+  ipcMain.handle("get-message-quantity2", getMessagesIpc);
+  ipcMain.handle("get-message-quantity", getMessagesIpcWorker);
+  ipcMain.handle("pass-slice", getMessagesIpcSlices);
 };
 
 app.on("ready", createWindow);
