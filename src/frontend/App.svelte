@@ -75,7 +75,7 @@
     messages = [];
     loading = true;
     console.log({ numberOfMsg });
-    const FRAGMENTS = 100;
+    const FRAGMENTS = 100000;
     let i = 0;
     await ipcMainBidirectional("get-message-quantity", 10000);
     while (i < numberOfMsg) {
@@ -88,6 +88,12 @@
     console.log("Performance Data Not Available");
     performanceData = true;
   }
+
+  async function csv_file() {
+    console.log("Creating csv file");
+    await ipcMainBidirectional("save-csv");
+    console.log("CSV file written");
+  }
   
 </script>
 
@@ -95,6 +101,9 @@
   <button type="button" class="btn btn-primary" on:click="{handleLoadSomeMsgs}"
       >File<i class="bi bi-folder2-open"></i></button
     >  
+    <button type="button" class="btn btn-primary" on:click="{csv_file}"
+      >Export to CSV<i class="bi bi-folder2-open"></i></button
+    > 
     <table>
       
       <thead>

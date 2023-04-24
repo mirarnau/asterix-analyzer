@@ -20,6 +20,11 @@ export async function openFilePicker() {
     return buffer;
   }
 
+  export async function saveFileCsv() {
+    const res = await dialog.showSaveDialog({ filters: [{ name: "CSV", extensions: ["csv"] }] });
+    return res;
+}
+
 export class FileManager {
     
     constructor (){}
@@ -27,10 +32,6 @@ export class FileManager {
     public async readFile(path : string) : Promise<Buffer>{
         const buffer = await readFile(path);
         return buffer;
-    }
-    public async saveFileCsv() {
-        const res = await dialog.showSaveDialog({ filters: [{ name: "CSV", extensions: ["csv"] }] });
-        return res;
     }
 
 }
