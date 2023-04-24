@@ -36,9 +36,18 @@
     background-color: #0e2a47;
   }
   
-  button {
+  .file-button {
     background-color: #051a30;
     width: 60px;
+    color: white;
+    border-color: #00eeff;
+    border-width: 3px;
+    text-align: center;
+  }
+
+  .csv-button {
+    background-color: #051a30;
+    width: 150px;
     color: white;
     border-color: #00eeff;
     border-width: 3px;
@@ -98,10 +107,10 @@
 </script>
 
 <main>
-  <button type="button" class="btn btn-primary" on:click="{handleLoadSomeMsgs}"
+  <button type="button" class="btn btn-primary file-button" on:click="{handleLoadSomeMsgs}"
       >File<i class="bi bi-folder2-open"></i></button
     >  
-    <button type="button" class="btn btn-primary" on:click="{csv_file}"
+    <button type="button" class="btn btn-primary csv-button" on:click="{csv_file}"
       >Export to CSV<i class="bi bi-folder2-open"></i></button
     > 
     <table>
