@@ -23,8 +23,8 @@
 </style>
 
 <script lang="ts" type="module">
-  import type { Cat10 } from "./custom-types/cat10";
-  import type { Cat21 } from "./custom-types/cat21";
+  import type { Cat10 } from "../electron/cat10/cat10";
+  import type { Cat21 } from "../electron/cat21/cat21";
   import { initIpcMainBidirectional, ipcMainBidirectional } from "./ipcMain/ipcMainCallers";
   import { parseIpcMainReceiveMessage } from "./ipcMain/ipcMainReceiverParser";
 
@@ -56,19 +56,33 @@
     performanceData = true;
   }
 
+  async function csv_file() {
+    console.log("Creating csv file");
+    await ipcMainBidirectional("save-csv");
+    console.log("CSV file written");
+  }
+
+
   
 </script>
 
 <main>
   <button type="button" class="btn btn-primary" on:click="{handleLoadSomeMsgs}"
       ><i class="bi bi-folder2-open"></i></button
-    >  
+    > 
+    <button
+            type="button"
+            class="{messages.length > 0 ? 'btn btn-primary' : 'btn btn-primary disabled'}"
+            on:click="{csv_file}"
+            ><i class="bi bi-filetype-csv"></i>
+    </button> 
   <table>
     <thead>
       <tr>
         <th>Id</th>
         <th>Class</th>
-        <th>Data source identifier</th>
+        <th>Data source identifier SIC</th>
+        <th>Data source identifier SAC</th>
       </tr>
     </thead>
     <tbody>
@@ -76,7 +90,8 @@
           <tr>
             <td>{message.id}</td>
             <td>{message.class}</td>
-            <td>{message.data_source_identifier}</td>
+            <td>{message.dataSourceIdentifier.sic}</td>
+            <td>{message.dataSourceIdentifier.sac}</td>
           </tr>
       {/each}
     </tbody>

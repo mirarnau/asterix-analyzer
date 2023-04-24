@@ -3,6 +3,8 @@ import { Cat21 } from "../cat21/Cat21";
 import { sliceMessageBuffer, classifyMessageCat } from "../data/MessageClassifier";
 import { openFilePicker } from "./FileManager";
 import { Worker } from "node:worker_threads";
+import { saveFileCsv } from "./FileManager";
+import { Notification } from "electron";
 
 let buffer: Buffer | undefined;
 let messages: Buffer[];
@@ -84,4 +86,36 @@ function runWorker(workerData: any) {
     if (msgDelivered > decodedMsg.length) msgDelivered = 0;
     return ret;
   }
+  export async function writeCsvFile() {
+    const picker = await saveFileCsv();
+    if (!picker.filePath) return;
+    await runWorkercsv({ messagesLength: decodedMsg.length, filePath: picker.filePath });
+    console.log(`${picker.filePath} written`);
+    new Notification({ title: "ASTERIX Message Decoder", body: "CSV file successfully written" }).show();
+  }
+  function runWorkercsv(workerData: any) {
+    return new Promise((resolve, reject) => {
+      const worker = new Worker(__dirname + "/ExportToCSV_worker.js", { workerData });
+      let result: any;
+      worker.on("message", (val: any) => {
+        result = val;
+      });
+      worker.on("error", reject);
+      worker.on("exit", (code) => {
+        if (code !== 0) {
+          console.log(new Error("Exit worker with code: " + code));
+        } else {
+          resolve(result);
+        }
+      });
+      if (decodedMsg.length > 300000) {
+        worker.postMessage(decodedMsg.slice(0, 300000));
+        worker.postMessage(decodedMsg.slice(300000, decodedMsg.length));
+      } else {
+        worker.postMessage(decodedMsg);
+      }
+    });
+  }
+
+  
   

@@ -17,6 +17,7 @@ import {
   getMessagesIpcWorker,
   loadFileIpc,
   getMessagesIpcSlices,
+  writeCsvFile,
 } from "./utils/ipcMain";
 
 const isProd = process.env.NODE_ENV === "production" || app.isPackaged;
@@ -63,6 +64,7 @@ const createWindow = () => {
   ipcMain.handle("get-message-quantity2", getMessagesIpc);
   ipcMain.handle("get-message-quantity", getMessagesIpcWorker);
   ipcMain.handle("pass-slice", getMessagesIpcSlices);
+  ipcMain.handle("save-csv", writeCsvFile);
 };
 
 app.on("ready", createWindow);
