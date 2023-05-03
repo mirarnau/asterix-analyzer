@@ -6,9 +6,9 @@ export async function adapt(message : Buffer, id : number) : Promise<Cat21> {
   
   let operator : Operator = new Operator();
   let schduler : AsyncScheduler = new AsyncScheduler();
-  let cat21: Cat21;
+  let cat21: Cat21 = new Cat21();
   message = Buffer.from(message);
-  cat21 = new Cat21(id);
+  cat21.setId(id);
   const fspec = BigInt("0x" + message.subarray(3, 10).toString("hex"))
   .toString(2)
   .padStart(7 * 8, "0")

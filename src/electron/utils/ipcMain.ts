@@ -3,7 +3,6 @@ import { Cat21 } from "../cat21/Cat21";
 import { sliceMessageBuffer, classifyMessageCat } from "../data/MessageClassifier";
 import { openFilePicker, saveFileCsv } from "./FileManager";
 import { Worker } from "node:worker_threads";
-import { saveFileCsv } from "./FileManager";
 
 import { Notification } from "electron";
 
