@@ -65,10 +65,12 @@
 
 
 <script lang="ts" type="module">
+
     import type { Cat10 } from "../electron/cat10/Cat10";
     import type { Cat21 } from "../electron/cat21/Cat21";
     import { initIpcMainBidirectional, ipcMainBidirectional } from "./ipcMain/ipcMainCallers";
     import { parseIpcMainReceiveMessage } from "./ipcMain/ipcMainReceiverParser";
+
 
   
   let messages: ( Cat10 | Cat21) [] = [];
@@ -107,6 +109,7 @@
 </script>
 
 <main>
+
   <button type="button" class="btn btn-primary file-button" on:click="{handleLoadSomeMsgs}"
       >File<i class="bi bi-folder2-open"></i></button
     >  
