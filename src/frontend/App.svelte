@@ -1,35 +1,79 @@
 <style>
   main {
-    margin: 0 auto;
-    top: 0px;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
-    width: 100%;
-    height: 100%;
+    background-color: white;
+    padding: 0%;
   }
-  /* h1 {
-    color: #ff3e00;
-    text-transform: uppercase;
-    font-size: 4em;
-    font-weight: 100;
-  } */
+  
+  th {
+    color: rgb(255, 255, 255);
+    font-size: medium;
+  }
+  
+  td {
+    color: white;
+    font-size: small;
+  }
+  
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  th, td {
+    text-align: left;
+    padding: 8px;
+  }
+  
+  th {
+    background-color: #051a30;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #0e2a47;
+  }
+  
+  tr:nth-child(odd) {
+    background-color: #0e2a47;
+  }
+  
+  .file-button {
+    background-color: #051a30;
+    width: 60px;
+    color: white;
+    border-color: #00eeff;
+    border-width: 3px;
+    text-align: center;
+  }
 
-  @media (min-width: 640px) {
-    main {
-      max-width: none;
-    }
+  .csv-button {
+    background-color: #051a30;
+    width: 150px;
+    color: white;
+    border-color: #00eeff;
+    border-width: 3px;
+    text-align: center;
+  }
+  
+  tr.smr {
+    background-color: rgb(127, 66, 0);
+  }
+  
+  tr.mlat {
+    background-color: rgb(0, 98, 128);
   }
 </style>
 
+
 <script lang="ts" type="module">
-  import type { Cat10 } from "../electron/cat10/cat10";
-  import type { Cat21 } from "../electron/cat21/cat21";
-  import { initIpcMainBidirectional, ipcMainBidirectional } from "./ipcMain/ipcMainCallers";
-  import { parseIpcMainReceiveMessage } from "./ipcMain/ipcMainReceiverParser";
+
+    import type { Cat10 } from "../electron/cat10/Cat10";
+    import type { Cat21 } from "../electron/cat21/Cat21";
+    import { initIpcMainBidirectional, ipcMainBidirectional } from "./ipcMain/ipcMainCallers";
+    import { parseIpcMainReceiveMessage } from "./ipcMain/ipcMainReceiverParser";
+
 
   
-  let messages: (Cat10 | Cat21)[] = [];
+  let messages: ( Cat10 | Cat21) [] = [];
   let numberOfMsg = 0;
   
   let loading = false;
@@ -42,7 +86,7 @@
     messages = [];
     loading = true;
     console.log({ numberOfMsg });
-    const FRAGMENTS = 10000;
+    const FRAGMENTS = 100000;
     let i = 0;
     await ipcMainBidirectional("get-message-quantity", 10000);
     while (i < numberOfMsg) {
@@ -61,39 +105,51 @@
     await ipcMainBidirectional("save-csv");
     console.log("CSV file written");
   }
-
-
   
 </script>
 
 <main>
-  <button type="button" class="btn btn-primary" on:click="{handleLoadSomeMsgs}"
-      ><i class="bi bi-folder2-open"></i></button
+
+  <button type="button" class="btn btn-primary file-button" on:click="{handleLoadSomeMsgs}"
+      >File<i class="bi bi-folder2-open"></i></button
+    >  
+    <button type="button" class="btn btn-primary csv-button" on:click="{csv_file}"
+      >Export to CSV<i class="bi bi-folder2-open"></i></button
     > 
-    <button
-            type="button"
-            class="{messages.length > 0 ? 'btn btn-primary' : 'btn btn-primary disabled'}"
-            on:click="{csv_file}"
-            ><i class="bi bi-filetype-csv"></i>
-    </button> 
-  <table>
-    <thead>
-      <tr>
-        <th>Id</th>
-        <th>Class</th>
-        <th>Data source identifier SIC</th>
-        <th>Data source identifier SAC</th>
-      </tr>
-    </thead>
-    <tbody>
-      {#each messages as message}
-          <tr>
-            <td>{message.id}</td>
-            <td>{message.class}</td>
-            <td>{message.dataSourceIdentifier.sic}</td>
-            <td>{message.dataSourceIdentifier.sac}</td>
-          </tr>
-      {/each}
-    </tbody>
-   </table>
+    <table>
+      
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Class</th>
+          <th>Instrument</th>
+          <th>Message Type / Target Id</th>
+          <th>Data source identifier</th>
+          <th>Timestamp</th>
+        </tr>
+      </thead>
+      <tbody>
+        {#each messages as message}
+          {#if message.class === "Cat10" }
+            <tr class:smr={message.measurementInstrument === 'SMR'} class:mlat={message.measurementInstrument === 'MLAT'}>
+              <td>{message.id}</td>
+              <td>{message.class}</td>
+              <td>{message.measurementInstrument}</td>
+              <td>{message.messageType.messageType}</td>
+              <td>{message.dataSourceIdentifier.sic}</td>
+              <td>{message.timeOfDay.timestamp}</td>
+            </tr>
+          {:else}
+            <tr>
+              <td>{message.id}</td>
+              <td>{message.class}</td>
+              <td>{message.measurementInstrument}</td>
+              <td>{message.targetIdentification.data}</td>
+              <td>{`SIC: ${message.dataSourceIdentifier.sic}; SAC: ${message.dataSourceIdentifier.sac}`}</td>
+              <td>{new Date(message.timeofReportTransmission.time * 1000).toISOString().substring(11, 23)}</td>
+            </tr>
+            {/if}
+        {/each}
+      </tbody>
+     </table>
 </main>

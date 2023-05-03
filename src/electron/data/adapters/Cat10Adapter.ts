@@ -8,8 +8,8 @@ export async function adapt(message : Buffer, id : number) : Promise<Cat10>{
     message = Buffer.from(message);
     let operator : Operator = new Operator();
     let schduler : AsyncScheduler = new AsyncScheduler();
-    let cat10 : Cat10;
-    cat10 = new Cat10(id);
+    let cat10 : Cat10 = new Cat10();
+    cat10.setId(id);
     const fspec = BigInt("0x" + message.subarray(3, 7).toString("hex"))
         .toString(2)
         .padStart(4 * 8, "0")

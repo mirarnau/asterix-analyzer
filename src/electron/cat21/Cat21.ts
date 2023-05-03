@@ -86,6 +86,7 @@ import { GeometricVerticalRateDecoder } from "./decoders/GeometricVerticalRateDe
 export class Cat21 {
     id : number;
     class : string = "Cat21";
+    measurementInstrument: string = "ADS-B";
     dataSourceIdentifier : DataSourceIdentifier;
     targetReportDescriptor : TargetReportDescriptor;
     trackNumber : TrackNumber;
@@ -129,9 +130,8 @@ export class Cat21 {
     receiverID : ReceiverID;
     dataAges : DataAges;
 
-    constructor(id: number) {
+    public setId(id : number) {
         this.id = id;
-        this.class = "Cat21";
     }
 
     public async setDataSourceIdentifier(item : Buffer) : Promise<void> {

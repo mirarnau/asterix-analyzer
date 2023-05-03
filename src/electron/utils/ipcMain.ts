@@ -1,9 +1,10 @@
 import { Cat10 } from "../cat10/Cat10";
 import { Cat21 } from "../cat21/Cat21";
 import { sliceMessageBuffer, classifyMessageCat } from "../data/MessageClassifier";
-import { openFilePicker } from "./FileManager";
+import { openFilePicker, saveFileCsv } from "./FileManager";
 import { Worker } from "node:worker_threads";
 import { saveFileCsv } from "./FileManager";
+
 import { Notification } from "electron";
 
 let buffer: Buffer | undefined;
@@ -18,7 +19,8 @@ export async function loadFileIpc() {
     // const endTime = performance.now();
 
     buffer = res;
-    //console.log(buffer);
+
+    console.log("Buffer length: " + buffer.length);
   
     // console.log(`Call to openFilePicker took ${endTime - startTime} milliseconds`);
     messages = [];
@@ -31,6 +33,7 @@ export async function loadFileIpc() {
     }
 
     messages = sliceMessageBuffer(buffer);
+    messages = messages.slice(0, 100);
     let L = messages.length > 5000000 ? 300000 : messages.length;
     return L;
 }
@@ -80,12 +83,13 @@ function runWorker(workerData: any) {
   }
   
   export function getMessagesIpcSlices() {
-    const FRAGMENTS = 10000;
+    const FRAGMENTS = 100;
     const ret = JSON.stringify(decodedMsg.slice(msgDelivered, msgDelivered + FRAGMENTS));
     msgDelivered += FRAGMENTS;
     if (msgDelivered > decodedMsg.length) msgDelivered = 0;
     return ret;
   }
+
   export async function writeCsvFile() {
     const picker = await saveFileCsv();
     if (!picker.filePath) return;
@@ -96,6 +100,7 @@ function runWorker(workerData: any) {
   function runWorkercsv(workerData: any) {
     return new Promise((resolve, reject) => {
       const worker = new Worker(__dirname + "/exportToCSVA_worker.js", { workerData });
+
       let result: any;
       worker.on("message", (val: any) => {
         result = val;
@@ -115,7 +120,5 @@ function runWorker(workerData: any) {
         worker.postMessage(decodedMsg);
       }
     });
-  }
-
-  
+}
   

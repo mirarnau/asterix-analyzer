@@ -80,7 +80,7 @@ export default {
     !production &&
       serve({
         host: "localhost",
-        port: 5000,
+        port: 3000,
         contentBase: "public",
         // verbose: true,
       }),

@@ -52,6 +52,7 @@ import { VehicleFleetIdentification } from "./valueObjects/VehicleFleetIdentific
 export class Cat10 {
     id : number;
     class : string = "Cat10";
+    measurementInstrument : string;
     messageType : MessageType;
     dataSourceIdentifier : DataSourceIdentifier;
     targetReportDescriptor : TargetReportDescriptor;
@@ -78,9 +79,12 @@ export class Cat10 {
     standardDeviationOfPosition : StandardDeviationOfPosition;
     systemStatus : SystemStatus;
 
-    constructor(id: number) {
+    public setId(id : number) {
         this.id = id;
-        this.class = "Cat10";
+    }
+
+    public setMeasurementInstrument(instrument : string) {
+        this.measurementInstrument = instrument;
     }
 
     public async setMessageType(item : Buffer) : Promise<void> {
@@ -93,6 +97,8 @@ export class Cat10 {
         var dataSourceIdentifierDecoder : DataSourceIdentifierDecoder = new DataSourceIdentifierDecoder();
         var dataSourceIdentifier : DataSourceIdentifier = await  dataSourceIdentifierDecoder.decode(item);
         this.dataSourceIdentifier = dataSourceIdentifier;
+        var instrument = dataSourceIdentifier.sic == "7"? "SMR" : "MLAT";
+        this.setMeasurementInstrument(instrument);
     }
 
     public async setTargetReportDescriptor(item : Buffer) : Promise<void> {

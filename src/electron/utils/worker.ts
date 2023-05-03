@@ -4,7 +4,7 @@ import { classifyMessageCat } from "../data/MessageClassifier";
 doStuff();
 
 async function doStuff() {
-    const FRAGMENTS = 1000;
+    const FRAGMENTS = 100;
     let i = 0;
     let L = workerData.messages.length > 5000000 ? 300000 : workerData.messages.length;
   

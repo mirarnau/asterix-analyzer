@@ -4,7 +4,6 @@ import { Operator } from "../../utils/Operator";
 
 export async function adapt(message : Buffer, id : number) : Promise<Cat21> {
   
-
   let operator : Operator = new Operator();
   let schduler : AsyncScheduler = new AsyncScheduler();
   let cat21: Cat21;
