@@ -28,10 +28,6 @@ export class FileManager {
         const buffer = await readFile(path);
         return buffer;
     }
-    public async saveFileCsv() {
-        const res = await dialog.showSaveDialog({ filters: [{ name: "CSV", extensions: ["csv"] }] });
-        return res;
-    }
 
 }
 

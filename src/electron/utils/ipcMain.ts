@@ -95,7 +95,7 @@ function runWorker(workerData: any) {
   }
   function runWorkercsv(workerData: any) {
     return new Promise((resolve, reject) => {
-      const worker = new Worker(__dirname + "/ExportToCSV_worker.js", { workerData });
+      const worker = new Worker(__dirname + "/exportToCSVA_worker.js", { workerData });
       let result: any;
       worker.on("message", (val: any) => {
         result = val;
