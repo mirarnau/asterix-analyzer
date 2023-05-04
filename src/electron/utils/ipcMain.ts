@@ -1,6 +1,6 @@
 import { Cat10 } from "../cat10/Cat10";
 import { Cat21 } from "../cat21/Cat21";
-import { sliceMessageBuffer, classifyMessageCat, filterMessages } from "../data/MessageClassifier";
+import { sliceMessageBuffer, classifyMessageCat, filterMessages, filterMessagesInstr } from "../data/MessageClassifier";
 import { openFilePicker, saveFileCsv } from "./FileManager";
 import { Worker } from "node:worker_threads";
 
@@ -130,3 +130,15 @@ function runWorker(workerData: any) {
     return await JSON.stringify(filtMess);
   }
   
+  export async function filterMessagesSMR() {
+    let filtMess : (Cat10|Cat21)[] = await filterMessagesInstr(decodedMsg, "SMR");
+    return await JSON.stringify(filtMess);
+  }
+  export async function filterMessagesADSB() {
+    let filtMess : (Cat10|Cat21)[] = await filterMessagesInstr(decodedMsg, "ADS-B");
+    return await JSON.stringify(filtMess);
+  }
+  export async function filterMessagesMLAT() {
+    let filtMess : (Cat10|Cat21)[] = await filterMessagesInstr(decodedMsg, "MLAT");
+    return await JSON.stringify(filtMess);
+  }

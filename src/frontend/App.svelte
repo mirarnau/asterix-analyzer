@@ -106,16 +106,56 @@
     console.log("CSV file written");
   }
   
-  async function filterCat10() {
+  async function filterMessages(filter:string) {
     messages = [];
-    const msg = await ipcMainBidirectional("filter-cat10");
-    messages = messages.concat(await parseIpcMainReceiveMessage(msg)); 
+    let msg;
+    switch (filter){
+      case "Cat10":
+        msg = await ipcMainBidirectional("filter-cat10");
+        messages = messages.concat(await parseIpcMainReceiveMessage(msg)); 
+        break;
+      case "Cat21":
+        msg = await ipcMainBidirectional("filter-cat21");
+        messages = messages.concat(await parseIpcMainReceiveMessage(msg)); 
+        break;
+      case "SMR":
+        msg = await ipcMainBidirectional("filter-SMR");
+        messages = messages.concat(await parseIpcMainReceiveMessage(msg)); 
+        break;
+      case "ADSB":
+        msg = await ipcMainBidirectional("filter-ADSB");
+        messages = messages.concat(await parseIpcMainReceiveMessage(msg)); 
+        break;
+      case "MLAT":
+        msg = await ipcMainBidirectional("filter-MLAT");
+        messages = messages.concat(await parseIpcMainReceiveMessage(msg)); 
+        break;
+        
+
+    }
   }
-  async function filterCat21() {
-    messages = [];
-    const msg = await ipcMainBidirectional("filter-cat21");
-    messages = messages.concat(await parseIpcMainReceiveMessage(msg)); 
+
+  function handleSelectionCat(event) {
+    let selectedCat = event.target.value;
+    if (selectedCat == "Cat10"){
+      filterMessages("Cat10");
+    } else if (selectedCat == "Cat21") {
+      filterMessages("Cat21");
+    }
   }
+
+  function handleSelectionInstrument(event) {
+    let selectedInstr = event.target.value;
+    if (selectedInstr == "SMR") {
+      console.log("SMR selected");
+      filterMessages("SMR");
+    } else if (selectedInstr == "ADSB") {
+      filterMessages("ADSB");
+    } else if (selectedInstr == "MLAT") {
+      filterMessages("MLAT");
+    }
+  }
+
 </script>
 
 <main>
@@ -126,12 +166,19 @@
     <button type="button" class="btn btn-primary csv-button" on:click="{csv_file}"
       >Export to CSV<i class="bi bi-folder2-open"></i></button
     > 
-    <button type="button" class="btn btn-primary csv-button" on:click="{filterCat10}"
-      >Cat10<i class="bi bi-folder2-open"></i></button
-    > 
-    <button type="button" class="btn btn-primary csv-button" on:click="{filterCat21}"
-      >Cat21<i class="bi bi-folder2-open"></i></button
-    > 
+    <label for="cat-selector">Filter by:</label>
+    <select id="cat-selector" on:change={handleSelectionCat}>
+      <option value="">-- Select --</option>
+      <option value="Cat10">Cat10</option>
+      <option value="Cat21">Cat21</option>
+    </select>
+    <select id="instrument-selector" on:change={handleSelectionInstrument}>
+      <option value="">-- Select --</option>
+      <option value="SMR">SMR</option>
+      <option value="ADSB">ADSB</option>
+      <option value="MLAT">MLAT</option>
+    </select>
+    
     <table>
       
       <thead>

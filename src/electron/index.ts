@@ -20,6 +20,9 @@ import {
   writeCsvFile,
   filterMessagesCat10,
   filterMessagesCat21,
+  filterMessagesSMR,
+  filterMessagesADSB,
+  filterMessagesMLAT,
 } from "./utils/ipcMain";
 
 const isProd = process.env.NODE_ENV === "production" || app.isPackaged;
@@ -69,6 +72,9 @@ const createWindow = () => {
   ipcMain.handle("save-csv", writeCsvFile);
   ipcMain.handle("filter-cat10", filterMessagesCat10);
   ipcMain.handle("filter-cat21", filterMessagesCat21);
+  ipcMain.handle("filter-SMR", filterMessagesSMR);
+  ipcMain.handle("filter-ADSB", filterMessagesADSB);
+  ipcMain.handle("filter-MLAT", filterMessagesMLAT);
 };
 
 app.on("ready", createWindow);
