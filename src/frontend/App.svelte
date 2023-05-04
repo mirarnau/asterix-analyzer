@@ -106,6 +106,16 @@
     console.log("CSV file written");
   }
   
+  async function filterCat10() {
+    messages = [];
+    const msg = await ipcMainBidirectional("filter-cat10");
+    messages = messages.concat(await parseIpcMainReceiveMessage(msg)); 
+  }
+  async function filterCat21() {
+    messages = [];
+    const msg = await ipcMainBidirectional("filter-cat21");
+    messages = messages.concat(await parseIpcMainReceiveMessage(msg)); 
+  }
 </script>
 
 <main>
@@ -115,6 +125,12 @@
     >  
     <button type="button" class="btn btn-primary csv-button" on:click="{csv_file}"
       >Export to CSV<i class="bi bi-folder2-open"></i></button
+    > 
+    <button type="button" class="btn btn-primary csv-button" on:click="{filterCat10}"
+      >Cat10<i class="bi bi-folder2-open"></i></button
+    > 
+    <button type="button" class="btn btn-primary csv-button" on:click="{filterCat21}"
+      >Cat21<i class="bi bi-folder2-open"></i></button
     > 
     <table>
       
@@ -144,7 +160,6 @@
               <td>{message.id}</td>
               <td>{message.class}</td>
               <td>{message.measurementInstrument}</td>
-              <td>{message.targetIdentification.data}</td>
               <td>{`SIC: ${message.dataSourceIdentifier.sic}; SAC: ${message.dataSourceIdentifier.sac}`}</td>
               <td>{new Date(message.timeofReportTransmission.time * 1000).toISOString().substring(11, 23)}</td>
             </tr>

@@ -1,6 +1,6 @@
 import { Cat10 } from "../cat10/Cat10";
 import { Cat21 } from "../cat21/Cat21";
-import { sliceMessageBuffer, classifyMessageCat } from "../data/MessageClassifier";
+import { sliceMessageBuffer, classifyMessageCat, filterMessages } from "../data/MessageClassifier";
 import { openFilePicker, saveFileCsv } from "./FileManager";
 import { Worker } from "node:worker_threads";
 
@@ -119,5 +119,14 @@ function runWorker(workerData: any) {
         worker.postMessage(decodedMsg);
       }
     });
-}
+  }
+
+  export async function filterMessagesCat10() {
+    let ret : (Cat10|Cat21)[] = await(filterMessages(decodedMsg, "Cat10"));
+    return await JSON.stringify(ret);
+  }
+  export async function filterMessagesCat21() {
+    let filtMess : (Cat10|Cat21)[] = await filterMessages(decodedMsg, "Cat21");
+    return await JSON.stringify(filtMess);
+  }
   
