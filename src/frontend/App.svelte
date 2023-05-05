@@ -1,8 +1,21 @@
 <style>
   main {
-    background-color: white;
-    padding: 0%;
+    margin: 0 auto;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    width: 100%;
+    height: 100%;
   }
+
+  @media (min-width: 640px) {
+    main {
+      max-width: none;
+    }
+  }
+
+  
   
   th {
     color: rgb(255, 255, 255);
@@ -38,7 +51,7 @@
   
   .file-button {
     background-color: #051a30;
-    width: 60px;
+    width: 100px;
     color: white;
     border-color: #00eeff;
     border-width: 3px;
@@ -53,6 +66,15 @@
     border-width: 3px;
     text-align: center;
   }
+
+  .simulation-button {
+    background-color: #051a30;
+    width: 120px;
+    color: white;
+    border-color: #00eeff;
+    border-width: 3px;
+    text-align: center;
+  }
   
   tr.smr {
     background-color: rgb(127, 66, 0);
@@ -61,6 +83,16 @@
   tr.mlat {
     background-color: rgb(0, 98, 128);
   }
+
+  #viewDiv {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 42px);
+  }
+  .button-container {
+    background-color: #262626;
+  }
+
 </style>
 
 
@@ -70,6 +102,8 @@
     import type { Cat21 } from "../electron/cat21/Cat21";
     import { initIpcMainBidirectional, ipcMainBidirectional } from "./ipcMain/ipcMainCallers";
     import { parseIpcMainReceiveMessage } from "./ipcMain/ipcMainReceiverParser";
+    import Simulation from "./components/simulation.svelte"
+    import { initializeMap } from "./arcgis/map";
 
 
   
@@ -79,7 +113,11 @@
   let loading = false;
   let performanceData = false;
 
+  let simulation : Simulation;
+  let visibleItem = "TABLE";
+
   async function handleLoadSomeMsgs() {
+    visibleItem = "TABLE";
     numberOfMsg = Number.parseInt(await initIpcMainBidirectional("file-picker"));
     if (!numberOfMsg) return;
     performanceData = false;
@@ -105,17 +143,36 @@
     await ipcMainBidirectional("save-csv");
     console.log("CSV file written");
   }
+
+  async function handleMapClick() {
+    visibleItem = "MAP";
+
+    initializeMap();
+    if (messages.length > 0) {
+      setTimeout(() => {
+        simulation.initializeSimulation!(messages);
+      }, 750);
+    }
+  }
   
 </script>
-
-<main>
-
+<div class="button-container">
   <button type="button" class="btn btn-primary file-button" on:click="{handleLoadSomeMsgs}"
-      >File<i class="bi bi-folder2-open"></i></button
+      >File  <i class="bi bi-folder2-open"></i></button
     >  
     <button type="button" class="btn btn-primary csv-button" on:click="{csv_file}"
-      >Export to CSV<i class="bi bi-folder2-open"></i></button
+      >Export to CSV</button
     > 
+    <button type="button" class="btn btn-primary simulation-button" on:click="{handleMapClick}"
+      >Simulation</button
+    >
+</div>
+
+<main>
+  <div class="{visibleItem === 'MAP' ? 'main overflow' : 'main'}">
+  {#if visibleItem === "MAP"}
+    <div id="viewDiv"></div>
+  {:else}
     <table>
       
       <thead>
@@ -152,4 +209,6 @@
         {/each}
       </tbody>
      </table>
+     {/if}
+    </div>
 </main>
