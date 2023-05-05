@@ -3,6 +3,7 @@ import { Cat21 } from "../cat21/Cat21";
 import { sliceMessageBuffer, classifyMessageCat } from "../data/MessageClassifier";
 import { openFilePicker, saveFileCsv } from "./FileManager";
 import { Worker } from "node:worker_threads";
+
 import { Notification } from "electron";
 
 let buffer: Buffer | undefined;
@@ -97,7 +98,8 @@ function runWorker(workerData: any) {
   }
   function runWorkercsv(workerData: any) {
     return new Promise((resolve, reject) => {
-      const worker = new Worker(__dirname + "/ExportToCSV_worker.js", { workerData });
+      const worker = new Worker(__dirname + "/exportToCSVA_worker.js", { workerData });
+
       let result: any;
       worker.on("message", (val: any) => {
         result = val;
@@ -117,6 +119,5 @@ function runWorker(workerData: any) {
         worker.postMessage(decodedMsg);
       }
     });
-  
-  }
+}
   

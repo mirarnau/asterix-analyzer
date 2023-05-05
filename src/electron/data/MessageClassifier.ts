@@ -1,10 +1,7 @@
 import { Cat10 } from "../cat10/Cat10";
 import { Cat21 } from "../cat21/Cat21";
-import { adapt } from "./adapters/Cat10Adapter";
-import { Cat21Adapter } from "./adapters/Cat21Adapter";
-
-
-
+import { adapt as adaptCat10} from "./adapters/Cat10Adapter";
+import { adapt as adaptCat21} from "./adapters/Cat21Adapter";
 
 export function sliceMessageBuffer(item : Buffer) {
   let first = 0;
@@ -22,7 +19,6 @@ export function sliceMessageBuffer(item : Buffer) {
 
 export async function classifyMessageCat(messages : Buffer[], numberOfMessages : number, fromId: number) : Promise<(Cat10|Cat21)[]>{
 
-  let cat21Adapter : Cat21Adapter = new Cat21Adapter();
   //let cat10 : Cat10;
   let decodedMessages: (Cat10|Cat21)[] = [];
 
@@ -37,9 +33,9 @@ export async function classifyMessageCat(messages : Buffer[], numberOfMessages :
   for (let i = 0; i < messages.length; i++) {
     const v = messages[i];
     if (v[0] === 10) {
-      decodedMessages[i] = await adapt(v, i + fromId + 1);
+      decodedMessages[i] = await adaptCat10(v, i + fromId + 1);
     } else {
-      decodedMessages[i] = await cat21Adapter.adapt(v, i + fromId + 1);
+      decodedMessages[i] = await adaptCat21(v, i + fromId + 1);
     }
   }
   return decodedMessages;
