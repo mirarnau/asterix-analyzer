@@ -38,14 +38,16 @@ export default {
     format: "iife",
     name: "fluide",
     file: "public/build/bundle.js",
+    inlineDynamicImports: true,
   },
   plugins: [
     svelte({
       preprocess: sveltePreprocess({
-          typescript: {
-            tsconfigFile: production ? "./tsconfig.svelte.prod.json" : "./tsconfig.svelte.json",
-          }
-        }),
+        typescript: {
+          typescript: true,
+          tsconfigFile: production ? "./tsconfig.svelte.prod.json" : "./tsconfig.svelte.json",
+        },
+      }),
       compilerOptions: {
         // enable run-time checks when not in production
         dev: !production,

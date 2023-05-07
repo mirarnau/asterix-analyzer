@@ -1,8 +1,21 @@
 <style>
   main {
-    background-color: white;
-    padding: 0%;
+    margin: 0 auto;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    width: 100%;
+    height: 100%;
   }
+
+  @media (min-width: 640px) {
+    main {
+      max-width: none;
+    }
+  }
+
+  
   
   th {
     color: rgb(255, 255, 255);
@@ -38,7 +51,7 @@
   
   .file-button {
     background-color: #051a30;
-    width: 60px;
+    width: 100px;
     color: white;
     border-color: #00eeff;
     border-width: 3px;
@@ -53,6 +66,15 @@
     border-width: 3px;
     text-align: center;
   }
+
+  .simulation-button {
+    background-color: #051a30;
+    width: 120px;
+    color: white;
+    border-color: #00eeff;
+    border-width: 3px;
+    text-align: center;
+  }
   
   tr.smr {
     background-color: rgb(127, 66, 0);
@@ -61,6 +83,21 @@
   tr.mlat {
     background-color: rgb(0, 98, 128);
   }
+
+  #viewDiv {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 42px);
+  }
+
+  .button-container {
+    background-color: #262626;
+  }
+
+  tr.expanded-row {
+    background-color: #f0f0f0; /* set the desired background color for expanded rows */
+  }
+
 </style>
 
 
@@ -70,6 +107,9 @@
     import type { Cat21 } from "../electron/cat21/Cat21";
     import { initIpcMainBidirectional, ipcMainBidirectional } from "./ipcMain/ipcMainCallers";
     import { parseIpcMainReceiveMessage } from "./ipcMain/ipcMainReceiverParser";
+    import Simulation from "./components/simulation.svelte"
+    import { initializeMap } from "./arcgis/map";
+    import GenericProps from "./items/GenericProps.svelte";
 
 
   
@@ -85,8 +125,15 @@
   let searchPicker = "Any";
 
 
+  let simulation : Simulation;
+  let visibleItem = "TABLE";
+
+  let selectedRow: number | null = null;
+  let allChildComponents = new Map<number, GenericProps>();
+  let allChildComponentsKeys = Array.from(allChildComponents.keys());
+
   async function handleLoadSomeMsgs() {
-    
+    visibleItem = "TABLE";
     numberOfMsg = Number.parseInt(await initIpcMainBidirectional("file-picker"));
     if (!numberOfMsg) return;
     messages = [];
@@ -177,13 +224,43 @@
   }
 </script>
 
-<main>
+  async function handleMapClick() {
+    visibleItem = "MAP";
 
+    initializeMap();
+    if (messages.length > 0) {
+      setTimeout(() => {
+        simulation.initializeSimulation!(messages);
+      }, 750);
+    }
+  }
+
+  function trClick(msg: Cat10 | Cat21) {
+    let tr = document.getElementById(`tr-${msg.id}`);
+    let tbody = document.querySelector("tbody");
+    if (allChildComponents.has(msg.id)) {
+      allChildComponents.get(msg.id)!.$destroy();
+      allChildComponents.delete(msg.id);
+      allChildComponentsKeys = Array.from(allChildComponents.keys());
+    } else {
+      // Open this row
+      if (tbody && tr) {
+        let arr = Array.from(tbody.children);
+        let nexttr = arr[arr.indexOf(tr) + 1];
+        let child = new GenericProps({ target: tbody, anchor: nexttr, props: { msg } });
+        allChildComponents.set(msg.id, child);
+        allChildComponentsKeys = Array.from(allChildComponents.keys());
+      }
+    }
+  }
+  
+</script>
+<div class="button-container">
   <button type="button" class="btn btn-primary file-button" on:click="{handleLoadSomeMsgs}"
-      >File<i class="bi bi-folder2-open"></i></button
+      >File  <i class="bi bi-folder2-open"></i></button
     >  
     <button type="button" class="btn btn-primary csv-button" on:click="{csv_file}"
-      >Export to CSV<i class="bi bi-folder2-open"></i></button
+      >Export to CSV</button
     > 
     <label for="cat-selector">Filter by:</label>
     <select id="cat-selector" on:change={handleSelectionCat}>
@@ -221,9 +298,17 @@
         <label class="input-group-text" on:click="{updateFilters}" for="inputGroup02">Search</label>
       </div>
     </div>
-    
+    <button type="button" class="btn btn-primary simulation-button" on:click="{handleMapClick}"
+      >Simulation</button
+    >
+</div>
+
+<main>
+  <div class="{visibleItem === 'MAP' ? 'main overflow' : 'main'}">
+  {#if visibleItem === "MAP"}
+    <div id="viewDiv"></div>
+  {:else}
     <table>
-      
       <thead>
         <tr>
           <th>Id</th>
@@ -235,27 +320,38 @@
         </tr>
       </thead>
       <tbody>
-        {#each messages as message}
+        {#each messages as message (message.id)}
           {#if message.class === "Cat10" }
-            <tr class:smr={message.measurementInstrument === 'SMR'} class:mlat={message.measurementInstrument === 'MLAT'}>
+            <tr class:smr={message.measurementInstrument === 'SMR'} 
+                class:mlat={message.measurementInstrument === 'MLAT'}
+                class:selected={selectedRow === message.id}
+                on:click="{() => trClick(message)}" id="tr-{message.id}">
               <td>{message.id}</td>
               <td>{message.class}</td>
               <td>{message.measurementInstrument}</td>
               <td>{message.messageType.messageType}</td>
               <td>{message.dataSourceIdentifier.sic}</td>
-              <td>{message.timeOfDay.timestamp}</td>
+              <td>{new Date(message.timeOfDay.timestamp * 1000).toISOString().substring(11, 23)}</td>
             </tr>
           {:else}
-            <tr>
+            <tr class:selected={selectedRow === message.id}
+                on:click="{() => trClick(message)}" id="tr-{message.id}">
               <td>{message.id}</td>
               <td>{message.class}</td>
               <td>{message.measurementInstrument}</td>
               <td>{message.targetIdentification.data}</td>
               <td>{`SIC: ${message.dataSourceIdentifier.sic}; SAC: ${message.dataSourceIdentifier.sac}`}</td>
-              <td>{new Date(message.timeofReportTransmission.time * 1000).toISOString().substring(11, 23)}</td>
+              <td>{new Date(message.timeofReportTransmission.time * 1000 ).toISOString().substring(11, 23)}</td>
             </tr>
-            {/if}
+          {/if}
+          {#if selectedRow === message.id}
+            <tr class="expanded-row">
+              <td colspan="6">Expanded content here</td>
+            </tr>
+          {/if}
         {/each}
       </tbody>
      </table>
+     {/if}
+    </div>
 </main>
