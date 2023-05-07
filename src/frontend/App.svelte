@@ -76,15 +76,20 @@
   let messages: ( Cat10 | Cat21) [] = [];
   let numberOfMsg = 0;
   
-  let loading = false;
-  let performanceData = false;
+  // let loading = false;
+  // let performanceData = false;
+
+  let selectedCat: string;
+  let selectedInstr: string;
+  let searchBox = "";
+  let searchPicker = "Any";
+
 
   async function handleLoadSomeMsgs() {
+    
     numberOfMsg = Number.parseInt(await initIpcMainBidirectional("file-picker"));
     if (!numberOfMsg) return;
-    performanceData = false;
     messages = [];
-    loading = true;
     console.log({ numberOfMsg });
     const FRAGMENTS = 100000;
     let i = 0;
@@ -95,9 +100,8 @@
       i += FRAGMENTS;
     }
     console.log(`Finished loading ${messages.length} messages!`);
-    loading = false;
     console.log("Performance Data Not Available");
-    performanceData = true;
+
   }
 
   async function csv_file() {
@@ -106,56 +110,71 @@
     console.log("CSV file written");
   }
   
-  async function filterMessages(filter:string) {
+  async function filterMessages() {
     messages = [];
-    let msg;
-    switch (filter){
-      case "Cat10":
-        msg = await ipcMainBidirectional("filter-cat10");
-        messages = messages.concat(await parseIpcMainReceiveMessage(msg)); 
-        break;
-      case "Cat21":
-        msg = await ipcMainBidirectional("filter-cat21");
-        messages = messages.concat(await parseIpcMainReceiveMessage(msg)); 
-        break;
+    const filter: Filter = {
+      Category: [],
+      Instrument: [],
+    };
+    let search = searchBox;
+    if (searchPicker !== "Any") {
+      search = "";
+      if (searchPicker === "Target Address") {
+        filter.TargetAddress = searchBox;
+      } else if (searchPicker === "Target identification") {
+        filter.TargetIdentification = searchBox;
+        console.log(searchBox);
+      }
+    }
+    if (selectedCat=="Cat10"){
+      filter.Category.push("Cat10");
+    } else if (selectedCat=="Cat21"){
+      filter.Category.push("Cat21");
+    }
+    switch(selectedInstr){
       case "SMR":
-        msg = await ipcMainBidirectional("filter-SMR");
-        messages = messages.concat(await parseIpcMainReceiveMessage(msg)); 
-        break;
-      case "ADSB":
-        msg = await ipcMainBidirectional("filter-ADSB");
-        messages = messages.concat(await parseIpcMainReceiveMessage(msg)); 
+        filter.Instrument.push("SMR");
         break;
       case "MLAT":
-        msg = await ipcMainBidirectional("filter-MLAT");
-        messages = messages.concat(await parseIpcMainReceiveMessage(msg)); 
+        filter.Instrument.push("MLAT");
         break;
-        
-
+      case "ADSB":
+        filter.Instrument.push("ADS-B");
+        break;
     }
+    
+    messages = messages.concat(await parseIpcMainReceiveMessage(await ipcMainBidirectional("filter-messages", { filter, search })));
   }
+  
 
   function handleSelectionCat(event) {
-    let selectedCat = event.target.value;
-    if (selectedCat == "Cat10"){
-      filterMessages("Cat10");
-    } else if (selectedCat == "Cat21") {
-      filterMessages("Cat21");
-    }
+    selectedCat = event.target.value;
+    updateFilters();
+    
   }
 
   function handleSelectionInstrument(event) {
-    let selectedInstr = event.target.value;
-    if (selectedInstr == "SMR") {
-      console.log("SMR selected");
-      filterMessages("SMR");
-    } else if (selectedInstr == "ADSB") {
-      filterMessages("ADSB");
-    } else if (selectedInstr == "MLAT") {
-      filterMessages("MLAT");
-    }
+    selectedInstr = event.target.value;
+    updateFilters();
+    
   }
 
+  interface Filter {
+    Category: string[];
+    Instrument: string[];
+    TargetAddress?: string;
+    TargetIdentification?: string;
+  }
+  function keyDown(e: any) {
+    if (e.keyCode === 13) {
+      updateFilters();
+    }
+  }
+  function updateFilters() {
+    setTimeout(() => {
+      filterMessages();
+    }, 100);
+  }
 </script>
 
 <main>
@@ -168,16 +187,40 @@
     > 
     <label for="cat-selector">Filter by:</label>
     <select id="cat-selector" on:change={handleSelectionCat}>
-      <option value="">-- Select --</option>
-      <option value="Cat10">Cat10</option>
+      <option value="">-- Category --</option>
+      <option value="Cat10">Cat10 </option>
       <option value="Cat21">Cat21</option>
     </select>
     <select id="instrument-selector" on:change={handleSelectionInstrument}>
-      <option value="">-- Select --</option>
+      <option value="">-- Instrument --</option>
       <option value="SMR">SMR</option>
       <option value="ADSB">ADSB</option>
       <option value="MLAT">MLAT</option>
     </select>
+    <div id="search">
+      <div class="input-group mb-3">
+        <select
+          style="max-width: 200px ;"
+          class="form-select"
+          id="inputGroup02"
+          bind:value="{searchPicker}"
+          aria-label="Example select with button addon"
+        >
+          <option selected>Any</option>
+          <option>Target Address</option>
+          <option>Target identification</option>
+        </select>
+        <input
+          bind:value="{searchBox}"
+          type="text"
+          class="form-control"
+          on:keydown="{keyDown}"
+          aria-label="Text input with dropdown button"
+          placeholder="Search..."
+        />
+        <label class="input-group-text" on:click="{updateFilters}" for="inputGroup02">Search</label>
+      </div>
+    </div>
     
     <table>
       
@@ -207,6 +250,7 @@
               <td>{message.id}</td>
               <td>{message.class}</td>
               <td>{message.measurementInstrument}</td>
+              <td>{message.targetIdentification.data}</td>
               <td>{`SIC: ${message.dataSourceIdentifier.sic}; SAC: ${message.dataSourceIdentifier.sac}`}</td>
               <td>{new Date(message.timeofReportTransmission.time * 1000).toISOString().substring(11, 23)}</td>
             </tr>

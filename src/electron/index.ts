@@ -18,11 +18,7 @@ import {
   loadFileIpc,
   getMessagesIpcSlices,
   writeCsvFile,
-  filterMessagesCat10,
-  filterMessagesCat21,
-  filterMessagesSMR,
-  filterMessagesADSB,
-  filterMessagesMLAT,
+  filterMess,
 } from "./utils/ipcMain";
 
 const isProd = process.env.NODE_ENV === "production" || app.isPackaged;
@@ -70,11 +66,11 @@ const createWindow = () => {
   ipcMain.handle("get-message-quantity", getMessagesIpcWorker);
   ipcMain.handle("pass-slice", getMessagesIpcSlices);
   ipcMain.handle("save-csv", writeCsvFile);
-  ipcMain.handle("filter-cat10", filterMessagesCat10);
-  ipcMain.handle("filter-cat21", filterMessagesCat21);
-  ipcMain.handle("filter-SMR", filterMessagesSMR);
-  ipcMain.handle("filter-ADSB", filterMessagesADSB);
-  ipcMain.handle("filter-MLAT", filterMessagesMLAT);
+  ipcMain.handle("filter-messages", filterMess);
+  // ipcMain.handle("filter-cat21", filterMessagesCat21);
+  // ipcMain.handle("filter-SMR", filterMessagesSMR);
+  // ipcMain.handle("filter-ADSB", filterMessagesADSB);
+  // ipcMain.handle("filter-MLAT", filterMessagesMLAT);
 };
 
 app.on("ready", createWindow);

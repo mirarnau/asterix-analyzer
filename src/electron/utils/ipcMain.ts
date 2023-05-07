@@ -3,13 +3,14 @@ import { Cat21 } from "../cat21/Cat21";
 import { sliceMessageBuffer, classifyMessageCat, filterMessages, filterMessagesInstr } from "../data/MessageClassifier";
 import { openFilePicker, saveFileCsv } from "./FileManager";
 import { Worker } from "node:worker_threads";
-
 import { Notification } from "electron";
+const JsonSearch = require("search-array").default;
 
 let buffer: Buffer | undefined;
 let messages: Buffer[];
 let decodedMsg: (Cat10 | Cat21)[];
 let msgDelivered = 0;
+let msgFiltered: (Cat10 | Cat21)[];
 
 export async function loadFileIpc() {
     //const startTime = performance.now();     
@@ -121,6 +122,44 @@ function runWorker(workerData: any) {
     });
   }
 
+  let oldFilter: Filter = {
+    Category: [],
+    Instrument: [],
+  };
+  let oldSearch: string = "";
+
+  export async function filterMess(_event: any, { filter, search } : {filter:Filter,search:string}) {
+    if (!msgFiltered) msgFiltered = decodedMsg;
+    if (JSON.stringify(oldFilter) === JSON.stringify(filter) && oldSearch === search) {
+      return JSON.stringify({
+        messages: msgFiltered.slice(0,100),
+        totalMessages: msgFiltered.length,
+      });
+    }
+      //filter current filter
+    msgFiltered = decodedMsg;
+    oldFilter = filter;
+
+    if (filter.Category.length > 0) msgFiltered = msgFiltered.filter((m) => filter.Category.includes(m.class));
+    if (filter.Instrument.length > 0) msgFiltered = msgFiltered.filter((m) => filter.Instrument.includes(m.measurementInstrument));
+    // if (filter.TrackNumber) msgFiltered = msgFiltered.filter((m) => m.trackNumber.value === filter.TrackNumber);
+    if (filter.TargetIdentification) {
+      msgFiltered = msgFiltered.filter(
+      (m) => m.targetIdentification && JSON.stringify(m.targetIdentification).includes(filter.TargetIdentification!)
+      );}
+    if (filter.TargetAddress)
+      msgFiltered = msgFiltered.filter((m) => m.targetAddress && m.targetAddress.value === filter.TargetAddress);
+  
+    oldSearch = search;
+  
+    if (search !== "") {
+      const searcher = new JsonSearch(msgFiltered);
+  
+      msgFiltered = searcher.query(search) as (Cat10 | Cat21)[];
+    }
+
+    return await JSON.stringify(msgFiltered);
+  }
   export async function filterMessagesCat10() {
     let ret : (Cat10|Cat21)[] = await(filterMessages(decodedMsg, "Cat10"));
     return await JSON.stringify(ret);
@@ -141,4 +180,11 @@ function runWorker(workerData: any) {
   export async function filterMessagesMLAT() {
     let filtMess : (Cat10|Cat21)[] = await filterMessagesInstr(decodedMsg, "MLAT");
     return await JSON.stringify(filtMess);
+  }
+
+  interface Filter {
+    Category: string[];
+    Instrument: string[];
+    TargetAddress?: string;
+    TargetIdentification?: string;
   }

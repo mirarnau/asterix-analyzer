@@ -64,6 +64,7 @@
     "electron-store": "^8.0.0",
     "electron-updater": "^5.2.1",
     "exceljs": "^4.3.0",
+    "search-array": "^1.6.0",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
