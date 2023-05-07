@@ -1,6 +1,7 @@
 <style>
     :global(.accordion-button) {
       padding: 0.5rem 1rem;
+      background-color: #051a30
     }
   </style>
   

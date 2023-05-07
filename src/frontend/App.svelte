@@ -109,6 +109,7 @@
     import { parseIpcMainReceiveMessage } from "./ipcMain/ipcMainReceiverParser";
     import Simulation from "./components/simulation.svelte"
     import { initializeMap } from "./arcgis/map";
+    import GenericProps from "./items/GenericProps.svelte";
 
 
   
@@ -122,6 +123,8 @@
   let visibleItem = "TABLE";
 
   let selectedRow: number | null = null;
+  let allChildComponents = new Map<number, GenericProps>();
+  let allChildComponentsKeys = Array.from(allChildComponents.keys());
 
   async function handleLoadSomeMsgs() {
     visibleItem = "TABLE";
@@ -162,8 +165,23 @@
     }
   }
 
-  function toggleRow(rowId: number) {
-    selectedRow = selectedRow === rowId ? null : rowId;
+  function trClick(msg: Cat10 | Cat21) {
+    let tr = document.getElementById(`tr-${msg.id}`);
+    let tbody = document.querySelector("tbody");
+    if (allChildComponents.has(msg.id)) {
+      allChildComponents.get(msg.id)!.$destroy();
+      allChildComponents.delete(msg.id);
+      allChildComponentsKeys = Array.from(allChildComponents.keys());
+    } else {
+      // Open this row
+      if (tbody && tr) {
+        let arr = Array.from(tbody.children);
+        let nexttr = arr[arr.indexOf(tr) + 1];
+        let child = new GenericProps({ target: tbody, anchor: nexttr, props: { msg } });
+        allChildComponents.set(msg.id, child);
+        allChildComponentsKeys = Array.from(allChildComponents.keys());
+      }
+    }
   }
   
 </script>
@@ -201,7 +219,7 @@
             <tr class:smr={message.measurementInstrument === 'SMR'} 
                 class:mlat={message.measurementInstrument === 'MLAT'}
                 class:selected={selectedRow === message.id}
-                on:click={() => toggleRow(message.id)}>
+                on:click="{() => trClick(message)}" id="tr-{message.id}">
               <td>{message.id}</td>
               <td>{message.class}</td>
               <td>{message.measurementInstrument}</td>
@@ -211,7 +229,7 @@
             </tr>
           {:else}
             <tr class:selected={selectedRow === message.id}
-                on:click={() => toggleRow(message.id)}>
+                on:click="{() => trClick(message)}" id="tr-{message.id}">
               <td>{message.id}</td>
               <td>{message.class}</td>
               <td>{message.measurementInstrument}</td>
