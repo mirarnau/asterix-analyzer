@@ -15,7 +15,7 @@ export class TargetIdentificationDecoder {
             start += 6;
         }
 
-        return new TargetIdentification(target_identification.join());
+        return new TargetIdentification(target_identification.join(""));
     }
 
     private deoceTarget_identification(bits: string[]) {

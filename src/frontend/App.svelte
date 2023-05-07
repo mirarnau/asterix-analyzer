@@ -89,8 +89,13 @@
     width: 100%;
     height: calc(100vh - 42px);
   }
+
   .button-container {
     background-color: #262626;
+  }
+
+  tr.expanded-row {
+    background-color: #f0f0f0; /* set the desired background color for expanded rows */
   }
 
 </style>
@@ -115,6 +120,8 @@
 
   let simulation : Simulation;
   let visibleItem = "TABLE";
+
+  let selectedRow: number | null = null;
 
   async function handleLoadSomeMsgs() {
     visibleItem = "TABLE";
@@ -154,6 +161,10 @@
       }, 750);
     }
   }
+
+  function toggleRow(rowId: number) {
+    selectedRow = selectedRow === rowId ? null : rowId;
+  }
   
 </script>
 <div class="button-container">
@@ -174,7 +185,6 @@
     <div id="viewDiv"></div>
   {:else}
     <table>
-      
       <thead>
         <tr>
           <th>Id</th>
@@ -186,26 +196,35 @@
         </tr>
       </thead>
       <tbody>
-        {#each messages as message}
+        {#each messages as message (message.id)}
           {#if message.class === "Cat10" }
-            <tr class:smr={message.measurementInstrument === 'SMR'} class:mlat={message.measurementInstrument === 'MLAT'}>
+            <tr class:smr={message.measurementInstrument === 'SMR'} 
+                class:mlat={message.measurementInstrument === 'MLAT'}
+                class:selected={selectedRow === message.id}
+                on:click={() => toggleRow(message.id)}>
               <td>{message.id}</td>
               <td>{message.class}</td>
               <td>{message.measurementInstrument}</td>
               <td>{message.messageType.messageType}</td>
               <td>{message.dataSourceIdentifier.sic}</td>
-              <td>{message.timeOfDay.timestamp}</td>
+              <td>{new Date(message.timeOfDay.timestamp * 1000).toISOString().substring(11, 23)}</td>
             </tr>
           {:else}
-            <tr>
+            <tr class:selected={selectedRow === message.id}
+                on:click={() => toggleRow(message.id)}>
               <td>{message.id}</td>
               <td>{message.class}</td>
               <td>{message.measurementInstrument}</td>
               <td>{message.targetIdentification.data}</td>
               <td>{`SIC: ${message.dataSourceIdentifier.sic}; SAC: ${message.dataSourceIdentifier.sac}`}</td>
-              <td>{new Date(message.timeofReportTransmission.time * 1000).toISOString().substring(11, 23)}</td>
+              <td>{new Date(message.timeofReportTransmission.time * 1000 ).toISOString().substring(11, 23)}</td>
             </tr>
-            {/if}
+          {/if}
+          {#if selectedRow === message.id}
+            <tr class="expanded-row">
+              <td colspan="6">Expanded content here</td>
+            </tr>
+          {/if}
         {/each}
       </tbody>
      </table>
