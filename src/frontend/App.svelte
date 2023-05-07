@@ -116,8 +116,14 @@
   let messages: ( Cat10 | Cat21) [] = [];
   let numberOfMsg = 0;
   
-  let loading = false;
-  let performanceData = false;
+  // let loading = false;
+  // let performanceData = false;
+
+  let selectedCat: string;
+  let selectedInstr: string;
+  let searchBox = "";
+  let searchPicker = "Any";
+
 
   let simulation : Simulation;
   let visibleItem = "TABLE";
@@ -130,9 +136,7 @@
     visibleItem = "TABLE";
     numberOfMsg = Number.parseInt(await initIpcMainBidirectional("file-picker"));
     if (!numberOfMsg) return;
-    performanceData = false;
     messages = [];
-    loading = true;
     console.log({ numberOfMsg });
     const FRAGMENTS = 100000;
     let i = 0;
@@ -143,9 +147,8 @@
       i += FRAGMENTS;
     }
     console.log(`Finished loading ${messages.length} messages!`);
-    loading = false;
     console.log("Performance Data Not Available");
-    performanceData = true;
+
   }
 
   async function csv_file() {
@@ -153,6 +156,73 @@
     await ipcMainBidirectional("save-csv");
     console.log("CSV file written");
   }
+  
+  async function filterMessages() {
+    messages = [];
+    const filter: Filter = {
+      Category: [],
+      Instrument: [],
+    };
+    let search = searchBox;
+    if (searchPicker !== "Any") {
+      search = "";
+      if (searchPicker === "Target Address") {
+        filter.TargetAddress = searchBox;
+      } else if (searchPicker === "Target identification") {
+        filter.TargetIdentification = searchBox;
+        console.log(searchBox);
+      }
+    }
+    if (selectedCat=="Cat10"){
+      filter.Category.push("Cat10");
+    } else if (selectedCat=="Cat21"){
+      filter.Category.push("Cat21");
+    }
+    switch(selectedInstr){
+      case "SMR":
+        filter.Instrument.push("SMR");
+        break;
+      case "MLAT":
+        filter.Instrument.push("MLAT");
+        break;
+      case "ADSB":
+        filter.Instrument.push("ADS-B");
+        break;
+    }
+    
+    messages = messages.concat(await parseIpcMainReceiveMessage(await ipcMainBidirectional("filter-messages", { filter, search })));
+  }
+  
+
+  function handleSelectionCat(event) {
+    selectedCat = event.target.value;
+    updateFilters();
+    
+  }
+
+  function handleSelectionInstrument(event) {
+    selectedInstr = event.target.value;
+    updateFilters();
+    
+  }
+
+  interface Filter {
+    Category: string[];
+    Instrument: string[];
+    TargetAddress?: string;
+    TargetIdentification?: string;
+  }
+  function keyDown(e: any) {
+    if (e.keyCode === 13) {
+      updateFilters();
+    }
+  }
+  function updateFilters() {
+    setTimeout(() => {
+      filterMessages();
+    }, 100);
+  }
+</script>
 
   async function handleMapClick() {
     visibleItem = "MAP";
@@ -192,6 +262,42 @@
     <button type="button" class="btn btn-primary csv-button" on:click="{csv_file}"
       >Export to CSV</button
     > 
+    <label for="cat-selector">Filter by:</label>
+    <select id="cat-selector" on:change={handleSelectionCat}>
+      <option value="">-- Category --</option>
+      <option value="Cat10">Cat10 </option>
+      <option value="Cat21">Cat21</option>
+    </select>
+    <select id="instrument-selector" on:change={handleSelectionInstrument}>
+      <option value="">-- Instrument --</option>
+      <option value="SMR">SMR</option>
+      <option value="ADSB">ADSB</option>
+      <option value="MLAT">MLAT</option>
+    </select>
+    <div id="search">
+      <div class="input-group mb-3">
+        <select
+          style="max-width: 200px ;"
+          class="form-select"
+          id="inputGroup02"
+          bind:value="{searchPicker}"
+          aria-label="Example select with button addon"
+        >
+          <option selected>Any</option>
+          <option>Target Address</option>
+          <option>Target identification</option>
+        </select>
+        <input
+          bind:value="{searchBox}"
+          type="text"
+          class="form-control"
+          on:keydown="{keyDown}"
+          aria-label="Text input with dropdown button"
+          placeholder="Search..."
+        />
+        <label class="input-group-text" on:click="{updateFilters}" for="inputGroup02">Search</label>
+      </div>
+    </div>
     <button type="button" class="btn btn-primary simulation-button" on:click="{handleMapClick}"
       >Simulation</button
     >

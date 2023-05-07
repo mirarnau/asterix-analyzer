@@ -40,6 +40,30 @@ export async function classifyMessageCat(messages : Buffer[], numberOfMessages :
   }
   return decodedMessages;
 }
+
+export async function filterMessages(messages: (Cat10 | Cat21)[], filter : String) : Promise<(Cat10|Cat21)[]>{
+  let filteredMessages : (Cat10|Cat21)[] = [];
+  for (let i = 0; i < messages.length; i++) {
+    const v = messages[i];
+    if (v.class == filter) {
+      filteredMessages.push(v);
+    }
+  }
+  // const filteredMessages : (Cat10 | Cat21)[] = messages.filter(message => message.class == filter);
+  return filteredMessages;
+}
+
+export async function filterMessagesInstr(messages: (Cat10 | Cat21)[], filter : String) : Promise<(Cat10|Cat21)[]>{
+  let filteredMessages : (Cat10|Cat21)[] = [];
+  for (let i = 0; i < messages.length; i++) {
+    const v = messages[i];
+    console.log("instr"+v.measurementInstrument);
+    if (v.measurementInstrument == filter) {
+      filteredMessages.push(v);
+    }
+  }
+  return filteredMessages;
+}
 export class MessageClassifier {
 
   public async classifyMessage(messages : Buffer[], numberOfMessages : number) : Promise<Buffer[]>{
