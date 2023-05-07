@@ -222,7 +222,6 @@
       filterMessages();
     }, 100);
   }
-</script>
 
   async function handleMapClick() {
     visibleItem = "MAP";
