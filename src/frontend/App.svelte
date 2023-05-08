@@ -94,10 +94,6 @@
     background-color: #262626;
   }
 
-  tr.expanded-row {
-    background-color: #f0f0f0; /* set the desired background color for expanded rows */
-  }
-
 </style>
 
 
@@ -341,11 +337,6 @@
               <td>{message.targetIdentification.data}</td>
               <td>{`SIC: ${message.dataSourceIdentifier.sic}; SAC: ${message.dataSourceIdentifier.sac}`}</td>
               <td>{new Date(message.timeofReportTransmission.time * 1000 ).toISOString().substring(11, 23)}</td>
-            </tr>
-          {/if}
-          {#if selectedRow === message.id}
-            <tr class="expanded-row">
-              <td colspan="6">Expanded content here</td>
             </tr>
           {/if}
         {/each}
