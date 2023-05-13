@@ -102,10 +102,10 @@ function tocsvCat10(msg: Cat10) {
 
   if (msg.calculatedTrackVelocityPolarCoordinates)
     csv[8] =
-      "r: " +
-      msg.calculatedTrackVelocityPolarCoordinates.rho +
-      " theta: " +
-      msg.calculatedTrackVelocityPolarCoordinates.theta;
+      "Ground speed " +
+      msg.calculatedTrackVelocityPolarCoordinates.ground_speed +
+      " Track angle: " +
+      msg.calculatedTrackVelocityPolarCoordinates.track_angle;
 
   if (msg.calculatedTrackVelocityCartesianCoordinates)
     csv[9] =
@@ -133,7 +133,7 @@ function tocsvCat10(msg: Cat10) {
 
   if (msg.amplitudeOfPrimaryPlot) csv[13] = msg.amplitudeOfPrimaryPlot.value.toString();
 
-  if (msg.timeOfDay) csv[14] = msg.timeOfDay.timestamp.toString();
+  if (msg.timeOfDay) csv[14] = new Date(msg.timeOfDay.timestamp * 1000).toISOString().substring(11, 23);
 
   if (msg.trackNumber) csv[15] = msg.trackNumber.value.toString();
 
@@ -197,8 +197,9 @@ function tocsvCat10(msg: Cat10) {
     }
   }
 
-  if (msg.calculatedAcceleration)
-    csv[17] = "Ax: " + msg.calculatedAcceleration.ax+ " Ay: " + msg.calculatedAcceleration.ay;
+  if (msg.calculatedAcceleration) csv[17] = "Ax: " + msg.calculatedAcceleration.ax+ " Ay: " + msg.calculatedAcceleration.ay;
+    
+  if (msg.targetAddress) csv[18] = msg.targetAddress.value.substring(2);
 
   if (msg.targetIdentification) csv[19] = msg.targetIdentification.data;
 
@@ -359,21 +360,21 @@ function tocsvCat21(msg: Cat21) {
 
   if (msg.mode3A) csv[10] = msg.mode3A.code;
 
-  if (msg.timeofApplicabilityforPosition) csv[32] = msg.timeofApplicabilityforPosition.time.toString();
+  if (msg.timeofApplicabilityforPosition) csv[32] = new Date(msg.timeofApplicabilityforPosition.time * 1000).toISOString().substring(11, 23);
 
-  if (msg.timeofApplicabilityforVelocity) csv[33] = msg.timeofApplicabilityforVelocity.time.toString();
+  if (msg.timeofApplicabilityforVelocity) csv[33] = new Date(msg.timeofApplicabilityforVelocity.time * 1000).toISOString().substring(11, 23);
 
-  if (msg.timeofMessageReceptionofPosition) csv[34] = msg.timeofMessageReceptionofPosition.time.toString();
+  if (msg.timeofMessageReceptionofPosition) csv[34] = new Date(msg.timeofMessageReceptionofPosition.time * 1000).toISOString().substring(11, 23);
 
-  if (msg.timeofMessageReceptionofPosition_highPres) csv[35] = msg.timeofMessageReceptionofPosition_highPres.time.toString();
+  if (msg.timeofMessageReceptionofPosition_highPres) csv[35] = new Date(msg.timeofMessageReceptionofPosition_highPres.time * 1000).toISOString().substring(11, 23);
 
-  if (msg.timeofMessageReceptionofVelocity) csv[36] = msg.timeofMessageReceptionofVelocity.time.toString();
+  if (msg.timeofMessageReceptionofVelocity) csv[36] = new Date(msg.timeofMessageReceptionofVelocity.time * 1000).toISOString().substring(11, 23);
 
-  if (msg.timeofMessageReceptionofVelocity_highPres) csv[37] = msg.timeofMessageReceptionofVelocity_highPres.time.toString();
+  if (msg.timeofMessageReceptionofVelocity_highPres) csv[37] = new Date(msg.timeofMessageReceptionofVelocity_highPres.time * 1000).toISOString().substring(11, 23);
 
-  if (msg.timeofReportTransmission) csv[38] = msg.timeofReportTransmission.time.toString();
+  if (msg.timeofReportTransmission) csv[38] = new Date(msg.timeofReportTransmission.time * 1000).toISOString().substring(11, 23);
 
-  if (msg.targetAddress) csv[18] = msg.targetAddress.value;
+  if (msg.targetAddress) csv[18] = msg.targetAddress.value.substring(2);
 
   if (msg.qualityIndicators) {
     if (msg.qualityIndicators.pic) {
@@ -575,7 +576,7 @@ function tocsvCat21(msg: Cat21) {
     }
   }
 
-  if (msg.receiverID) csv[59] = msg.receiverID.id;
+  if (msg.receiverID) csv[59] = msg.receiverID.id.substring(2);
 
   return csv;
 }
