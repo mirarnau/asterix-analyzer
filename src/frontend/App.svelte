@@ -60,7 +60,7 @@
 
   .csv-button {
     background-color: #051a30;
-    width: 150px;
+    width: 170px;
     color: white;
     border-color: #00eeff;
     border-width: 3px;
@@ -93,6 +93,35 @@
   .button-container {
     background-color: #262626;
   }
+
+  .play-button {
+    background-color: #00eeff;
+    color: rgb(0, 0, 0);
+    border-color: #00eeff;
+    border-width: 3px;
+    text-align: center;
+  }
+
+  .play-back-button {
+    background-color: rgb(31, 31, 31);
+    color: white;
+    border-color: #00eeff;
+    border-width: 3px;
+    text-align: center;
+  }
+
+  .play-forward-button {
+    background-color: rgb(31, 31, 31);
+    color: white;
+    border-color: #00eeff;
+    border-width: 3px;
+    text-align: center;
+  }
+
+  .align-right {
+  display: flex;
+  justify-content: flex-end;
+}
 
 </style>
 
@@ -128,6 +157,9 @@
   let allChildComponents = new Map<number, GenericProps>();
   let allChildComponentsKeys = Array.from(allChildComponents.keys());
 
+  let play = false;
+  let settings = false;
+
   async function handleLoadSomeMsgs() {
     visibleItem = "TABLE";
     numberOfMsg = Number.parseInt(await initIpcMainBidirectional("file-picker"));
@@ -136,7 +168,7 @@
     console.log({ numberOfMsg });
     const FRAGMENTS = 100000;
     let i = 0;
-    await ipcMainBidirectional("get-message-quantity", 10000);
+    await ipcMainBidirectional("get-message-quantity", 20000);
     while (i < numberOfMsg) {
       const msgs = await ipcMainBidirectional("pass-slice");
       messages = messages.concat(await parseIpcMainReceiveMessage(msgs));
@@ -248,6 +280,18 @@
       }
     }
   }
+
+  async function kml_file() {
+    console.log("Creating kml file");
+
+    await ipcMainBidirectional("save-kml");
+
+    console.log("KML file written");
+  }
+
+  function settingsPannel() {
+    settings = !settings;
+  }
   
 </script>
 <div class="button-container">
@@ -255,7 +299,7 @@
       >File  <i class="bi bi-folder2-open"></i></button
     >  
     <button type="button" class="btn btn-primary csv-button" on:click="{csv_file}"
-      >Export to CSV</button
+      >Export to CSV <i class="bi bi-filetype-csv"></i></button
     > 
     <label for="cat-selector">Filter by:</label>
     <select id="cat-selector" on:change={handleSelectionCat}>
@@ -293,7 +337,10 @@
         <label class="input-group-text" on:click="{updateFilters}" for="inputGroup02">Search</label>
       </div>
     </div>
-    <button type="button" class="btn btn-primary simulation-button" on:click="{handleMapClick}"
+    <button 
+    type="button" 
+    class="{messages.length > 0 ? 'btn btn-primary simulation-button' : 'btn btn-primary disabled simulation-button'}"
+    on:click="{handleMapClick}"
       >Simulation</button
     >
 </div>
@@ -301,6 +348,46 @@
 <main>
   <div class="{visibleItem === 'MAP' ? 'main overflow' : 'main'}">
   {#if visibleItem === "MAP"}
+  <div class="ontop dark" id="btn-bar">
+    <div id="progDiv" class="align-right">
+      <div>
+        <button
+          type="button"
+          class="{messages.length > 0 ? 'btn btn-primary play-back-button' : 'btn btn-primary disabled play-back-button'}"
+          on:click="{simulation.restartSim}"
+          ><i class="bi bi-arrow-counterclockwise"></i>
+        </button>
+        <button
+          type="button"
+          class="{messages.length > 0 ? 'btn btn-primary play-back-button' : 'btn btn-primary disabled play-back-button'}"
+          on:click="{simulation.backwardsTick}"><i class="bi bi-arrow-90deg-left"></i></button
+        >
+        <button
+          type="button"
+          class="{messages.length > 0 ? 'btn btn-primary play-button play-button' : 'btn btn-primary disabled play-button play-forward-button play-button'}"
+          on:click="{simulation.playClick}"
+        >
+          {#if play}
+            <i class="bi bi-pause"></i>
+          {:else}
+            <i class="bi bi-play"></i>
+          {/if}
+        </button>
+    
+        <button
+          type="button"
+          class="{messages.length > 0 ? 'btn btn-primary play-forward-button' : 'btn btn-primary disabled play-forward-button'}"
+          on:click="{simulation.forwardsTick}"
+          ><i class="bi bi-arrow-90deg-right"></i>
+        </button>
+      </div>
+    </div>
+      <Simulation
+        on:stop="{() => (play = false)}"
+        on:switchplay="{() => (play = !play)}"
+        bind:this="{simulation}"
+      />
+    </div>
     <div id="viewDiv"></div>
   {:else}
     <table>

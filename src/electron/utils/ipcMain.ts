@@ -33,7 +33,7 @@ export async function loadFileIpc() {
     }
 
     messages = sliceMessageBuffer(buffer);
-    messages = messages.slice(0, 100);
+    messages = messages.slice(0, 300);
     let L = messages.length > 5000000 ? 300000 : messages.length;
     return L;
 }
@@ -83,7 +83,7 @@ function runWorker(workerData: any) {
   }
   
   export function getMessagesIpcSlices() {
-    const FRAGMENTS = 100;
+    const FRAGMENTS = 300;
     const ret = JSON.stringify(decodedMsg.slice(msgDelivered, msgDelivered + FRAGMENTS));
     msgDelivered += FRAGMENTS;
     if (msgDelivered > decodedMsg.length) msgDelivered = 0;
