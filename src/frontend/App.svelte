@@ -120,7 +120,6 @@
   let searchBox = "";
   let searchPicker = "Any";
 
-
   let simulation : Simulation;
   let visibleItem = "TABLE";
 
@@ -325,7 +324,7 @@
               <td>{message.class}</td>
               <td>{message.measurementInstrument}</td>
               <td>{message.messageType.messageType}</td>
-              <td>{message.dataSourceIdentifier.sic}</td>
+              <td>{`SAC: ${message.dataSourceIdentifier.sac}; SIC: ${message.dataSourceIdentifier.sic}`}</td>
               <td>{new Date(message.timeOfDay.timestamp * 1000).toISOString().substring(11, 23)}</td>
             </tr>
           {:else}
@@ -335,7 +334,7 @@
               <td>{message.class}</td>
               <td>{message.measurementInstrument}</td>
               <td>{message.targetIdentification.data}</td>
-              <td>{`SIC: ${message.dataSourceIdentifier.sic}; SAC: ${message.dataSourceIdentifier.sac}`}</td>
+              <td>{`SAC: ${message.dataSourceIdentifier.sac}; SIC: ${message.dataSourceIdentifier.sic}`}</td>
               <td>{new Date(message.timeofReportTransmission.time * 1000 ).toISOString().substring(11, 23)}</td>
             </tr>
           {/if}
