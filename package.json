@@ -66,10 +66,11 @@
     "electron-store": "^8.0.0",
     "electron-updater": "^5.2.1",
     "exceljs": "^4.3.0",
-    "search-array": "^1.6.0",
-    "xlsx": "^0.18.5",
     "geojson": "^0.5.0",
-    "geolib": "^3.3.3"
+    "geolib": "^3.3.3",
+    "search-array": "^1.6.0",
+    "svelte-routing": "^1.8.8",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^22.0.2",
