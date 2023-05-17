@@ -1,7 +1,7 @@
 <style>
     :global(.accordion-header) {
       padding: 0.5rem 1rem;
-      background-color: rgb(155, 154, 154);
+      background-color: rgb(208, 207, 207);
       font-size: 0.8rem;
     }
     :global(.accordion) {
@@ -25,7 +25,7 @@
       text-align: center;
 -webkit-text-fill-color: aliceblue;    }
     .accordion-button {
-      background-color: rgb(155, 154, 154);
+      background-color: rgb(208, 207, 207);
       font-size: 0.9rem;
       text-align: center;
     }
