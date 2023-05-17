@@ -243,8 +243,8 @@
   import type { Cat21 } from "../electron/cat21/Cat21";
   import { initIpcMainBidirectional, ipcMainBidirectional } from "./ipcMain/ipcMainCallers";
   import { parseIpcMainReceiveMessage } from "./ipcMain/ipcMainReceiverParser";
-  // import Simulation from "./components/simulation.svelte"
-  // import { initializeMap } from "./arcgis/map";
+  import Simulation from "./components/simulation.svelte"
+  import { initializeMap } from "./arcgis/map";
   import GenericProps from "./items/GenericProps.svelte";
   import { onMount } from "svelte";
 
@@ -257,9 +257,10 @@
   let selectedCat: string;
   let selectedInstr: string;
   let searchBox = "";
+  
   let searchPicker = "Filter";
 
-  // let simulation : Simulation;
+  let simulation : Simulation;
   let visibleItem = "MAP";
 
   let selectedRow: number | null = null;
@@ -359,12 +360,12 @@
   async function handleMapClick() {
     visibleItem = "MAP";
 
-    // initializeMap();
-    // if (messages.length > 0) {
-    //   setTimeout(() => {
-    //     simulation.initializeSimulation!(messages);
-    //   }, 750);
-    // }
+    initializeMap();
+    if (messages.length > 0) {
+      setTimeout(() => {
+        simulation.initializeSimulation!(messages);
+      }, 750);
+    }
   }
 
   async function handleTableClick() {
