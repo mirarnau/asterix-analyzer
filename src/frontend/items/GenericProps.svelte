@@ -1,38 +1,34 @@
 <style>
     :global(.accordion-header) {
       padding: 0.5rem 1rem;
-      background-color: rgb(208, 207, 207);
+      background-color: rgb(26, 21, 40);
       font-size: 0.8rem;
     }
     :global(.accordion) {
       padding: 0.5rem 1rem;
-      background-color: rgb(0, 0, 0);
-      text-align: center;
+      background-color: rgb(48, 43, 63)
     }
     :global(.accordion-collapse) {
       padding: 0.5rem 1rem;
-      background-color: rgb(0, 0, 0);
+      background-color: rgb(26, 21, 40);
       font-size: 0.8rem;
     }
     :global(.accordion-body) {
       padding: 0.5rem 1rem;
-      background-color: rgb(0, 0, 0);
+      background-color: rgb(48, 43, 63);
       font-size: 0.8rem;
     }
     .list-group-item {
-      background-color: rgb(0,0,0);
-      font-size: 1rem;
-      text-align: center;
--webkit-text-fill-color: aliceblue;    }
+      background-color: rgb(26, 21, 40);
+      font-size: 0.8rem;
+    }
     .accordion-button {
-      background-color: rgb(208, 207, 207);
-      font-size: 0.9rem;
-      text-align: center;
+      background-color: rgb(26, 21, 40);
+      font-size: 0.8rem;
     }
     .list-group {
-      background-color: rgb(234, 8, 8);
+      background-color: rgb(26, 21, 40);
       font-size: 0.8rem;
-      text-align: center;
     }
     .accordion-item {
       font-size: 0.8rem;

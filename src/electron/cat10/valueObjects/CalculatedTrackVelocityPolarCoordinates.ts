@@ -1,19 +1,18 @@
 import { strict as assert } from 'node:assert';
 
 export class CalculatedTrackVelocityPolarCoordinates{
-    // rho : number;
-    // theta : number;
-    ground_speed : string;
-    track_angle : string;
+    rho : number;
+    theta : number;
 
-    constructor(ground_speed : string, track_angle : string) {
-        this.ground_speed = ground_speed;
-        this.track_angle = track_angle;
+    constructor(rho : number, theta : number) {
+        this.rho = rho;
+        this.theta = theta;
         this.validate();
     }
 
     validate(){
-        assert(this.ground_speed != null);
+        assert(this.rho != null);
+        assert(this.theta != null);
     }
 
 }
