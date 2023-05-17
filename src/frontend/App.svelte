@@ -473,58 +473,6 @@
   });
   
 </script>
-
-<div class="button-container">
-  <button type="button" class="btn btn-primary file-button" on:click="{handleLoadSomeMsgs}"
-      >File  <i class="bi bi-folder2-open"></i></button
-    >  
-    <button type="button" class="btn btn-primary csv-button" on:click="{csv_file}"
-      >Export to CSV <i class="bi bi-filetype-csv"></i></button
-    > 
-    <label for="cat-selector">Filter by:</label>
-    <select id="cat-selector" on:change={handleSelectionCat}>
-      <option value="">-- Category --</option>
-      <option value="Cat10">Cat10 </option>
-      <option value="Cat21">Cat21</option>
-    </select>
-    <select id="instrument-selector" on:change={handleSelectionInstrument}>
-      <option value="">-- Instrument --</option>
-      <option value="SMR">SMR</option>
-      <option value="ADSB">ADSB</option>
-      <option value="MLAT">MLAT</option>
-    </select>
-    <div id="search">
-      <div class="input-group mb-3">
-        <select
-          style="max-width: 200px ;"
-          class="form-select"
-          id="inputGroup02"
-          bind:value="{searchPicker}"
-          aria-label="Example select with button addon"
-        >
-          <option selected>Any</option>
-          <option>Target Address</option>
-          <option>Target identification</option>
-        </select>
-        <input
-          bind:value="{searchBox}"
-          type="text"
-          class="form-control"
-          on:keydown="{keyDown}"
-          aria-label="Text input with dropdown button"
-          placeholder="Search..."
-        />
-        <label class="input-group-text" on:click="{updateFilters}" for="inputGroup02">Search</label>
-      </div>
-    </div>
-    <button 
-    type="button" 
-    class="{messages.length > 0 ? 'btn btn-primary simulation-button' : 'btn btn-primary disabled simulation-button'}"
-    on:click="{handleMapClick}"
-      >Simulation</button
-    >
-</div>
-
 <nav>
   <div class="inner">
     <div on:click={handleMobileIconClick} class={`mobile-icon${showMobileMenu ? ' active' : ''}`}>
@@ -532,7 +480,11 @@
     </div>
     <ul class={`navbar-list${showMobileMenu ? ' mobile' : ''}`}>
       <li>
-        <a href={'#'} on:click="{handleMapClick}"> MAP </a>
+        {#if messages.length > 0}
+        <a href={'#'} on:click="{handleMapClick}"> SIMULATION </a>
+        {:else}
+        <span class="disabled-link"> SIMULATION </span>
+      {/if}
       </li>
       <li>
         <a href={'#'} on:click="{handleTableClick}"> TABLE </a>
@@ -615,8 +567,8 @@
             bind:value="{searchPicker}"
             aria-label="Example select with button addon"
           >
-            <option selected>Filter</option>
-            <option>Target Address</option>
+          <option selected>Filter</option>  
+          <option>Target Address</option>
             <option>Target identification</option>
           </select>
           <input
@@ -627,7 +579,13 @@
             aria-label="Text input with dropdown button"
             placeholder="Search..."
           />
+          {#if searchPicker === "Filter" }
+          <label class="btn btn-primary disabled input-group-text" on:click="{updateFilters}" for="inputGroup02">Search</label>
+          {:else}
           <label class="input-group-text" on:click="{updateFilters}" for="inputGroup02">Search</label>
+          {/if}
+
+
         </div>
       </div>
   </div>
