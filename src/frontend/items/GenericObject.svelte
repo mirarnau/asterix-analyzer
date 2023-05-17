@@ -1,15 +1,15 @@
 <style>
     :global(.accordion-button) {
       padding: 0.5rem 1rem;
-      background-color: rgb(26, 21, 40);
+      background-color: rgb(0, 0, 0);
     }
 
     .list-group-item {
-      background-color: rgb(48, 43, 63);
+      background-color: rgb(255, 255, 255);
       font-size: 0.8rem;
     }
     .list-group {
-      background-color: rgb(48, 43, 63);
+      background-color: rgb(0, 0, 0);
       font-size: 0.8rem;
     }
   </style>
