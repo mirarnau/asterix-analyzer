@@ -8,6 +8,132 @@
     width: 100%;
     height: 100%;
   }
+  .inner {
+    max-width: 980px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin: auto;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+
+  .mobile-icon {
+    width: 25px;
+    height: 14px;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .mobile-icon:after,
+  .mobile-icon:before,
+  .middle-line {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: #fff;
+    transition: all 0.4s;
+    transform-origin: center;
+  }
+
+  .mobile-icon:before,
+  .middle-line {
+    top: 0;
+  }
+
+  .mobile-icon:after,
+  .middle-line {
+    bottom: 0;
+  }
+
+  .mobile-icon:before {
+    width: 66%;
+  }
+
+  .mobile-icon:after {
+    width: 33%;
+  }
+
+  .middle-line {
+    margin: auto;
+  }
+
+  .mobile-icon:hover:before,
+  .mobile-icon:hover:after,
+  .mobile-icon.active:before,
+  .mobile-icon.active:after,
+  .mobile-icon.active .middle-line {
+    width: 100%;
+  }
+
+  .mobile-icon.active:before,
+  .mobile-icon.active:after {
+    top: 50%;
+    transform: rotate(-45deg);
+  }
+
+  .mobile-icon.active .middle-line {
+    transform: rotate(45deg);
+  }
+
+  .navbar-list {
+    display: none;
+    width: 100%;
+    justify-content: space-between;
+    margin: 0;
+    padding: 0 40px;
+  }
+
+  .navbar-list.mobile {
+    background-color: rgba(0, 0, 0, 0.8);
+    position: fixed;
+    display: block;
+    height: calc(100% - 45px);
+    bottom: 0;
+    left: 0;
+  }
+
+  .navbar-list li {
+    list-style-type: none;
+    position: relative;
+  }
+
+  .navbar-list li:before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #424245;
+  }
+
+  .navbar-list a {
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    height: 45px;
+    align-items: center;
+    padding: 0 10px;
+    font-size: 13px;
+  }
+
+  @media only screen and (min-width: 767px) {
+    .mobile-icon {
+      display: none;
+    }
+
+    .navbar-list {
+      display: flex;
+      padding: 0;
+    }
+
+    .navbar-list a {
+      display: inline-flex;
+    }
+  }
 
   @media (min-width: 640px) {
     main {
@@ -60,7 +186,7 @@
 
   .csv-button {
     background-color: #051a30;
-    width: 170px;
+    width: 150px;
     color: white;
     border-color: #00eeff;
     border-width: 3px;
@@ -68,6 +194,15 @@
   }
 
   .simulation-button {
+    background-color: #051a30;
+    width: 120px;
+    color: white;
+    border-color: #00eeff;
+    border-width: 3px;
+    text-align: center;
+  }
+
+  .table-button {
     background-color: #051a30;
     width: 120px;
     color: white;
@@ -93,51 +228,26 @@
   .button-container {
     background-color: #262626;
   }
-
-  .play-button {
-    background-color: #00eeff;
-    color: rgb(0, 0, 0);
-    border-color: #00eeff;
-    border-width: 3px;
-    text-align: center;
+  nav {
+    background-color: rgba(0, 0, 0, 0.8);
+    font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+    height: 45px;
   }
-
-  .play-back-button {
-    background-color: rgb(31, 31, 31);
-    color: white;
-    border-color: #00eeff;
-    border-width: 3px;
-    text-align: center;
-  }
-
-  .play-forward-button {
-    background-color: rgb(31, 31, 31);
-    color: white;
-    border-color: #00eeff;
-    border-width: 3px;
-    text-align: center;
-  }
-
-  .align-right {
-  display: flex;
-  justify-content: flex-end;
-}
 
 </style>
 
 
 <script lang="ts" type="module">
 
-    import type { Cat10 } from "../electron/cat10/Cat10";
-    import type { Cat21 } from "../electron/cat21/Cat21";
-    import { initIpcMainBidirectional, ipcMainBidirectional } from "./ipcMain/ipcMainCallers";
-    import { parseIpcMainReceiveMessage } from "./ipcMain/ipcMainReceiverParser";
-    import Simulation from "./components/simulation.svelte"
-    import { initializeMap } from "./arcgis/map";
-    import GenericProps from "./items/GenericProps.svelte";
+  import type { Cat10 } from "../electron/cat10/Cat10";
+  import type { Cat21 } from "../electron/cat21/Cat21";
+  import { initIpcMainBidirectional, ipcMainBidirectional } from "./ipcMain/ipcMainCallers";
+  import { parseIpcMainReceiveMessage } from "./ipcMain/ipcMainReceiverParser";
+  import Simulation from "./components/simulation.svelte"
+  import { initializeMap } from "./arcgis/map";
+  import GenericProps from "./items/GenericProps.svelte";
+  import { onMount } from "svelte";
 
-
-  
   let messages: ( Cat10 | Cat21) [] = [];
   let numberOfMsg = 0;
   
@@ -147,28 +257,24 @@
   let selectedCat: string;
   let selectedInstr: string;
   let searchBox = "";
-  let searchPicker = "Any";
-
+  
+  let searchPicker = "Filter";
 
   let simulation : Simulation;
-  let visibleItem = "TABLE";
+  let visibleItem = "MAP";
 
   let selectedRow: number | null = null;
   let allChildComponents = new Map<number, GenericProps>();
   let allChildComponentsKeys = Array.from(allChildComponents.keys());
 
-  let play = false;
-  let settings = false;
-
   async function handleLoadSomeMsgs() {
-    visibleItem = "TABLE";
     numberOfMsg = Number.parseInt(await initIpcMainBidirectional("file-picker"));
     if (!numberOfMsg) return;
     messages = [];
     console.log({ numberOfMsg });
-    const FRAGMENTS = 1000;
+    const FRAGMENTS = 100000;
     let i = 0;
-    await ipcMainBidirectional("get-message-quantity", 1000);
+    await ipcMainBidirectional("get-message-quantity", 10000);
     while (i < numberOfMsg) {
       const msgs = await ipcMainBidirectional("pass-slice");
       messages = messages.concat(await parseIpcMainReceiveMessage(msgs));
@@ -192,7 +298,7 @@
       Instrument: [],
     };
     let search = searchBox;
-    if (searchPicker !== "Any") {
+    if (searchPicker !== "Filter") {
       search = "";
       if (searchPicker === "Target Address") {
         filter.TargetAddress = searchBox;
@@ -262,6 +368,10 @@
     }
   }
 
+  async function handleTableClick() {
+    visibleItem = "TABLE";
+  }
+
   function trClick(msg: Cat10 | Cat21) {
     let tr = document.getElementById(`tr-${msg.id}`);
     let tbody = document.querySelector("tbody");
@@ -274,122 +384,117 @@
       if (tbody && tr) {
         let arr = Array.from(tbody.children);
         let nexttr = arr[arr.indexOf(tr) + 1];
-        let child = new GenericProps({ target: tbody, anchor: nexttr, props: { msg } });
+        let child = new GenericProps({ target: tbody, anchor: nexttr, props: { msg }});
         allChildComponents.set(msg.id, child);
         allChildComponentsKeys = Array.from(allChildComponents.keys());
       }
     }
   }
+  let showMobileMenu = false;
 
-  async function kml_file() {
-    console.log("Creating kml file");
+  const navItems = [
+  { label: "MAP", href: "#", clickHandler: handleMapClick},
+  { label: "TABLE", href: "#", clickHandler: handleTableClick},
+  { label: "FILE", href: "#", clickHandler: handleLoadSomeMsgs }
+  ];
 
-    await ipcMainBidirectional("save-kml");
+  
+  let selectedItem = navItems[0];
 
-    console.log("KML file written");
-  }
+  
+  // Mobile menu click event handler
+  const handleMobileIconClick = () => (showMobileMenu = !showMobileMenu);
 
-  function settingsPannel() {
-    settings = !settings;
-  }
+  const handleNavItemClick = (item:any) => {
+    selectedItem = item;
+    // Add your custom logic for handling the selected item
+    console.log("Selected item:", item.label);
+  };
+
+
+  // Media match query handler
+  const mediaQueryHandler = (e: { matches: any; }) => {
+    // Reset mobile state
+    if (!e.matches) {
+      showMobileMenu = false;
+    }
+  };
+
+  // Attach media query listener on mount hook
+  onMount(() => {
+    const mediaListener = window.matchMedia("(max-width: 767px)");
+
+    mediaListener.addListener(mediaQueryHandler);
+  });
   
 </script>
-<div class="button-container">
-  <button type="button" class="btn btn-primary file-button" on:click="{handleLoadSomeMsgs}"
-      >File  <i class="bi bi-folder2-open"></i></button
-    >  
-    <button type="button" class="btn btn-primary csv-button" on:click="{csv_file}"
-      >Export to CSV <i class="bi bi-filetype-csv"></i></button
-    > 
-    <label for="cat-selector">Filter by:</label>
-    <select id="cat-selector" on:change={handleSelectionCat}>
-      <option value="">-- Category --</option>
-      <option value="Cat10">Cat10 </option>
-      <option value="Cat21">Cat21</option>
-    </select>
-    <select id="instrument-selector" on:change={handleSelectionInstrument}>
-      <option value="">-- Instrument --</option>
-      <option value="SMR">SMR</option>
-      <option value="ADSB">ADSB</option>
-      <option value="MLAT">MLAT</option>
-    </select>
-    <div id="search">
-      <div class="input-group mb-3">
-        <select
-          style="max-width: 200px ;"
-          class="form-select"
-          id="inputGroup02"
-          bind:value="{searchPicker}"
-          aria-label="Example select with button addon"
-        >
-          <option selected>Any</option>
-          <option>Target Address</option>
-          <option>Target identification</option>
-        </select>
-        <input
-          bind:value="{searchBox}"
-          type="text"
-          class="form-control"
-          on:keydown="{keyDown}"
-          aria-label="Text input with dropdown button"
-          placeholder="Search..."
-        />
-        <label class="input-group-text" on:click="{updateFilters}" for="inputGroup02">Search</label>
-      </div>
+<nav>
+  <div class="inner">
+    <div on:click={handleMobileIconClick} class={`mobile-icon${showMobileMenu ? ' active' : ''}`}>
+      <div class="middle-line"></div>
     </div>
-    <button 
-    type="button" 
-    class="{messages.length > 0 ? 'btn btn-primary simulation-button' : 'btn btn-primary disabled simulation-button'}"
-    on:click="{handleMapClick}"
-      >Simulation</button
-    >
-</div>
+    <ul class={`navbar-list${showMobileMenu ? ' mobile' : ''}`}>
+      <li>
+        <a href={'#'} on:click="{handleMapClick}"> MAP </a>
+      </li>
+      <li>
+        <a href={'#'} on:click="{handleTableClick}"> TABLE </a>
+      </li>
+      <li>
+        <a href={'#'} on:click="{handleLoadSomeMsgs}"> FILE </a>
+      </li>
+    </ul>
+  </div>
+</nav>
 
 <main>
   <div class="{visibleItem === 'MAP' ? 'main overflow' : 'main'}">
   {#if visibleItem === "MAP"}
-  <div class="ontop dark" id="btn-bar">
-    <div id="progDiv" class="align-right">
-      <div>
-        <button
-          type="button"
-          class="{messages.length > 0 ? 'btn btn-primary play-back-button' : 'btn btn-primary disabled play-back-button'}"
-          on:click="{simulation.restartSim}"
-          ><i class="bi bi-arrow-counterclockwise"></i>
-        </button>
-        <button
-          type="button"
-          class="{messages.length > 0 ? 'btn btn-primary play-back-button' : 'btn btn-primary disabled play-back-button'}"
-          on:click="{simulation.backwardsTick}"><i class="bi bi-arrow-90deg-left"></i></button
-        >
-        <button
-          type="button"
-          class="{messages.length > 0 ? 'btn btn-primary play-button play-button' : 'btn btn-primary disabled play-button play-forward-button play-button'}"
-          on:click="{simulation.playClick}"
-        >
-          {#if play}
-            <i class="bi bi-pause"></i>
-          {:else}
-            <i class="bi bi-play"></i>
-          {/if}
-        </button>
-    
-        <button
-          type="button"
-          class="{messages.length > 0 ? 'btn btn-primary play-forward-button' : 'btn btn-primary disabled play-forward-button'}"
-          on:click="{simulation.forwardsTick}"
-          ><i class="bi bi-arrow-90deg-right"></i>
-        </button>
-      </div>
-    </div>
-      <Simulation
-        on:stop="{() => (play = false)}"
-        on:switchplay="{() => (play = !play)}"
-        bind:this="{simulation}"
-      />
-    </div>
     <div id="viewDiv"></div>
-  {:else}
+  {:else if visibleItem === "TABLE"}
+    <div class="button-container">
+    
+      <button type="button" class="btn btn-primary csv-button" on:click="{csv_file}"
+        >Export to CSV</button
+      > 
+      <label for="cat-selector">Filter by:</label>
+      <select id="cat-selector" on:change={handleSelectionCat}>
+        <option value="">-- Category --</option>
+        <option value="Cat10">Cat10 </option>
+        <option value="Cat21">Cat21</option>
+      </select>
+      <select id="instrument-selector" on:change={handleSelectionInstrument}>
+        <option value="">-- Instrument --</option>
+        <option value="SMR">SMR</option>
+        <option value="ADSB">ADSB</option>
+        <option value="MLAT">MLAT</option>
+      </select>
+      <div id="search">
+        <div class="input-group mb-3">
+          <select
+            style="max-width: 200px ;"
+            class="form-select"
+            id="inputGroup02"
+            bind:value="{searchPicker}"
+            aria-label="Example select with button addon"
+          >
+            <option selected>Filter</option>
+            <option>Target Address</option>
+            <option>Target identification</option>
+          </select>
+          <input
+            bind:value="{searchBox}"
+            type="text"
+            class="form-control"
+            on:keydown="{keyDown}"
+            aria-label="Text input with dropdown button"
+            placeholder="Search..."
+          />
+          <label class="input-group-text" on:click="{updateFilters}" for="inputGroup02">Search</label>
+        </div>
+      </div>
+  </div>
+
     <table>
       <thead>
         <tr>
@@ -412,7 +517,7 @@
               <td>{message.class}</td>
               <td>{message.measurementInstrument}</td>
               <td>{message.messageType.messageType}</td>
-              <td>{message.dataSourceIdentifier.sic}</td>
+              <td>{`SAC: ${message.dataSourceIdentifier.sac}; SIC: ${message.dataSourceIdentifier.sic}`}</td>
               <td>{new Date(message.timeOfDay.timestamp * 1000).toISOString().substring(11, 23)}</td>
             </tr>
           {:else}
@@ -421,8 +526,8 @@
               <td>{message.id}</td>
               <td>{message.class}</td>
               <td>{message.measurementInstrument}</td>
-              <td>{#if message.targetIdentification}{message.targetIdentification.data}{/if}</td>
-              <td>{`SIC: ${message.dataSourceIdentifier.sic}; SAC: ${message.dataSourceIdentifier.sac}`}</td>
+              <td>{message.targetIdentification.data}</td>
+              <td>{`SAC: ${message.dataSourceIdentifier.sac}; SIC: ${message.dataSourceIdentifier.sic}`}</td>
               <td>{new Date(message.timeofReportTransmission.time * 1000 ).toISOString().substring(11, 23)}</td>
             </tr>
           {/if}

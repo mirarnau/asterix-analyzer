@@ -259,7 +259,7 @@ export function loadGroundLayer(map: ArcGISMap) {
   const constLayer = new GraphicsLayer();
   constLayer.elevationInfo = { mode: "on-the-ground" };
 
-  //constLayer.addMany([graphicsmr, graphicmlat]);
+  constLayer.addMany([graphicsmr, graphicmlat]);
   // let sketch = new Sketch({
   //   layer: constLayer,
   //   view: view,
@@ -374,26 +374,21 @@ export function createGraphicADSB(msg: Cat21) {
       id: msg.id,
       class: msg.class,
       instrument: msg.measurementInstrument,
-      time_ASTERIX_report_transmission: msg.timeofReportTransmission
-        ? new Date(msg.timeofReportTransmission.time * 1000)
-            .toISOString()
-            .substring(11, 23)
-        : null,
-      target_address: msg.targetAddress ? msg.targetAddress.value : null,
-      target_identification: msg.targetIdentification ? msg.targetIdentification.data : null,
-      data_source_identifier: msg.dataSourceIdentifier
-        ? `SIC: ${msg.dataSourceIdentifier.sic}; SAC: ${msg.dataSourceIdentifier.sac}`
-        : null,
-      barometric_vertical_rate: msg.barometricVerticalRate ? msg.barometricVerticalRate.value : null,
-      flight_level: msg.flightLevel ? msg.flightLevel.fligthLevel : null,
-      geometric_height: msg.geometricHeight ? msg.geometricHeight.geometricHeight : null,
-      latitude: msg.positioninWGS84Coordinates ? msg.positioninWGS84Coordinates.latitude : null,
-      longitude: msg.positioninWGS84Coordinates ? msg.positioninWGS84Coordinates.longitude : null,
+      time_ASTERIX_report_transmission: new Date(msg.timeofReportTransmission.time * 1000)
+        .toISOString()
+        .substring(11, 23),
+      target_address: msg.targetAddress.value,
+      target_identification: msg.targetIdentification.data,
+      data_source_identifier: `SIC: ${msg.dataSourceIdentifier.sic}; SAC: ${msg.dataSourceIdentifier.sac}`,
+      barometric_vertical_rate: msg.barometricVerticalRate.value,
+      flight_level: msg.flightLevel.fligthLevel,
+      geometric_height: msg.geometricHeight.geometricHeight,
+      latitude: msg.positioninWGS84Coordinates.latitude,
+      longitude: msg.positioninWGS84Coordinates.longitude,
     },
   });
   graphicMap.set(msg.id, newGraphic);
   groundLayerAdsb.add(newGraphic);
-  
 }
 
 export function setSMRVisibility(b: boolean) {

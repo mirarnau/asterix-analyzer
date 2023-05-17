@@ -127,18 +127,16 @@ export function parseADSBmessage(msg: Cat21) {
     const newPlane: Airplane = {
       longitude: 0,
       latitude: 0,
-      level: level,
-      geometric_height: geometric_height,
+      level,
+      geometric_height,
       // mlat_msgs: [],
       adsb_msgs: [msg],
-      target_identification: msg.targetIdentification ? msg.targetIdentification.data : "AA",
-      target_address: msg.targetAddress ? msg.targetAddress.value : "AA",
-      heading: heading,
+      target_identification: msg.targetIdentification.data,
+      target_address: msg.targetAddress.value,
+      heading,
       graphic: undefined,
       pathGraphic: undefined,
     };
-    
-    
 
     planeMap.set(newPlane.target_address, newPlane);
 

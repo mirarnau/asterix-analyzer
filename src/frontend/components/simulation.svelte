@@ -53,9 +53,9 @@
       // msgPlotted = [];
   
       if (messages[0].class === "Cat10") {
-        simStartTime = getDateCat10(messages[0] as Cat10).getTime();
+        simStartTime = getDateCat10(messages[0]).getTime();
       } else {
-        simStartTime = getDateCat21(messages[0] as Cat21).getTime();
+        simStartTime = getDateCat21(messages[0]).getTime();
       }
   
       if (messages[messages.length - 1].class === "Cat10") {
@@ -69,12 +69,8 @@
   
     function getTime(msg: Cat10 | Cat21) {
       if (msg.class === "Cat10") {
-        var messageCat10 = msg as Cat10;
-        return messageCat10.timeOfDay.timestamp;
-      } else if (msg.class === "Cat21") {
-        var messageCat21 = msg as Cat21;
-        return messageCat21.timeofReportTransmission.time;
-      } 
+        return msg.timeOfDay.timestamp;
+      } else if (msg.class === "Cat21") return msg.timeofReportTransmission.time;
       return -1;
     }
   
