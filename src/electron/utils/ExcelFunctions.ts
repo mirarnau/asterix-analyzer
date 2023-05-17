@@ -155,8 +155,8 @@ function getVelocityPolar(vel : CalculatedTrackVelocityPolarCoordinates){
     let rho;
     let theta;
     try {
-        rho = vel.rho;
-        theta = vel.theta;
+        rho = vel.ground_speed;
+        theta = vel.track_angle;
     }   catch { rho = theta = "No data"};
     return [rho, theta];
 }
