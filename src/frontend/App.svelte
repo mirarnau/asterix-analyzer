@@ -186,7 +186,7 @@
 
   .csv-button {
     background-color: #051a30;
-    width: 150px;
+    width: 170px;
     color: white;
     border-color: #00eeff;
     border-width: 3px;
@@ -234,6 +234,35 @@
     height: 45px;
   }
 
+  .play-button {
+    background-color: #00eeff;
+    color: rgb(0, 0, 0);
+    border-color: #00eeff;
+    border-width: 3px;
+    text-align: center;
+  }
+
+  .play-back-button {
+    background-color: rgb(31, 31, 31);
+    color: white;
+    border-color: #00eeff;
+    border-width: 3px;
+    text-align: center;
+  }
+
+  .play-forward-button {
+    background-color: rgb(31, 31, 31);
+    color: white;
+    border-color: #00eeff;
+    border-width: 3px;
+    text-align: center;
+  }
+
+  .align-right {
+  display: flex;
+  justify-content: flex-end;
+}
+
 </style>
 
 
@@ -267,14 +296,17 @@
   let allChildComponents = new Map<number, GenericProps>();
   let allChildComponentsKeys = Array.from(allChildComponents.keys());
 
+  let play = false;
+  let settings = false;
+
   async function handleLoadSomeMsgs() {
     numberOfMsg = Number.parseInt(await initIpcMainBidirectional("file-picker"));
     if (!numberOfMsg) return;
     messages = [];
     console.log({ numberOfMsg });
-    const FRAGMENTS = 100000;
+    const FRAGMENTS = 1000;
     let i = 0;
-    await ipcMainBidirectional("get-message-quantity", 10000);
+    await ipcMainBidirectional("get-message-quantity", 1000);
     while (i < numberOfMsg) {
       const msgs = await ipcMainBidirectional("pass-slice");
       messages = messages.concat(await parseIpcMainReceiveMessage(msgs));
@@ -390,6 +422,19 @@
       }
     }
   }
+
+  async function kml_file() {
+    console.log("Creating kml file");
+
+    await ipcMainBidirectional("save-kml");
+
+    console.log("KML file written");
+  }
+
+  function settingsPannel() {
+    settings = !settings;
+  }
+  
   let showMobileMenu = false;
 
   const navItems = [
@@ -428,6 +473,58 @@
   });
   
 </script>
+
+<div class="button-container">
+  <button type="button" class="btn btn-primary file-button" on:click="{handleLoadSomeMsgs}"
+      >File  <i class="bi bi-folder2-open"></i></button
+    >  
+    <button type="button" class="btn btn-primary csv-button" on:click="{csv_file}"
+      >Export to CSV <i class="bi bi-filetype-csv"></i></button
+    > 
+    <label for="cat-selector">Filter by:</label>
+    <select id="cat-selector" on:change={handleSelectionCat}>
+      <option value="">-- Category --</option>
+      <option value="Cat10">Cat10 </option>
+      <option value="Cat21">Cat21</option>
+    </select>
+    <select id="instrument-selector" on:change={handleSelectionInstrument}>
+      <option value="">-- Instrument --</option>
+      <option value="SMR">SMR</option>
+      <option value="ADSB">ADSB</option>
+      <option value="MLAT">MLAT</option>
+    </select>
+    <div id="search">
+      <div class="input-group mb-3">
+        <select
+          style="max-width: 200px ;"
+          class="form-select"
+          id="inputGroup02"
+          bind:value="{searchPicker}"
+          aria-label="Example select with button addon"
+        >
+          <option selected>Any</option>
+          <option>Target Address</option>
+          <option>Target identification</option>
+        </select>
+        <input
+          bind:value="{searchBox}"
+          type="text"
+          class="form-control"
+          on:keydown="{keyDown}"
+          aria-label="Text input with dropdown button"
+          placeholder="Search..."
+        />
+        <label class="input-group-text" on:click="{updateFilters}" for="inputGroup02">Search</label>
+      </div>
+    </div>
+    <button 
+    type="button" 
+    class="{messages.length > 0 ? 'btn btn-primary simulation-button' : 'btn btn-primary disabled simulation-button'}"
+    on:click="{handleMapClick}"
+      >Simulation</button
+    >
+</div>
+
 <nav>
   <div class="inner">
     <div on:click={handleMobileIconClick} class={`mobile-icon${showMobileMenu ? ' active' : ''}`}>
@@ -450,6 +547,46 @@
 <main>
   <div class="{visibleItem === 'MAP' ? 'main overflow' : 'main'}">
   {#if visibleItem === "MAP"}
+  <div class="ontop dark" id="btn-bar">
+    <div id="progDiv" class="align-right">
+      <div>
+        <button
+          type="button"
+          class="{messages.length > 0 ? 'btn btn-primary play-back-button' : 'btn btn-primary disabled play-back-button'}"
+          on:click="{simulation.restartSim}"
+          ><i class="bi bi-arrow-counterclockwise"></i>
+        </button>
+        <button
+          type="button"
+          class="{messages.length > 0 ? 'btn btn-primary play-back-button' : 'btn btn-primary disabled play-back-button'}"
+          on:click="{simulation.backwardsTick}"><i class="bi bi-arrow-90deg-left"></i></button
+        >
+        <button
+          type="button"
+          class="{messages.length > 0 ? 'btn btn-primary play-button play-button' : 'btn btn-primary disabled play-button play-forward-button play-button'}"
+          on:click="{simulation.playClick}"
+        >
+          {#if play}
+            <i class="bi bi-pause"></i>
+          {:else}
+            <i class="bi bi-play"></i>
+          {/if}
+        </button>
+    
+        <button
+          type="button"
+          class="{messages.length > 0 ? 'btn btn-primary play-forward-button' : 'btn btn-primary disabled play-forward-button'}"
+          on:click="{simulation.forwardsTick}"
+          ><i class="bi bi-arrow-90deg-right"></i>
+        </button>
+      </div>
+    </div>
+      <Simulation
+        on:stop="{() => (play = false)}"
+        on:switchplay="{() => (play = !play)}"
+        bind:this="{simulation}"
+      />
+    </div>
     <div id="viewDiv"></div>
   {:else if visibleItem === "TABLE"}
     <div class="button-container">
@@ -526,8 +663,8 @@
               <td>{message.id}</td>
               <td>{message.class}</td>
               <td>{message.measurementInstrument}</td>
-              <td>{message.targetIdentification.data}</td>
-              <td>{`SAC: ${message.dataSourceIdentifier.sac}; SIC: ${message.dataSourceIdentifier.sic}`}</td>
+              <td>{#if message.targetIdentification}{message.targetIdentification.data}{/if}</td>
+              <td>{`SIC: ${message.dataSourceIdentifier.sic}; SAC: ${message.dataSourceIdentifier.sac}`}</td>
               <td>{new Date(message.timeofReportTransmission.time * 1000 ).toISOString().substring(11, 23)}</td>
             </tr>
           {/if}
