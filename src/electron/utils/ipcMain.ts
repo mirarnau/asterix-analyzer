@@ -33,7 +33,7 @@ export async function loadFileIpc() {
     }
 
     messages = sliceMessageBuffer(buffer);
-    //messages = messages.slice(0, 300);
+    messages = messages.slice(0, 300);
     let L = messages.length > 5000000 ? 300000 : messages.length;
     return L;
 }
