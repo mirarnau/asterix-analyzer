@@ -421,7 +421,7 @@
               <td>{message.id}</td>
               <td>{message.class}</td>
               <td>{message.measurementInstrument}</td>
-              <td>{"AA"}</td>
+              <td>{#if message.targetIdentification}{message.targetIdentification.data}{/if}</td>
               <td>{`SIC: ${message.dataSourceIdentifier.sic}; SAC: ${message.dataSourceIdentifier.sac}`}</td>
               <td>{new Date(message.timeofReportTransmission.time * 1000 ).toISOString().substring(11, 23)}</td>
             </tr>
