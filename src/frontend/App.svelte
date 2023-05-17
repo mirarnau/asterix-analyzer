@@ -166,9 +166,9 @@
     if (!numberOfMsg) return;
     messages = [];
     console.log({ numberOfMsg });
-    const FRAGMENTS = 100000;
+    const FRAGMENTS = 1000;
     let i = 0;
-    await ipcMainBidirectional("get-message-quantity", 20000);
+    await ipcMainBidirectional("get-message-quantity", 1000);
     while (i < numberOfMsg) {
       const msgs = await ipcMainBidirectional("pass-slice");
       messages = messages.concat(await parseIpcMainReceiveMessage(msgs));
@@ -421,7 +421,7 @@
               <td>{message.id}</td>
               <td>{message.class}</td>
               <td>{message.measurementInstrument}</td>
-              <td>{message.targetIdentification.data}</td>
+              <td>{"AA"}</td>
               <td>{`SIC: ${message.dataSourceIdentifier.sic}; SAC: ${message.dataSourceIdentifier.sac}`}</td>
               <td>{new Date(message.timeofReportTransmission.time * 1000 ).toISOString().substring(11, 23)}</td>
             </tr>

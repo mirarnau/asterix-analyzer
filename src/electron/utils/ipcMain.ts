@@ -83,7 +83,7 @@ function runWorker(workerData: any) {
   }
   
   export function getMessagesIpcSlices() {
-    const FRAGMENTS = 300;
+    const FRAGMENTS = 1000;
     const ret = JSON.stringify(decodedMsg.slice(msgDelivered, msgDelivered + FRAGMENTS));
     msgDelivered += FRAGMENTS;
     if (msgDelivered > decodedMsg.length) msgDelivered = 0;

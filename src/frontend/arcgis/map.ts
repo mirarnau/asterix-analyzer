@@ -35,7 +35,7 @@ function initMap() {
   });
 
   view.when(() => {
-    //loadAreasLayer(view.map);
+    loadAreasLayer(view.map);
     loadGraphicsLayer(view.map);
     loadGroundLayer(view.map);
   });
