@@ -520,15 +520,12 @@
             </div>
           </div>
         </div>
-        
       </div>
-    </div>
       <Simulation
         on:stop="{() => (play = false)}"
         on:switchplay="{() => (play = !play)}"
         bind:this="{simulation}"
       />
-    </div>
     <div id="viewDiv"></div>
   {:else if visibleItem === "TABLE"}
     <Table />
