@@ -87,7 +87,7 @@
   }
 
   .navbar-list.mobile {
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: #0e2a47;
     position: fixed;
     display: block;
     height: calc(100% - 45px);
@@ -100,24 +100,60 @@
     position: relative;
   }
 
-  .navbar-list li:before {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background-color: #424245;
+  .inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
   }
 
-  .navbar-list a {
+  .mobile-icon {
+    display: none;
+    cursor: pointer;
+  }
+
+  .mobile-icon.active .middle-line {
+    background-color: #fff;
+  }
+
+  .middle-line {
+    width: 20px;
+    height: 2px;
+    background-color: #ccc;
+    transition: background-color 0.3s ease-in-out;
+  }
+
+  .navbar-list {
+    list-style: none;
+    display: flex;
+  }
+
+  .navbar-list.mobile {
+    display: none;
+    flex-direction: column;
+    background-color: #444;
+    padding: 10px;
+  }
+
+  .navbar-list.mobile li {
+    margin-bottom: 10px;
+  }
+
+  .navbar-list li a,
+  .navbar-list li .disabled-link {
+    display: block;
+    padding: 10px;
     color: #fff;
     text-decoration: none;
-    display: flex;
-    height: 45px;
-    align-items: center;
-    padding: 0 10px;
-    font-size: 13px;
+  }
+
+  .navbar-list li a:hover {
+    background-color: #555;
+  }
+
+  .disabled-link {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 
   @media only screen and (min-width: 767px) {
@@ -140,6 +176,7 @@
       max-width: none;
     }
   }  
+
   .file-button {
     background-color: #051a30;
     width: 100px;
@@ -175,11 +212,12 @@
     border-width: 3px;
     text-align: center;
   }
+
   .button-container {
     background-color: #262626;
   }
   nav {
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(22, 22, 22, 0.8);
     font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
     height: 45px;
   }
@@ -209,27 +247,62 @@
   }
 
   .align-right {
-  display: flex;
-  justify-content: flex-end;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .container {
+  position: relative;
 }
 
+.map-container {
+  position: relative;
+  z-index: 1;
+}
+
+.legend-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+}
+
+.color-round {
+    border-radius: 50%;
+    margin-right: 10px;
+    height: 20px;
+    width: 20px;
+    border-color: black;
+    border-style: solid;
+    border-width: 1px;
+  }
+
+  .color {
+    border-radius: 50%;
+    margin-left: 5px;
+    margin-right: 10px;
+    height: 10px;
+    width: 10px;
+    border-color: black;
+    border-style: solid;
+    border-width: 1px;
+  }
 </style>
 
-
 <script lang="ts" type="module">
-
+  import { fade } from "svelte/transition";
   import type { Cat10 } from "../electron/cat10/Cat10";
   import type { Cat21 } from "../electron/cat21/Cat21";
   import { initIpcMainBidirectional, ipcMainBidirectional } from "./ipcMain/ipcMainCallers";
   import { parseIpcMainReceiveMessage } from "./ipcMain/ipcMainReceiverParser";
-  import Simulation from "./components/simulation.svelte"
+  import Simulation from "./components/simulation.svelte";
   import { initializeMap } from "./arcgis/map";
   import GenericProps from "./items/GenericProps.svelte";
   import { onMount } from "svelte";
   import Table from "./components/Table.svelte";
 
 
-  let messages: ( Cat10 | Cat21) [] = [];
+  let messages: (Cat10 | Cat21)[] = [];
   let numberOfMsg = 0;
   
   const MSG_PER_PAGE = 15;
@@ -239,10 +312,10 @@
   let selectedCat: string;
   let selectedInstr: string;
   let searchBox = "";
-  
+
   let searchPicker = "Filter";
 
-  let simulation : Simulation;
+  let simulation: Simulation;
   let visibleItem = "MAP";
 
   let selectedRow: number | null = null;
@@ -251,6 +324,8 @@
 
   let play = false;
   let settings = false;
+
+  initializeMap();
 
   async function handleLoadSomeMsgs() {
     numberOfMsg = Number.parseInt(await initIpcMainBidirectional("file-picker"));
@@ -267,7 +342,6 @@
     }
     console.log(`Finished loading ${messages.length} messages!`);
     console.log("Performance Data Not Available");
-
   }
 
   async function csv_file() {
@@ -306,31 +380,28 @@
   function settingsPannel() {
     settings = !settings;
   }
-  
+
   let showMobileMenu = false;
 
   const navItems = [
-  { label: "MAP", href: "#", clickHandler: handleMapClick},
-  { label: "TABLE", href: "#", clickHandler: handleTableClick},
-  { label: "FILE", href: "#", clickHandler: handleLoadSomeMsgs }
+    { label: "MAP", href: "#", clickHandler: handleMapClick },
+    { label: "TABLE", href: "#", clickHandler: handleTableClick },
+    { label: "FILE", href: "#", clickHandler: handleLoadSomeMsgs },
   ];
 
-  
-  let selectedItem = navItems[0];
+  let selectedItem = navItems[2];
 
-  
   // Mobile menu click event handler
   const handleMobileIconClick = () => (showMobileMenu = !showMobileMenu);
 
-  const handleNavItemClick = (item:any) => {
+  const handleNavItemClick = (item: any) => {
     selectedItem = item;
     // Add your custom logic for handling the selected item
     console.log("Selected item:", item.label);
   };
 
-
   // Media match query handler
-  const mediaQueryHandler = (e: { matches: any; }) => {
+  const mediaQueryHandler = (e: { matches: any }) => {
     // Reset mobile state
     if (!e.matches) {
       showMobileMenu = false;
@@ -343,35 +414,26 @@
 
     mediaListener.addListener(mediaQueryHandler);
   });
-
-  function clearSubcomponents() {
-    allChildComponents.forEach((v, k) => {
-      v.$destroy();
-      allChildComponents.delete(k);
-    });
-    allChildComponentsKeys = Array.from(allChildComponents.keys());
-  }
-
-  
 </script>
+
 <nav>
   <div class="inner">
-    <div on:click={handleMobileIconClick} class={`mobile-icon${showMobileMenu ? ' active' : ''}`}>
+    <div on:click="{handleMobileIconClick}" class="{`mobile-icon${showMobileMenu ? ' active' : ''}`}">
       <div class="middle-line"></div>
     </div>
-    <ul class={`navbar-list${showMobileMenu ? ' mobile' : ''}`}>
+    <ul class="{`navbar-list${showMobileMenu ? ' mobile' : ''}`}">
+      <li>
+        <a href="{'#'}" on:click="{handleMapClick}"> SIMULATION </a>
+      </li>
       <li>
         {#if messages.length > 0}
-        <a href={'#'} on:click="{handleMapClick}"> SIMULATION </a>
+          <a href="{'#'}" on:click="{handleTableClick}"> TABLE </a>
         {:else}
-        <span class="disabled-link"> SIMULATION </span>
-      {/if}
+          <span class="disabled-link">TABLE</span>
+        {/if}
       </li>
       <li>
-        <a href={'#'} on:click="{handleTableClick}"> TABLE </a>
-      </li>
-      <li>
-        <a href={'#'} on:click="{handleLoadSomeMsgs}"> FILE </a>
+        <a href="{'#'}" on:click="{handleLoadSomeMsgs}"> FILE </a>
       </li>
     </ul>
   </div>
@@ -379,39 +441,86 @@
 
 <main>
   <div class="{visibleItem === 'MAP' ? 'main overflow' : 'main'}">
-  {#if visibleItem === "MAP"}
-  <div class="ontop dark" id="btn-bar">
-    <div id="progDiv" class="align-right">
-      <div>
-        <button
-          type="button"
-          class="{messages.length > 0 ? 'btn btn-primary play-back-button' : 'btn btn-primary disabled play-back-button'}"
-          on:click="{simulation.restartSim}"
-          ><i class="bi bi-arrow-counterclockwise"></i>
-        </button>
-        <button
-          type="button"
-          class="{messages.length > 0 ? 'btn btn-primary play-back-button' : 'btn btn-primary disabled play-back-button'}"
-          on:click="{simulation.backwardsTick}"><i class="bi bi-arrow-90deg-left"></i></button
-        >
-        <button
-          type="button"
-          class="{messages.length > 0 ? 'btn btn-primary play-button play-button' : 'btn btn-primary disabled play-button play-forward-button play-button'}"
-          on:click="{simulation.playClick}"
-        >
-          {#if play}
-            <i class="bi bi-pause"></i>
-          {:else}
-            <i class="bi bi-play"></i>
-          {/if}
-        </button>
-    
-        <button
-          type="button"
-          class="{messages.length > 0 ? 'btn btn-primary play-forward-button' : 'btn btn-primary disabled play-forward-button'}"
-          on:click="{simulation.forwardsTick}"
-          ><i class="bi bi-arrow-90deg-right"></i>
-        </button>
+    {#if visibleItem === "MAP"}
+      <div class="ontop dark" id="btn-bar">
+        <div id="progDiv" class="align-right">
+          <div>
+            <button
+              type="button"
+              class="{messages.length > 0
+                ? 'btn btn-primary play-back-button'
+                : 'btn btn-primary disabled play-back-button'}"
+              on:click="{simulation.restartSim}"
+              ><i class="bi bi-arrow-counterclockwise"></i>
+            </button>
+            <button
+              type="button"
+              class="{messages.length > 0
+                ? 'btn btn-primary play-back-button'
+                : 'btn btn-primary disabled play-back-button'}"
+              on:click="{simulation.backwardsTick}"><i class="bi bi-arrow-90deg-left"></i></button
+            >
+            <button
+              type="button"
+              class="{messages.length > 0
+                ? 'btn btn-primary play-button play-button'
+                : 'btn btn-primary disabled play-button play-forward-button play-button'}"
+              on:click="{simulation.playClick}"
+            >
+              {#if play}
+                <i class="bi bi-pause"></i>
+              {:else}
+                <i class="bi bi-play"></i>
+              {/if}
+            </button>
+
+            <button
+              type="button"
+              class="{messages.length > 0
+                ? 'btn btn-primary play-forward-button'
+                : 'btn btn-primary disabled play-forward-button'}"
+              on:click="{simulation.forwardsTick}"
+              ><i class="bi bi-arrow-90deg-right"></i>
+            </button>
+          </div>
+        </div>
+        <div class="container">
+          <div class="map-container">
+            <Simulation
+              on:stop="{() => (play = false)}"
+              on:switchplay="{() => (play = !play)}"
+              bind:this="{simulation}"
+            />
+          </div>
+          <div class="legend-container">
+            <div class="ontop dark" id="legend" transition:fade="{{ duration: 100 }}">
+              <p>Map Legend</p>
+              <div style="font-size: small">
+                <table>
+                  <tr>
+                    <td>
+                      <div class="color" style="background-color: #fe0000;"></div>
+                    </td>
+                    <td>SMR Data Point</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="color" style="background-color: #ffeb16;"></div>
+                    </td>
+                    <td>MLAT Data Point</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="color" style="background-color: #6733bb;"></div>
+                    </td>
+                    <td>ADS-B Data Point</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        
       </div>
     </div>
       <Simulation
