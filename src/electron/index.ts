@@ -19,6 +19,7 @@ import {
   getMessagesIpcSlices,
   writeCsvFile,
   filterMess,
+  filterTakeOff,
 } from "./utils/ipcMain";
 
 const isProd = process.env.NODE_ENV === "production" || app.isPackaged;
@@ -67,6 +68,7 @@ const createWindow = () => {
   ipcMain.handle("pass-slice", getMessagesIpcSlices);
   ipcMain.handle("save-csv", writeCsvFile);
   ipcMain.handle("filter-messages", filterMess);
+  ipcMain.handle("filter-takeoff", filterTakeOff);
   // ipcMain.handle("filter-cat21", filterMessagesCat21);
   // ipcMain.handle("filter-SMR", filterMessagesSMR);
   // ipcMain.handle("filter-ADSB", filterMessagesADSB);

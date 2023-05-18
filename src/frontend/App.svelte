@@ -139,42 +139,7 @@
     main {
       max-width: none;
     }
-  }
-
-  
-  
-  th {
-    color: rgb(255, 255, 255);
-    font-size: medium;
-  }
-  
-  td {
-    color: white;
-    font-size: small;
-  }
-  
-  table {
-    border-collapse: collapse;
-    width: 100%;
-  }
-  
-  th, td {
-    text-align: left;
-    padding: 8px;
-  }
-  
-  th {
-    background-color: #051a30;
-  }
-  
-  tr:nth-child(even) {
-    background-color: #0e2a47;
-  }
-  
-  tr:nth-child(odd) {
-    background-color: #0e2a47;
-  }
-  
+  }  
   .file-button {
     background-color: #051a30;
     width: 100px;
@@ -210,21 +175,6 @@
     border-width: 3px;
     text-align: center;
   }
-  
-  tr.smr {
-    background-color: rgb(127, 66, 0);
-  }
-  
-  tr.mlat {
-    background-color: rgb(0, 98, 128);
-  }
-
-  #viewDiv {
-    position: relative;
-    width: 100%;
-    height: calc(100vh - 42px);
-  }
-
   .button-container {
     background-color: #262626;
   }
@@ -272,24 +222,27 @@
   import type { Cat21 } from "../electron/cat21/Cat21";
   import { initIpcMainBidirectional, ipcMainBidirectional } from "./ipcMain/ipcMainCallers";
   import { parseIpcMainReceiveMessage } from "./ipcMain/ipcMainReceiverParser";
-  // import Simulation from "./components/simulation.svelte"
-  // import { initializeMap } from "./arcgis/map";
+  import Simulation from "./components/simulation.svelte"
+  import { initializeMap } from "./arcgis/map";
   import GenericProps from "./items/GenericProps.svelte";
   import { onMount } from "svelte";
+  import Table from "./components/Table.svelte";
+
 
   let messages: ( Cat10 | Cat21) [] = [];
   let numberOfMsg = 0;
   
-  // let loading = false;
-  // let performanceData = false;
-
+  const MSG_PER_PAGE = 15;
+  let pageArray: number[] = [];
+  let activePage = 1;
+  let displayedPageArray: number[] = [];
   let selectedCat: string;
   let selectedInstr: string;
   let searchBox = "";
   
   let searchPicker = "Filter";
 
-  // let simulation : Simulation;
+  let simulation : Simulation;
   let visibleItem = "MAP";
 
   let selectedRow: number | null = null;
@@ -322,107 +275,26 @@
     await ipcMainBidirectional("save-csv");
     console.log("CSV file written");
   }
-  
-  async function filterMessages() {
-    messages = [];
-    const filter: Filter = {
-      Category: [],
-      Instrument: [],
-    };
-    let search = searchBox;
-    if (searchPicker !== "Filter") {
-      search = "";
-      if (searchPicker === "Target Address") {
-        filter.TargetAddress = searchBox;
-      } else if (searchPicker === "Target identification") {
-        filter.TargetIdentification = searchBox;
-        console.log(searchBox);
-      }
-    }
-    if (selectedCat=="Cat10"){
-      filter.Category.push("Cat10");
-    } else if (selectedCat=="Cat21"){
-      filter.Category.push("Cat21");
-    }
-    switch(selectedInstr){
-      case "SMR":
-        filter.Instrument.push("SMR");
-        break;
-      case "MLAT":
-        filter.Instrument.push("MLAT");
-        break;
-      case "ADSB":
-        filter.Instrument.push("ADS-B");
-        break;
-    }
-    
-    messages = messages.concat(await parseIpcMainReceiveMessage(await ipcMainBidirectional("filter-messages", { filter, search })));
-  }
-  
 
-  function handleSelectionCat(event) {
-    selectedCat = event.target.value;
-    updateFilters();
-    
+  async function take_off() {
+    await ipcMainBidirectional("filter-takeoff");
   }
-
-  function handleSelectionInstrument(event) {
-    selectedInstr = event.target.value;
-    updateFilters();
-    
-  }
-
-  interface Filter {
-    Category: string[];
-    Instrument: string[];
-    TargetAddress?: string;
-    TargetIdentification?: string;
-  }
-  function keyDown(e: any) {
-    if (e.keyCode === 13) {
-      updateFilters();
-    }
-  }
-  function updateFilters() {
-    setTimeout(() => {
-      filterMessages();
-    }, 100);
-  }
-
+ 
   async function handleMapClick() {
     visibleItem = "MAP";
 
-    // initializeMap();
-    // if (messages.length > 0) {
-    //   setTimeout(() => {
-    //     simulation.initializeSimulation!(messages);
-    //   }, 750);
-    // }
+    initializeMap();
+    if (messages.length > 0) {
+      setTimeout(() => {
+        simulation.initializeSimulation!(messages);
+      }, 750);
+    }
   }
 
   async function handleTableClick() {
     visibleItem = "TABLE";
   }
-
-  function trClick(msg: Cat10 | Cat21) {
-    let tr = document.getElementById(`tr-${msg.id}`);
-    let tbody = document.querySelector("tbody");
-    if (allChildComponents.has(msg.id)) {
-      allChildComponents.get(msg.id)!.$destroy();
-      allChildComponents.delete(msg.id);
-      allChildComponentsKeys = Array.from(allChildComponents.keys());
-    } else {
-      // Open this row
-      if (tbody && tr) {
-        let arr = Array.from(tbody.children);
-        let nexttr = arr[arr.indexOf(tr) + 1];
-        let child = new GenericProps({ target: tbody, anchor: nexttr, props: { msg }});
-        allChildComponents.set(msg.id, child);
-        allChildComponentsKeys = Array.from(allChildComponents.keys());
-      }
-    }
-  }
-
+  
   async function kml_file() {
     console.log("Creating kml file");
 
@@ -471,6 +343,15 @@
 
     mediaListener.addListener(mediaQueryHandler);
   });
+
+  function clearSubcomponents() {
+    allChildComponents.forEach((v, k) => {
+      v.$destroy();
+      allChildComponents.delete(k);
+    });
+    allChildComponentsKeys = Array.from(allChildComponents.keys());
+  }
+
   
 </script>
 <nav>
@@ -499,8 +380,8 @@
 <main>
   <div class="{visibleItem === 'MAP' ? 'main overflow' : 'main'}">
   {#if visibleItem === "MAP"}
-  <!-- <div class="ontop dark" id="btn-bar"> -->
-    <!-- <div id="progDiv" class="align-right">
+  <div class="ontop dark" id="btn-bar">
+    <div id="progDiv" class="align-right">
       <div>
         <button
           type="button"
@@ -538,97 +419,10 @@
         on:switchplay="{() => (play = !play)}"
         bind:this="{simulation}"
       />
-    </div> -->
-    <!-- <div id="viewDiv"></div> -->
+    </div>
+    <div id="viewDiv"></div>
   {:else if visibleItem === "TABLE"}
-    <div class="button-container">
-    
-      <button type="button" class="btn btn-primary csv-button" on:click="{csv_file}"
-        >Export to CSV</button
-      > 
-      <label for="cat-selector">Filter by:</label>
-      <select id="cat-selector" on:change={handleSelectionCat}>
-        <option value="">-- Category --</option>
-        <option value="Cat10">Cat10 </option>
-        <option value="Cat21">Cat21</option>
-      </select>
-      <select id="instrument-selector" on:change={handleSelectionInstrument}>
-        <option value="">-- Instrument --</option>
-        <option value="SMR">SMR</option>
-        <option value="ADSB">ADSB</option>
-        <option value="MLAT">MLAT</option>
-      </select>
-      <div id="search">
-        <div class="input-group mb-3">
-          <select
-            style="max-width: 200px ;"
-            class="form-select"
-            id="inputGroup02"
-            bind:value="{searchPicker}"
-            aria-label="Example select with button addon"
-          >
-          <option selected>Filter</option>  
-          <option>Target Address</option>
-            <option>Target identification</option>
-          </select>
-          <input
-            bind:value="{searchBox}"
-            type="text"
-            class="form-control"
-            on:keydown="{keyDown}"
-            aria-label="Text input with dropdown button"
-            placeholder="Search..."
-          />
-          {#if searchPicker === "Filter" }
-          <label class="btn btn-primary disabled input-group-text" on:click="{updateFilters}" for="inputGroup02">Search</label>
-          {:else}
-          <label class="input-group-text" on:click="{updateFilters}" for="inputGroup02">Search</label>
-          {/if}
-
-
-        </div>
-      </div>
-  </div>
-
-    <table>
-      <thead>
-        <tr>
-          <th>Id</th>
-          <th>Class</th>
-          <th>Instrument</th>
-          <th>Message Type / Target Id</th>
-          <th>Data source identifier</th>
-          <th>Timestamp</th>
-        </tr>
-      </thead>
-      <tbody>
-        {#each messages as message (message.id)}
-          {#if message.class === "Cat10" }
-            <tr class:smr={message.measurementInstrument === 'SMR'} 
-                class:mlat={message.measurementInstrument === 'MLAT'}
-                class:selected={selectedRow === message.id}
-                on:click="{() => trClick(message)}" id="tr-{message.id}">
-              <td>{message.id}</td>
-              <td>{message.class}</td>
-              <td>{message.measurementInstrument}</td>
-              <td>{message.messageType.messageType}</td>
-              <td>{`SAC: ${message.dataSourceIdentifier.sac}; SIC: ${message.dataSourceIdentifier.sic}`}</td>
-              <td>{new Date(message.timeOfDay.timestamp * 1000).toISOString().substring(11, 23)}</td>
-            </tr>
-          {:else}
-            <tr class:selected={selectedRow === message.id}
-                on:click="{() => trClick(message)}" id="tr-{message.id}">
-              <td>{message.id}</td>
-              <td>{message.class}</td>
-              <td>{message.measurementInstrument}</td>
-              <td>{#if message.targetIdentification}{message.targetIdentification.data}{/if}</td>
-              <td>{`SIC: ${message.dataSourceIdentifier.sic}; SAC: ${message.dataSourceIdentifier.sac}`}</td>
-              <td>{new Date(message.timeofReportTransmission.time * 1000 ).toISOString().substring(11, 23)}</td>
-            </tr>
-          {/if}
-        {/each}
-      </tbody>
-     </table>
+    <Table />
      {/if}
     </div>
 </main>
