@@ -1,21 +1,22 @@
 {
-  "name": "electron-svelte-typescript",
-  "description": "Template for desktop apps written with Electron, Svelte and Typescript.",
+  "name": "asterix-decoder",
+  "description": "Decoder for Asterix data files",
   "version": "0.1.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fuzzc0re/electron-svelte-typescript.git"
+    "url": "git+https://github.com/mirarnau/asterix-analyzer"
   },
   "author": {
-    "name": "fuzzc0re",
-    "email": "fuzzc0re@protonmail.com",
-    "url": "https://github.com/fuzzc0re"
+    "name": "MarcAzlor",
+    "email": "marc.azlor@estudiantat.upc.edu"
   },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/fuzzc0re/electron-svelte-typescript/issues"
   },
   "keywords": [
+    "asterix",
+    "arcgis",
     "electron",
     "svelte",
     "typescript",
@@ -27,7 +28,7 @@
     "electron-updater",
     "rollup"
   ],
-  "homepage": "https://github.com/fuzzc0re/electron-svelte-typescript#readme",
+  "homepage": "https://github.com/mirarnau/asterix-analyzer",
   "main": "build/index.js",
   "scripts": {
     "prestart": "cross-env NODE_ENV=development node scripts/preBuild.js",
@@ -61,7 +62,6 @@
   },
   "dependencies": {
     "@arcgis/core": "^4.24.7",
-    "@fortawesome/fontawesome-free": "^6.4.0",
     "@maphubs/tokml": "^0.6.1",
     "electron-log": "^4.3.5",
     "electron-store": "^8.0.0",
@@ -70,8 +70,7 @@
     "geojson": "^0.5.0",
     "geolib": "^3.3.3",
     "search-array": "^1.6.0",
-    "svelte-routing": "^1.8.8",
-    "xlsx": "^0.18.5"
+    "svelte-routing": "^1.8.8"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^22.0.2",
@@ -113,13 +112,17 @@
     "typescript": "^4.3.4"
   },
   "build": {
-    "productName": "Electron Svelte Typescript",
-    "appId": "electron.svelte.typescript",
+    "productName": "ASTERIX decoder",
+    "appId": "org.upc.alumni",
     "copyright": "Copyright © 2021 ${author}",
     "win": {
       "target": [
         "nsis"
       ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
     },
     "mac": {
       "target": [
@@ -131,8 +134,7 @@
     },
     "linux": {
       "target": [
-        "AppImage",
-        "snap"
+        "AppImage"
       ],
       "category": "productivity"
     },
@@ -142,13 +144,13 @@
       "package.json"
     ],
     "extraResources": [
-      "assets/**"
-    ],
-    "publish": [
       {
-        "provider": "github",
-        "owner": "fuzzc0re",
-        "repo": "electron-svelte-typescript"
+        "from": "./assets",
+        "to": "assets"
+      },
+      {
+        "from": "./assets",
+        "to": "build"
       }
     ]
   }
