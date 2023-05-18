@@ -2,7 +2,8 @@
     :global(.accordion-header) {
       padding: 0.5rem 1rem;
       background-color: rgb(208, 207, 207);
-      font-size: 0.8rem;
+      font-size: 1rem;
+      -webkit-text-fill-color: black;
     }
     :global(.accordion) {
       padding: 0.5rem 1rem;

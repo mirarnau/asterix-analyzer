@@ -1,6 +1,6 @@
 import { Cat10 } from "../cat10/Cat10";
 import { Cat21 } from "../cat21/Cat21";
-import { sliceMessageBuffer, classifyMessageCat, filterMessages, filterMessagesInstr } from "../data/MessageClassifier";
+import { sliceMessageBuffer, classifyMessageCat } from "../data/MessageClassifier";
 import { openFilePicker, saveFileCsv } from "./FileManager";
 import { Worker } from "node:worker_threads";
 import { Notification } from "electron";
@@ -33,7 +33,7 @@ export async function loadFileIpc() {
     }
 
     messages = sliceMessageBuffer(buffer);
-    messages = messages.slice(0, 300);
+    // messages = messages.slice(0, 300);
     let L = messages.length > 5000000 ? 300000 : messages.length;
     return L;
 }
@@ -127,12 +127,13 @@ function runWorker(workerData: any) {
     Instrument: [],
   };
   let oldSearch: string = "";
+  const MSG_PER_PAGE = 15;
 
-  export async function filterMess(_event: any, { filter, search } : {filter:Filter,search:string}) {
+  export async function filterMess(_event: any, { page, filter, search } : {page: number; filter:Filter; search:string}) {
     if (!msgFiltered) msgFiltered = decodedMsg;
     if (JSON.stringify(oldFilter) === JSON.stringify(filter) && oldSearch === search) {
       return JSON.stringify({
-        messages: msgFiltered.slice(0,100),
+        messages: msgFiltered.slice(page * MSG_PER_PAGE - MSG_PER_PAGE, page * MSG_PER_PAGE),
         totalMessages: msgFiltered.length,
       });
     }
@@ -157,30 +158,47 @@ function runWorker(workerData: any) {
   
       msgFiltered = searcher.query(search) as (Cat10 | Cat21)[];
     }
+    return JSON.stringify({
+      messages: msgFiltered.slice(page * MSG_PER_PAGE - MSG_PER_PAGE, page * MSG_PER_PAGE),
+      totalMessages: msgFiltered.length,
+    });
+    //return await JSON.stringify(msgFiltered);
+  }
 
-    return await JSON.stringify(msgFiltered);
+  export async function filterTakeOff(){
+    let takingOffMsg: any[] = [];
+    let msgFilteredTO : any = decodedMsg.filter((m) => m.measurementInstrument == "ADS-B");
+    // console.log(msgFilteredTO);
+    msgFilteredTO.forEach((m: any) => {
+      if (m.positioninWGS84Coordinates) {
+        if (m.positioninWGS84Coordinates.latitude < 41.282409 && m.positioninWGS84Coordinates.latitude > 41.282015 && m.positioninWGS84Coordinates.longitude < 2.074580 && m.positioninWGS84Coordinates.longitude > 2.073444){
+          takingOffMsg.push(m);
+        }
+      }
+    });
+    console.log(takingOffMsg.length);
   }
-  export async function filterMessagesCat10() {
-    let ret : (Cat10|Cat21)[] = await(filterMessages(decodedMsg, "Cat10"));
-    return await JSON.stringify(ret);
-  }
-  export async function filterMessagesCat21() {
-    let filtMess : (Cat10|Cat21)[] = await filterMessages(decodedMsg, "Cat21");
-    return await JSON.stringify(filtMess);
-  }
+  // export async function filterMessagesCat10() {
+  //   let ret : (Cat10|Cat21)[] = await(filterMessages(decodedMsg, "Cat10"));
+  //   return await JSON.stringify(ret);
+  // }
+  // export async function filterMessagesCat21() {
+  //   let filtMess : (Cat10|Cat21)[] = await filterMessages(decodedMsg, "Cat21");
+  //   return await JSON.stringify(filtMess);
+  // }
   
-  export async function filterMessagesSMR() {
-    let filtMess : (Cat10|Cat21)[] = await filterMessagesInstr(decodedMsg, "SMR");
-    return await JSON.stringify(filtMess);
-  }
-  export async function filterMessagesADSB() {
-    let filtMess : (Cat10|Cat21)[] = await filterMessagesInstr(decodedMsg, "ADS-B");
-    return await JSON.stringify(filtMess);
-  }
-  export async function filterMessagesMLAT() {
-    let filtMess : (Cat10|Cat21)[] = await filterMessagesInstr(decodedMsg, "MLAT");
-    return await JSON.stringify(filtMess);
-  }
+  // export async function filterMessagesSMR() {
+  //   let filtMess : (Cat10|Cat21)[] = await filterMessagesInstr(decodedMsg, "SMR");
+  //   return await JSON.stringify(filtMess);
+  // }
+  // export async function filterMessagesADSB() {
+  //   let filtMess : (Cat10|Cat21)[] = await filterMessagesInstr(decodedMsg, "ADS-B");
+  //   return await JSON.stringify(filtMess);
+  // }
+  // export async function filterMessagesMLAT() {
+  //   let filtMess : (Cat10|Cat21)[] = await filterMessagesInstr(decodedMsg, "MLAT");
+  //   return await JSON.stringify(filtMess);
+  // }
 
   interface Filter {
     Category: string[];
