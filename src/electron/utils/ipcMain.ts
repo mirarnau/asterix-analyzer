@@ -164,40 +164,43 @@ function runWorker(workerData: any) {
   }
 
   export async function filterTakeOff(){
-    let takingOffMsg: any[] = [];
+    let takingOffMsg: Cat21[] = [];
     let msgFilteredTO : any = decodedMsg.filter((m) => m.measurementInstrument == "ADS-B");
     // console.log(msgFilteredTO);
     msgFilteredTO.forEach((m: any) => {
       if (m.positioninWGS84Coordinates) {
-        if (m.positioninWGS84Coordinates.latitude < 41.282409 && m.positioninWGS84Coordinates.latitude > 41.282015 && m.positioninWGS84Coordinates.longitude < 2.074580 && m.positioninWGS84Coordinates.longitude > 2.073444){
+        if (m.positioninWGS84Coordinates.latitude < 41.282768 && m.positioninWGS84Coordinates.latitude > 41.282015 && m.positioninWGS84Coordinates.longitude < 2.075665 && m.positioninWGS84Coordinates.longitude > 2.073443){
           takingOffMsg.push(m);
         }
       }
     });
-    console.log(takingOffMsg.length);
+    if(takingOffMsg.length > 0){
+      const picker = await saveFileCsv();
+      if (!picker.filePath) return;
+      await runWorkerTO({ takingOffMsg, filePath: picker.filePath });
+      console.log(`${picker.filePath} written`);
+      new Notification({ title: "ASTERIX Message Decoder", body: "CSV file successfully written" }).show();
+    }
   }
-  // export async function filterMessagesCat10() {
-  //   let ret : (Cat10|Cat21)[] = await(filterMessages(decodedMsg, "Cat10"));
-  //   return await JSON.stringify(ret);
-  // }
-  // export async function filterMessagesCat21() {
-  //   let filtMess : (Cat10|Cat21)[] = await filterMessages(decodedMsg, "Cat21");
-  //   return await JSON.stringify(filtMess);
-  // }
-  
-  // export async function filterMessagesSMR() {
-  //   let filtMess : (Cat10|Cat21)[] = await filterMessagesInstr(decodedMsg, "SMR");
-  //   return await JSON.stringify(filtMess);
-  // }
-  // export async function filterMessagesADSB() {
-  //   let filtMess : (Cat10|Cat21)[] = await filterMessagesInstr(decodedMsg, "ADS-B");
-  //   return await JSON.stringify(filtMess);
-  // }
-  // export async function filterMessagesMLAT() {
-  //   let filtMess : (Cat10|Cat21)[] = await filterMessagesInstr(decodedMsg, "MLAT");
-  //   return await JSON.stringify(filtMess);
-  // }
 
+  function runWorkerTO(workerData: any){
+    return new Promise((resolve, reject) => {
+      const worker = new Worker(__dirname + "/exportTakeOff_worker.js", { workerData });
+
+      let result: any;
+      worker.on("message", (val: any) => {
+        result = val;
+      });
+      worker.on("error", reject);
+      worker.on("exit", (code) => {
+        if (code !== 0) {
+          console.log(new Error("Exit worker with code: " + code));
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
   interface Filter {
     Category: string[];
     Instrument: string[];
