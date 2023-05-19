@@ -14,8 +14,8 @@ function initMap() {
   view = new SceneView({
     // An instance of Map or WebScene
     map: new Map({
-      basemap: "dark-gray-vector",
-      ground: "world-elevation-3d",
+      basemap: "satellite",
+      ground: "world-elevation",
     }),
     camera: {
       heading: 330,

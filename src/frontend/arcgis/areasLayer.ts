@@ -7,51 +7,61 @@ let areasLayer: GraphicsLayer;
 
 const fillSymbolRWY = {
   type: "simple-fill", // autocasts as new SimpleFillSymbol()
-  color: [227, 139, 79, 0.8],
+  color: [227, 139, 79, 0.5],
   outline: {
     // autocasts as new SimpleLineSymbol()
     color: [255, 255, 255],
-    width: 2,
+    width: 0.5,
   },
 };
 
 const fillSymbolApron = {
   type: "simple-fill", // autocasts as new SimpleFillSymbol()
-  color: [255, 0, 0, 0.6],
+  color: [255, 0, 0, 0.3],
   outline: {
     // autocasts as new SimpleLineSymbol()
     color: [255, 255, 255],
-    width: 2,
+    width: 0.5,
   },
 };
 
 const fillSymbolTaxi = {
   type: "simple-fill", // autocasts as new SimpleFillSymbol()
-  color: [0, 255, 0, 0.6],
+  color: [0, 255, 0, 0.3],
   outline: {
     // autocasts as new SimpleLineSymbol()
     color: [255, 255, 255],
-    width: 2,
+    width: 0.5,
   },
 };
 
 const fillSymbolStand = {
   type: "simple-fill", // autocasts as new SimpleFillSymbol()
-  color: [51, 51, 51, 0.8],
+  color: [51, 51, 51, 0.4],
   outline: {
     // autocasts as new SimpleLineSymbol()
     color: [255, 255, 255],
-    width: 2,
+    width: 0.5,
   },
 };
 
 const fillSymbolAirbone = {
   type: "simple-fill", // autocasts as new SimpleFillSymbol()
-  color: [103, 51, 187, 0.6],
+  color: [103, 51, 187, 0.3],
   outline: {
     // autocasts as new SimpleLineSymbol()
     color: [255, 255, 255],
-    width: 2,
+    width: 0.5,
+  },
+};
+
+const fillSymbolThreshold = {
+  type: "simple-fill", // autocasts as new SimpleFillSymbol()
+  color: [255, 255, 0, 0.9],
+  outline: {
+    // autocasts as new SimpleLineSymbol()
+    color: [255, 255, 255],
+    width: 0.5,
   },
 };
 
@@ -382,6 +392,21 @@ export function loadAreasLayer(map: ArcGISMap) {
     }),
   });
 
+  const thresholdRwy06R = new Graphic({
+    symbol: fillSymbolThreshold,
+    geometry: new Polygon({
+      rings: [
+        [
+          [2.0732979029761642, 41.28224134602138, 0],
+          [2.0755151495146293, 41.28300687827166, 0],
+          [2.075805308831857, 41.28252233629394, 0],
+          [2.0735830568687006, 41.281771289107695, 0],
+          [2.0732979029761642, 41.28224134602138, 0]
+        ],
+      ],
+    }),
+  });
+
   areasLayer = new GraphicsLayer({
     elevationInfo: { mode: "on-the-ground" },
   });
@@ -404,6 +429,7 @@ export function loadAreasLayer(map: ArcGISMap) {
     airborne4,
     airborne5,
     airborne6,
+    thresholdRwy06R
   ]);
 
   map.add(areasLayer);
