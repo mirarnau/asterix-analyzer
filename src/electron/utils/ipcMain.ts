@@ -126,7 +126,7 @@ function runWorker(workerData: any) {
     Instrument: [],
   };
   let oldSearch: string = "";
-  const MSG_PER_PAGE = 15;
+  const MSG_PER_PAGE = 50;
 
   export async function filterMess(_event: any, { page, filter, search } : {page: number; filter:Filter; search:string}) {
     if (!msgFiltered) msgFiltered = decodedMsg;

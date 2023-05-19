@@ -108,17 +108,21 @@
     "typescript": "^4.3.4"
   },
   "build": {
-    "productName": "ASTERIX decoder",
+    "productName": "AsterX",
     "appId": "org.upc.alumni",
     "copyright": "Copyright © 2021 ${author}",
     "win": {
+      "icon": "./assets/logoAsterX.png",
       "target": [
         "nsis"
       ]
     },
     "nsis": {
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "./assets/logoAsterX.ico",
+      "uninstallerIcon": "./assets/logoAsterX.ico",
+      "installerHeaderIcon": "./assets/logoAsterX.ico"
     },
     "mac": {
       "target": [

@@ -63,7 +63,7 @@
   }
   
   let messages: ( Cat10 | Cat21) [] = [];
-  const MSG_PER_PAGE = 15;
+  const MSG_PER_PAGE = 50;
   let pageArray: number[] = [];
   let activePage = 1;
   let displayedPageArray: number[] = [];
@@ -75,7 +75,7 @@
   let allChildComponents = new Map<number, GenericProps>();
   let allChildComponentsKeys = Array.from(allChildComponents.keys());
   
-  let searchPicker = "Filter";
+  let searchPicker = "Select Filter";
   
   filterMessages();
   
@@ -87,7 +87,7 @@
         Instrument: [],
       };
       let search = searchBox;
-      if (searchPicker !== "Filter") {
+      if (searchPicker !== "Select Filter") {
         search = "";
         if (searchPicker === "Target Address") {
           filter.TargetAddress = searchBox;
@@ -208,7 +208,7 @@
         >Export to CSV</button
       > 
       <button type="button" class="btn btn-primary csv-button" on:click="{take_off}"
-        >Taking off</button
+        >Tacking off</button
       > 
       <label for="cat-selector">Filter by:</label>
       <select id="cat-selector" on:change={handleSelectionCat}>
@@ -222,29 +222,29 @@
         <option value="ADSB">ADSB</option>
         <option value="MLAT">MLAT</option>
       </select>
+      <select
+          style="max-width: 200px ;"
+          class="form-select"
+          id="inputGroup02"
+          bind:value="{searchPicker}"
+          aria-label="Example select with button addon"
+        >
+        <option selected>Select Filter</option>  
+        <option>Target Address</option>
+          <option>Target identification</option>
+      </select>
       <div id="search">
         <div class="input-group mb-3">
-          <select
-            style="max-width: 200px ;"
-            class="form-select"
-            id="inputGroup02"
-            bind:value="{searchPicker}"
-            aria-label="Example select with button addon"
-          >
-          <option selected>Filter</option>  
-          <option>Target Address</option>
-            <option>Target identification</option>
-          </select>
           <input
             bind:value="{searchBox}"
             type="text"
             class="form-control"
             on:keydown="{keyDown}"
             aria-label="Text input with dropdown button"
-            placeholder="Search..."
+            placeholder="Search by target adress or target ID..."
           />
           {#if searchPicker === "Filter" }
-          <label class="btn btn-primary disabled input-group-text" on:click="{updateFilters}" for="inputGroup02">Search</label>
+          <label class="btn btn-primary disabled input-group-text" on:click="{updateFilters}" for="inputGroup02">Filter</label>
           {:else}
           <label class="input-group-text" on:click="{updateFilters}" for="inputGroup02">Search</label>
           {/if}

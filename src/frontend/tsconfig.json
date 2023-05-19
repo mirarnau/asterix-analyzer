@@ -22,7 +22,7 @@
     "esModuleInterop": true,
     "isolatedModules": true,
     "importsNotUsedAsValues": "remove",
-    "strictPropertyInitialization": false,
+    "strictPropertyInitialization": false
   },
   "include": ["."],
   "exclude": ["node_modules/*", "__sapper__/*", "public/*"]
