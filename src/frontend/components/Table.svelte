@@ -208,7 +208,7 @@
         >Export to CSV</button
       > 
       <button type="button" class="btn btn-primary csv-button" on:click="{take_off}"
-        >Tacking off</button
+        >Taking off</button
       > 
       <label for="cat-selector">Filter by:</label>
       <select id="cat-selector" on:change={handleSelectionCat}>
