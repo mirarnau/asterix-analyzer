@@ -13,29 +13,27 @@ let msgDelivered = 0;
 let msgFiltered: (Cat10 | Cat21)[];
 
 export async function loadFileIpc() {
-    //const startTime = performance.now();     
-    const res = await openFilePicker();
-    if (!res) return;
-    // const endTime = performance.now();
+  //const startTime = performance.now();
+  const res = await openFilePicker();
+  if (!res) return;
 
-    buffer = res;
+  buffer = res;
+  // const endTime = performance.now();
 
-    console.log("Buffer length: " + buffer.length);
-  
-    // console.log(`Call to openFilePicker took ${endTime - startTime} milliseconds`);
-    messages = [];
-    decodedMsg = [];
-    msgDelivered = 0;
-  
-    if (!buffer) {
-        console.log("No file opened");
-        return;
-    }
+  // console.log(`Call to openFilePicker took ${endTime - startTime} milliseconds`);
+  messages = [];
+  decodedMsg = [];
+  msgDelivered = 0;
 
-    messages = sliceMessageBuffer(buffer);
-    // messages = messages.slice(0, 300);
-    let L = messages.length > 5000000 ? 300000 : messages.length;
-    return L;
+  if (!buffer) {
+    console.log("No file opened");
+    return;
+  }
+
+  messages = await sliceMessageBuffer(buffer);
+  let L = messages.length > 5000000 ? 300000 : messages.length;
+  console.log(`About to process ${L} messages.`);
+  return L;
 }
 
 export async function getMessagesIpc(_event: any, messageQuantity: number) {
@@ -83,7 +81,7 @@ function runWorker(workerData: any) {
   }
   
   export function getMessagesIpcSlices() {
-    const FRAGMENTS = 1000;
+    const FRAGMENTS = 10000;
     const ret = JSON.stringify(decodedMsg.slice(msgDelivered, msgDelivered + FRAGMENTS));
     msgDelivered += FRAGMENTS;
     if (msgDelivered > decodedMsg.length) msgDelivered = 0;

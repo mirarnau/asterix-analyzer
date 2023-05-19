@@ -185,6 +185,7 @@
     }
   
     export function playClick() {
+      console.log(`Simulation contains ${messages.length} messages!`);
       play = !play;
       dispatch("switchplay");
       if (seeAllBool) {
