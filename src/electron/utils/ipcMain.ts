@@ -178,27 +178,6 @@ function runWorker(workerData: any) {
     });
     console.log(takingOffMsg.length);
   }
-  // export async function filterMessagesCat10() {
-  //   let ret : (Cat10|Cat21)[] = await(filterMessages(decodedMsg, "Cat10"));
-  //   return await JSON.stringify(ret);
-  // }
-  // export async function filterMessagesCat21() {
-  //   let filtMess : (Cat10|Cat21)[] = await filterMessages(decodedMsg, "Cat21");
-  //   return await JSON.stringify(filtMess);
-  // }
-  
-  // export async function filterMessagesSMR() {
-  //   let filtMess : (Cat10|Cat21)[] = await filterMessagesInstr(decodedMsg, "SMR");
-  //   return await JSON.stringify(filtMess);
-  // }
-  // export async function filterMessagesADSB() {
-  //   let filtMess : (Cat10|Cat21)[] = await filterMessagesInstr(decodedMsg, "ADS-B");
-  //   return await JSON.stringify(filtMess);
-  // }
-  // export async function filterMessagesMLAT() {
-  //   let filtMess : (Cat10|Cat21)[] = await filterMessagesInstr(decodedMsg, "MLAT");
-  //   return await JSON.stringify(filtMess);
-  // }
 
   interface Filter {
     Category: string[];

@@ -3,7 +3,9 @@ import { TimeofASTERIXReportTransmission } from "../valueObjects/TimeofASTERIXRe
 export class TimeofASTERIXReportTransmissionDecoder {
 
     public async decode(item : Buffer) : Promise<TimeofASTERIXReportTransmission> {
-        const time = Math.round((parseInt("0x" + item.toString("hex")) / 128.0) * 10) / 10;
+        const timestamp = Math.round((parseInt("0x" + item.toString("hex")) / 128.0) * 10) / 10;
+        var time = new Date(timestamp * 1000).toISOString().substring(11, 23);
+
         return new TimeofASTERIXReportTransmission(time);
     }
 

@@ -277,7 +277,7 @@ async function filterMessages() {
             <td>{message.measurementInstrument}</td>
             <td>{message.messageType.messageType}</td>
             <td>{`SAC: ${message.dataSourceIdentifier.sac}; SIC: ${message.dataSourceIdentifier.sic}`}</td>
-            <td>{new Date(message.timeOfDay.timestamp * 1000).toISOString().substring(11, 23)}</td>
+            <td>{message.timeOfDay.timestamp}</td>
           </tr>
         {:else}
           <tr class:selected={selectedRow === message.id}
@@ -287,7 +287,7 @@ async function filterMessages() {
             <td>{message.measurementInstrument}</td>
             <td>{#if message.targetIdentification}{message.targetIdentification.data}{/if}</td>
             <td>{`SIC: ${message.dataSourceIdentifier.sic}; SAC: ${message.dataSourceIdentifier.sac}`}</td>
-            <td>{new Date(message.timeofReportTransmission.time * 1000 ).toISOString().substring(11, 23)}</td>
+            <td>{message.timeofReportTransmission.time}</td>
           </tr>
         {/if}
       {/each}

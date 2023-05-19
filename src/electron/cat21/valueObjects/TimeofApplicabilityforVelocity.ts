@@ -1,9 +1,9 @@
 import { strict as assert } from 'node:assert';
 
 export class TimeofApplicabilityforVelocity {
-    time : number;
+    time : string;
 
-    constructor(time : number){
+    constructor(time : string){
         this.time = time;
         this.validate();
     }
