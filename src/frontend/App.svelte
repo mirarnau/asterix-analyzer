@@ -308,7 +308,7 @@ position: relative;
 
 .legend-container {
   position: absolute;
-  top: 10px;
+  bottom: 10px;
   right: 10px;
   z-index: 2;
 }
@@ -333,6 +333,18 @@ position: relative;
   border-style: solid;
   border-width: 1px;
 }
+
+#overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 </style>
 
 <script lang="ts" type="module">
@@ -369,6 +381,7 @@ position: relative;
 
   let play = false;
   let settings = false;
+  let loading = false;
 
   initializeMap();
 
@@ -376,15 +389,22 @@ position: relative;
     numberOfMsg = Number.parseInt(await initIpcMainBidirectional("file-picker"));
     if (!numberOfMsg) return;
     messages = [];
+    loading = true;
     console.log({ numberOfMsg });
-    const FRAGMENTS = 1000;
+    const FRAGMENTS = 10000;
     let i = 0;
-    await ipcMainBidirectional("get-message-quantity", 1000);
+    await ipcMainBidirectional("get-message-quantity", 10000);
+
     while (i < numberOfMsg) {
       const msgs = await ipcMainBidirectional("pass-slice");
+
       messages = messages.concat(await parseIpcMainReceiveMessage(msgs));
       i += FRAGMENTS;
     }
+    console.log(`Finished loading ${messages.length} messages!`);
+
+    simulation.initializeSimulation!(messages);
+    loading = false;
     console.log(`Finished loading ${messages.length} messages!`);
     console.log("Performance Data Not Available");
   }
@@ -431,7 +451,7 @@ position: relative;
   const navItems = [
     { label: "MAP", href: "#", clickHandler: handleMapClick },
     { label: "TABLE", href: "#", clickHandler: handleTableClick },
-    { label: "FILE", href: "#", clickHandler: handleLoadSomeMsgs },
+    { label: "FILE", href: "#", clickHandler: handleLoadSomeMsgs},
   ];
 
   let selectedItem = navItems[2];
@@ -537,38 +557,46 @@ position: relative;
               bind:this="{simulation}"
             />
           </div>
-          <div class="legend-container">
-            <div class="ontop dark" id="legend" transition:fade="{{ duration: 100 }}">
-              <p>Map Legend</p>
-              <div style="font-size: small">
-                <table>
-                  <tr>
-                    <td>
-                      <div class="color" style="background-color: #fe0000;"></div>
-                    </td>
-                    <td>SMR Data Point</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="color" style="background-color: #ffeb16;"></div>
-                    </td>
-                    <td>MLAT Data Point</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="color" style="background-color: #6733bb;"></div>
-                    </td>
-                    <td>ADS-B Data Point</td>
-                  </tr>
-                </table>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
       <div id="viewDiv"></div>
+      <div class="legend-container">
+        <div class="dark" id="legend" transition:fade="{{ duration: 100 }}">
+          <div style="font-size: small">
+            <table>
+              <tr>
+                <td>
+                  <div class="color" style="background-color: #fe0000;"></div>
+                </td>
+                <td>SMR Data Point</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="color" style="background-color: #ffeb16;"></div>
+                </td>
+                <td>MLAT Data Point</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="color" style="background-color: #6733bb;"></div>
+                </td>
+                <td>ADS-B Data Point</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
     {:else if visibleItem === "TABLE"}
       <Table />
     {/if}
   </div>
+  {#if loading == true}
+    <div id="overlay">
+      <div class="d-flex justify-content-center">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    </div>
+  {/if}
 </main>

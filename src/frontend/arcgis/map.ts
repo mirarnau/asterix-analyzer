@@ -18,14 +18,14 @@ function initMap() {
       ground: "world-elevation-3d",
     }),
     camera: {
-      heading: 0,
+      heading: 330,
       position: {
         // observation point
-        latitude: 41.25,
-        longitude: 2.08,
-        z: 3750, // zoom level
+        latitude: 41.2819,
+        longitude: 2.0955,
+        z: 9000, // zoom level
       },
-      tilt: 50, // perspective in degrees
+      tilt: 10, // perspective in degrees
     },
     viewingMode: "global",
     //  spatialReference: SpatialReference.WGS84,
