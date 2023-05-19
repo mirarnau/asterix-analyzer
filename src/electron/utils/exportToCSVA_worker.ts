@@ -20,7 +20,7 @@ async function doStuff() {
   const fil = createWriteStream(workerData.filePath);
 
   fil.write(
-    "Id,Class,Message type,Data source identifier,Target report description,WGS84 coordinates,Polar coordinates,Cartesian coordinates,Calculated track velocity polar coordinates,Calculated track velocity cartesian coordinates,Mod 3A code,Flight level,Measured height,Altitude of primary plot,Time of day,Track number,Track status,Calculated acceleration,Target address,Target identification,Mode S MB data,Target size and orientation,Presence,Vehicle fleet identification,Preprogrammed message,Standard deviation of position,System status,Aircraft operational status,Service identification,Service management,Emitter category,Target report descriptor,Time applicability position,Time applicability velocity,Time message reception position,Time message reception position high,Time message reception velocity,Time message reception velocity high,TimeASTERIX report transmission,Quality indicator,Tarjectory intent,WGS84 coordinates high,Message amplitude,Geometric height,Selected altitude,Final state selected altitude,Air speed,True airspeed,Magnetic heading,Barometric vertical rate,Geometric vertical rate,Airborne ground vector,Track angle rate,Target status,MOPS version,Met information,Roll angle,ACAS resolution advisory report,Surface capabilities and characteristics,Receiver ID \n"
+    "Id,Class,Message type,Data source identifier,Target report description,WGS84 coordinates,Polar coordinates,Cartesian coordinates,Calculated track velocity polar coordinates,Calculated track velocity cartesian coordinates,WGS84 coordinates high,Flight level,Measured height,Geometric height,Time of day,Track number,Track status,Aircraft operational status,Target address,Target identification,Mode S MB data,Target size and orientation,Presence,Vehicle fleet identification,Preprogrammed message,Standard deviation of position,System status,Calculated acceleration,Service identification,Service management,Quality indicator,Target report descriptor,Time applicability position,Time applicability velocity,Time message reception position,Time message reception position high,Time message reception velocity,Time message reception velocity high,TimeASTERIX report transmission,Emitter category,Tarjectory intent,Mod 3A code,Message amplitude,Altitude of primary plot,Selected altitude,Final state selected altitude,Air speed,True airspeed,Magnetic heading,Barometric vertical rate,Geometric vertical rate,Airborne ground vector,Track angle rate,Target status,MOPS version,Met information,Roll angle,ACAS resolution advisory report,Surface capabilities and characteristics,Receiver ID \n"
   );
 
   await mgs.forEach((value,idx) => {
@@ -115,7 +115,7 @@ function tocsvCat10(msg: Cat10) {
       msg.calculatedTrackVelocityCartesianCoordinates.y;
 
   if (msg.mode3ACodeOctalRepresentation)
-    csv[10] =
+    csv[41] =
       "V: " +
       msg.mode3ACodeOctalRepresentation.v +
       " G: " +
@@ -131,7 +131,7 @@ function tocsvCat10(msg: Cat10) {
 
   if (msg.measuredHeight) csv[12] = msg.measuredHeight.height.toString();
 
-  if (msg.amplitudeOfPrimaryPlot) csv[13] = msg.amplitudeOfPrimaryPlot.value.toString();
+  if (msg.amplitudeOfPrimaryPlot) csv[43] = msg.amplitudeOfPrimaryPlot.value.toString();
 
   if (msg.timeOfDay) csv[14] = new Date(msg.timeOfDay.timestamp * 1000).toISOString().substring(11, 23);
 
@@ -197,7 +197,7 @@ function tocsvCat10(msg: Cat10) {
     }
   }
 
-  if (msg.calculatedAcceleration) csv[17] = "Ax: " + msg.calculatedAcceleration.ax+ " Ay: " + msg.calculatedAcceleration.ay;
+  if (msg.calculatedAcceleration) csv[27] = "Ax: " + msg.calculatedAcceleration.ax+ " Ay: " + msg.calculatedAcceleration.ay;
     
   if (msg.targetAddress) csv[18] = msg.targetAddress.value.substring(2);
 
@@ -268,7 +268,7 @@ function tocsvCat21(msg: Cat21) {
   csv[1] = "Cat21";
 
   if (msg.aircraftOperationalStatus)
-    csv[27] =
+    csv[17] =
       "RA: " +
       msg.aircraftOperationalStatus.ra +
       " TC: " +
@@ -288,7 +288,7 @@ function tocsvCat21(msg: Cat21) {
 
   if (msg.serviceManagement) csv[29] = msg.serviceManagement.rp;
 
-  if (msg.emitterCategory) csv[30] = msg.emitterCategory.ecat;
+  if (msg.emitterCategory) csv[39] = msg.emitterCategory.ecat;
 
   if (msg.targetReportDescriptor) {
     if (msg.targetReportDescriptor.rcf) {
@@ -358,7 +358,7 @@ function tocsvCat21(msg: Cat21) {
     }
   }
 
-  if (msg.mode3A) csv[10] = msg.mode3A.code;
+  if (msg.mode3A) csv[41] = msg.mode3A.code;
 
   if (msg.timeofApplicabilityforPosition) csv[32] = new Date(msg.timeofApplicabilityforPosition.time * 1000).toISOString().substring(11, 23);
 
@@ -378,7 +378,7 @@ function tocsvCat21(msg: Cat21) {
 
   if (msg.qualityIndicators) {
     if (msg.qualityIndicators.pic) {
-      csv[39] =
+      csv[30] =
         "NUCr_or_NACv: " +
         msg.qualityIndicators.nucr_or_nacv +
         " NUCp_or_NIC: " +
@@ -396,7 +396,7 @@ function tocsvCat21(msg: Cat21) {
         " PIC: " +
         msg.qualityIndicators.pic;
     } else if (msg.qualityIndicators.gva) {
-      csv[39] =
+      csv[30] =
         "NUCr_or_NACv: " +
         msg.qualityIndicators.nucr_or_nacv +
         " NUCp_or_NIC: " +
@@ -412,7 +412,7 @@ function tocsvCat21(msg: Cat21) {
         " GVA: " +
         msg.qualityIndicators.gva;
     } else if (msg.qualityIndicators.sil) {
-      csv[39] =
+      csv[30] =
         "NUCr_or_NACv: " +
         msg.qualityIndicators.nucr_or_nacv +
         " NUCp_or_NIC: " +
@@ -424,7 +424,7 @@ function tocsvCat21(msg: Cat21) {
         " NACP: " +
         msg.qualityIndicators.nacp;
     } else {
-      csv[39] =
+      csv[30] =
         "NUCr_or_NACv: " + msg.qualityIndicators.nucr_or_nacv + " NUCp_or_NIC: " + msg.qualityIndicators.nucp_or_nic;
     }
   }
@@ -445,12 +445,12 @@ function tocsvCat21(msg: Cat21) {
     csv[5] = "Latitude: " + msg.positioninWGS84Coordinates.latitude + " Longitude: " + msg.positioninWGS84Coordinates.longitude;
 
   if (msg.highResPositioninWGS84Coordinates)
-    csv[41] =
+    csv[10] =
       "Latitude: " + msg.highResPositioninWGS84Coordinates.latitude + " Longitude: " + msg.highResPositioninWGS84Coordinates.longitude;
 
   if (msg.messageAmplitude) csv[42] = msg.messageAmplitude.messageAmplitude;
 
-  if (msg.geometricHeight) csv[43] = msg.geometricHeight.geometricHeight;
+  if (msg.geometricHeight) csv[13] = msg.geometricHeight.geometricHeight;
 
   if (msg.flightLevel) csv[11] = msg.flightLevel.fligthLevel;
 
