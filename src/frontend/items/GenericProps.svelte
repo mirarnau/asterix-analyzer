@@ -3,25 +3,25 @@
       padding: 0.5rem 1rem;
       background-color: rgb(208, 207, 207);
       font-size: 1rem;
-      -webkit-text-fill-color: black;
+      -webkit-text-fill-color: rgba(22, 22, 22, 0.8);
     }
     :global(.accordion) {
       padding: 0.5rem 1rem;
-      background-color: rgb(0, 0, 0);
+      background-color: rgba(22, 22, 22, 0.8);
       text-align: center;
     }
     :global(.accordion-collapse) {
       padding: 0.5rem 1rem;
-      background-color: rgb(0, 0, 0);
+      background-color: rgba(22, 22, 22, 0.8);
       font-size: 0.8rem;
     }
     :global(.accordion-body) {
       padding: 0.5rem 1rem;
-      background-color: rgb(0, 0, 0);
+      background-color: rgba(22, 22, 22, 0.8);
       font-size: 0.8rem;
     }
     .list-group-item {
-      background-color: rgb(0,0,0);
+      background-color: rgba(22, 22, 22, 0.8);
       font-size: 1rem;
       text-align: center;
 -webkit-text-fill-color: aliceblue;    }
@@ -31,7 +31,7 @@
       text-align: center;
     }
     .list-group {
-      background-color: rgb(234, 8, 8);
+      background-color: rgba(22, 22, 22, 0.8);
       font-size: 0.8rem;
       text-align: center;
     }

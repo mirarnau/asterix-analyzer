@@ -31,6 +31,7 @@ export async function loadFileIpc() {
   }
 
   messages = await sliceMessageBuffer(buffer);
+  messages = messages.slice(0, 300);
   let L = messages.length > 5000000 ? 300000 : messages.length;
   console.log(`About to process ${L} messages.`);
   return L;
