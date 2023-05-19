@@ -18,7 +18,7 @@ function initMap() {
       ground: "world-elevation",
     }),
     camera: {
-      heading: 330,
+      heading: 336,
       position: {
         // observation point
         latitude: 41.2819,
