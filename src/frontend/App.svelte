@@ -87,174 +87,220 @@
   }
 
   .navbar-list.mobile {
-    background-color: #0e2a47;
-    position: fixed;
-    display: block;
-    height: calc(100% - 45px);
-    bottom: 0;
-    left: 0;
-  }
+background-color: #0e2a47;
+position: fixed;
+display: block;
+height: calc(100% - 45px);
+bottom: 0;
+left: 0;
+}
 
-  .navbar-list li {
-    list-style-type: none;
-    position: relative;
-  }
+.navbar-list li {
+list-style-type: none;
+position: relative;
+}
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+}
 
-  .inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px;
-  }
+.mobile-icon {
+  display: none;
+  cursor: pointer;
+}
 
+.mobile-icon.active .middle-line {
+  background-color: #fff;
+}
+
+.middle-line {
+  width: 20px;
+  height: 2px;
+  background-color: #ccc;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.navbar-list {
+  list-style: none;
+  display: flex;
+}
+
+.navbar-list.mobile {
+  display: none;
+  flex-direction: column;
+  background-color: #444;
+  padding: 10px;
+}
+
+.navbar-list.mobile li {
+  margin-bottom: 10px;
+}
+
+.navbar-list li a,
+.navbar-list li .disabled-link {
+  display: block;
+  padding: 10px;
+  color: #fff;
+  text-decoration: none;
+}
+.navbar-list li a:hover {
+  background-color: #555;
+}
+
+.disabled-link {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media only screen and (min-width: 767px) {
   .mobile-icon {
     display: none;
-    cursor: pointer;
-  }
-
-  .mobile-icon.active .middle-line {
-    background-color: #fff;
-  }
-
-  .middle-line {
-    width: 20px;
-    height: 2px;
-    background-color: #ccc;
-    transition: background-color 0.3s ease-in-out;
   }
 
   .navbar-list {
-    list-style: none;
     display: flex;
+    padding: 0;
   }
 
-  .navbar-list.mobile {
-    display: none;
-    flex-direction: column;
-    background-color: #444;
-    padding: 10px;
+  .navbar-list a {
+    display: inline-flex;
   }
-
-  .navbar-list.mobile li {
-    margin-bottom: 10px;
-  }
-
-  .navbar-list li a,
-  .navbar-list li .disabled-link {
-    display: block;
-    padding: 10px;
-    color: #fff;
-    text-decoration: none;
-  }
-
-  .navbar-list li a:hover {
-    background-color: #555;
-  }
-
-  .disabled-link {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  @media only screen and (min-width: 767px) {
-    .mobile-icon {
-      display: none;
-    }
-
-    .navbar-list {
-      display: flex;
-      padding: 0;
-    }
-
-    .navbar-list a {
-      display: inline-flex;
-    }
-  }
-
-  @media (min-width: 640px) {
-    main {
-      max-width: none;
-    }
-  }  
-
-  .file-button {
-    background-color: #051a30;
-    width: 100px;
-    color: white;
-    border-color: #00eeff;
-    border-width: 3px;
-    text-align: center;
-  }
-
-  .csv-button {
-    background-color: #051a30;
-    width: 170px;
-    color: white;
-    border-color: #00eeff;
-    border-width: 3px;
-    text-align: center;
-  }
-
-  .simulation-button {
-    background-color: #051a30;
-    width: 120px;
-    color: white;
-    border-color: #00eeff;
-    border-width: 3px;
-    text-align: center;
-  }
-
-  .table-button {
-    background-color: #051a30;
-    width: 120px;
-    color: white;
-    border-color: #00eeff;
-    border-width: 3px;
-    text-align: center;
-  }
-
-  .button-container {
-    background-color: #262626;
-  }
-  nav {
-    background-color: rgba(22, 22, 22, 0.8);
-    font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
-    height: 45px;
-  }
-
-  .play-button {
-    background-color: #00eeff;
-    color: rgb(0, 0, 0);
-    border-color: #00eeff;
-    border-width: 3px;
-    text-align: center;
-  }
-
-  .play-back-button {
-    background-color: rgb(31, 31, 31);
-    color: white;
-    border-color: #00eeff;
-    border-width: 3px;
-    text-align: center;
-  }
-
-  .play-forward-button {
-    background-color: rgb(31, 31, 31);
-    color: white;
-    border-color: #00eeff;
-    border-width: 3px;
-    text-align: center;
-  }
-
-  .align-right {
-    display: flex;
-    justify-content: flex-end;
-  }
-
-  .container {
-  position: relative;
 }
 
+@media (min-width: 640px) {
+  main {
+    max-width: none;
+  }
+}
+
+
+
+th {
+  color: rgb(255, 255, 255);
+  font-size: medium;
+}
+
+
+td {
+  color: white;
+  font-size: small;
+}
+
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+th,
+td {
+  text-align: left;
+  padding: 8px;
+}
+
+
+th {
+  background-color: #051a30;
+}
+
+
+tr:nth-child(even) {
+  background-color: #0e2a47;
+}
+tr:nth-child(odd) {
+  background-color: #0e2a47;
+}
+.file-button {
+  background-color: #051a30;
+  width: 100px;
+  color: white;
+  border-color: #00eeff;
+  border-width: 3px;
+  text-align: center;
+}
+
+.csv-button {
+  background-color: #051a30;
+  width: 170px;
+  color: white;
+  border-color: #00eeff;
+  border-width: 3px;
+  text-align: center;
+}
+
+.simulation-button {
+  background-color: #051a30;
+  width: 120px;
+  color: white;
+  border-color: #00eeff;
+  border-width: 3px;
+  text-align: center;
+}
+
+.table-button {
+  background-color: #051a30;
+  width: 120px;
+  color: white;
+  border-color: #00eeff;
+  border-width: 3px;
+  text-align: center;
+}
+tr.smr {
+  background-color: rgb(127, 66, 0);
+}
+tr.mlat {
+  background-color: rgb(0, 98, 128);
+}
+
+#viewDiv {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 42px);
+}
+
+.button-container {
+  background-color: #262626;
+}
+nav {
+background-color: rgba(22, 22, 22, 0.8);
+font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+height: 45px;
+}
+
+.play-button {
+background-color: #00eeff;
+color: rgb(0, 0, 0);
+border-color: #00eeff;
+border-width: 3px;
+text-align: center;
+}
+
+.play-back-button {
+background-color: rgb(31, 31, 31);
+color: white;
+border-color: #00eeff;
+border-width: 3px;
+text-align: center;
+}
+
+.play-forward-button {
+background-color: rgb(31, 31, 31);
+color: white;
+border-color: #00eeff;
+border-width: 3px;
+text-align: center;
+}
+
+.align-right {
+
+display: flex;
+justify-content: flex-end;
+}
+
+.container {
+position: relative;
+}
 .map-container {
   position: relative;
   z-index: 1;
@@ -268,25 +314,25 @@
 }
 
 .color-round {
-    border-radius: 50%;
-    margin-right: 10px;
-    height: 20px;
-    width: 20px;
-    border-color: black;
-    border-style: solid;
-    border-width: 1px;
-  }
+  border-radius: 50%;
+  margin-right: 10px;
+  height: 20px;
+  width: 20px;
+  border-color: black;
+  border-style: solid;
+  border-width: 1px;
+}
 
-  .color {
-    border-radius: 50%;
-    margin-left: 5px;
-    margin-right: 10px;
-    height: 10px;
-    width: 10px;
-    border-color: black;
-    border-style: solid;
-    border-width: 1px;
-  }
+.color {
+  border-radius: 50%;
+  margin-left: 5px;
+  margin-right: 10px;
+  height: 10px;
+  width: 10px;
+  border-color: black;
+  border-style: solid;
+  border-width: 1px;
+}
 </style>
 
 <script lang="ts" type="module">
@@ -301,10 +347,9 @@
   import { onMount } from "svelte";
   import Table from "./components/Table.svelte";
 
-
   let messages: (Cat10 | Cat21)[] = [];
   let numberOfMsg = 0;
-  
+
   const MSG_PER_PAGE = 15;
   let pageArray: number[] = [];
   let activePage = 1;
@@ -353,7 +398,7 @@
   async function take_off() {
     await ipcMainBidirectional("filter-takeoff");
   }
- 
+
   async function handleMapClick() {
     visibleItem = "MAP";
 
@@ -368,7 +413,7 @@
   async function handleTableClick() {
     visibleItem = "TABLE";
   }
-  
+
   async function kml_file() {
     console.log("Creating kml file");
 
@@ -521,14 +566,9 @@
           </div>
         </div>
       </div>
-      <Simulation
-        on:stop="{() => (play = false)}"
-        on:switchplay="{() => (play = !play)}"
-        bind:this="{simulation}"
-      />
-    <div id="viewDiv"></div>
-  {:else if visibleItem === "TABLE"}
-    <Table />
-     {/if}
-    </div>
+      <div id="viewDiv"></div>
+    {:else if visibleItem === "TABLE"}
+      <Table />
+    {/if}
+  </div>
 </main>
