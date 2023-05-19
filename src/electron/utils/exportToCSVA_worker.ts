@@ -133,7 +133,7 @@ function tocsvCat10(msg: Cat10) {
 
   if (msg.amplitudeOfPrimaryPlot) csv[13] = msg.amplitudeOfPrimaryPlot.value.toString();
 
-  if (msg.timeOfDay) csv[14] = msg.timeOfDay.timestamp;
+  if (msg.timeOfDay) csv[14] = new Date(msg.timeOfDay.timestamp * 1000).toISOString().substring(11, 23);
 
   if (msg.trackNumber) csv[15] = msg.trackNumber.value.toString();
 
@@ -360,19 +360,19 @@ function tocsvCat21(msg: Cat21) {
 
   if (msg.mode3A) csv[10] = msg.mode3A.code;
 
-  if (msg.timeofApplicabilityforPosition) csv[32] = msg.timeofApplicabilityforPosition.time;
+  if (msg.timeofApplicabilityforPosition) csv[32] = new Date(msg.timeofApplicabilityforPosition.time * 1000).toISOString().substring(11, 23);
 
-  if (msg.timeofApplicabilityforVelocity) csv[33] = msg.timeofApplicabilityforVelocity.time;
+  if (msg.timeofApplicabilityforVelocity) csv[33] = new Date(msg.timeofApplicabilityforVelocity.time * 1000).toISOString().substring(11, 23);
 
-  if (msg.timeofMessageReceptionofPosition) csv[34] = msg.timeofMessageReceptionofPosition.time;
+  if (msg.timeofMessageReceptionofPosition) csv[34] = new Date(msg.timeofMessageReceptionofPosition.time * 1000).toISOString().substring(11, 23);
 
-  if (msg.timeofMessageReceptionofPosition_highPres) csv[35] = msg.timeofMessageReceptionofPosition_highPres.time;
+  if (msg.timeofMessageReceptionofPosition_highPres) csv[35] = new Date(msg.timeofMessageReceptionofPosition_highPres.time * 1000).toISOString().substring(11, 23);
 
-  if (msg.timeofMessageReceptionofVelocity) csv[36] = msg.timeofMessageReceptionofVelocity.time;
+  if (msg.timeofMessageReceptionofVelocity) csv[36] = new Date(msg.timeofMessageReceptionofVelocity.time * 1000).toISOString().substring(11, 23);
 
-  if (msg.timeofMessageReceptionofVelocity_highPres) csv[37] = msg.timeofMessageReceptionofVelocity_highPres.time;
+  if (msg.timeofMessageReceptionofVelocity_highPres) csv[37] = new Date(msg.timeofMessageReceptionofVelocity_highPres.time * 1000).toISOString().substring(11, 23);
 
-  if (msg.timeofReportTransmission) csv[38] = msg.timeofReportTransmission.time;
+  if (msg.timeofReportTransmission) csv[38] = new Date(msg.timeofReportTransmission.time * 1000).toISOString().substring(11, 23);
 
   if (msg.targetAddress) csv[18] = msg.targetAddress.value.substring(2);
 

@@ -3,9 +3,7 @@ import { TimeofMessageReceptionofPosition } from "../valueObjects/TimeofMessageR
 export class TimeofMessageReceptionofPositionDecoder {
 
     public async decode(item : Buffer) : Promise<TimeofMessageReceptionofPosition> {
-        const timestamp = Math.round((parseInt("0x" + item.toString("hex")) / 128.0) * 10) / 10;
-        var time = new Date(timestamp * 1000).toISOString().substring(11, 23);
-
+        const time = Math.round((parseInt("0x" + item.toString("hex")) / 128.0) * 10) / 10;
         return new TimeofMessageReceptionofPosition(time);
     }
     

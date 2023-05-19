@@ -13,9 +13,7 @@ export class TimeofMessageReceptionofVelocity_HighPrecisionDecoder {
         } else if (bits.slice(0, 2).join("") == "10") {
             fsi = -1;
         }
-        const timestamp =  (parseInt("0x" + item.toString("hex")) + fsi) * Math.pow(2, -30) * Math.pow(2, 9);
-        var time = new Date(timestamp * 1000).toISOString().substring(11, 23)
-
+        const time =  (parseInt("0x" + item.toString("hex")) + fsi) * Math.pow(2, -30) * Math.pow(2, 9);
         return new TimeofMessageReceptionofVelocity_HighPrecision(time);
     }
 }

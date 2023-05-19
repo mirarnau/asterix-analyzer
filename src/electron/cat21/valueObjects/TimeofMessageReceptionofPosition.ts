@@ -1,9 +1,9 @@
 import { strict as assert } from 'node:assert';
 
 export class TimeofMessageReceptionofPosition {
-    time : string;
+    time : number;
 
-    constructor(time : string){
+    constructor(time : number){
         this.time = time;
         this.validate();
     }

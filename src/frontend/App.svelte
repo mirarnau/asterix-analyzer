@@ -177,7 +177,7 @@ position: relative;
 
 
 
-/* th {
+th {
   color: rgb(255, 255, 255);
   font-size: medium;
 }
@@ -210,7 +210,7 @@ tr:nth-child(even) {
 }
 tr:nth-child(odd) {
   background-color: #0e2a47;
-} */
+}
 .file-button {
   background-color: #051a30;
   width: 100px;
@@ -246,7 +246,7 @@ tr:nth-child(odd) {
   border-width: 3px;
   text-align: center;
 }
-/* tr.smr {
+tr.smr {
   background-color: rgb(127, 66, 0);
 }
 tr.mlat {
@@ -257,7 +257,7 @@ tr.mlat {
   position: relative;
   width: 100%;
   height: calc(100vh - 42px);
-} */
+}
 
 .button-container {
   background-color: #262626;

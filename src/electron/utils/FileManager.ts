@@ -23,7 +23,7 @@ export async function openFilePicker() {
   export async function saveFileCsv() {
     const res = await dialog.showSaveDialog({ filters: [{ name: "CSV", extensions: ["csv"] }] });
     return res;
-}
+  }
 
 export class FileManager {
     
